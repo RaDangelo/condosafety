@@ -11,11 +11,10 @@ module.exports = function (app) {
             if (err)
                 res.send(err)
 
-            res.json(pessoas); // return all pessoas in JSON format
+            res.json(pessoas);
         });
     });
 
-    // create todo and send back all todos after creation
     app.post('/pessoa', function (req, res) {
 
         var pessoa = new Pessoa(req.body);

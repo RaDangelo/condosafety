@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+declare var $: any;
+
 @Component({
   selector: 'login-page',
   templateUrl: './login-page.component.html',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    $('body').css('background-color', 'transparent');
+  }
 
   ngOnInit() {
   }
