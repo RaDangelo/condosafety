@@ -1,0 +1,96 @@
+@import "../mixins.less";
+@import "../variables.less";
+
+@inside-containers: ~".login-header, .login-body";
+@data-containers: ~".username, .password";
+
+@{inside-containers} {
+  width: 100%;
+}
+
+@{data-containers} {
+  width: 290px;
+}
+
+.login-bg {
+  height: calc(100vh);
+  background-color: darken(@base-color, 30%);
+}
+
+.login-container {
+    margin: auto;
+    width: 350px;
+    padding: 6px;
+    border: none;
+    border-radius: 2px;
+    height: 372px;
+    top: 140px;
+    position: relative;
+}
+
+.login-header {
+    background-color: darken(@base-color, 50%);
+    height: 80px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px 6px 0px 0px;
+}
+
+.login-title {
+    color: #f0f0f0;
+    font-weight: 600;
+    font-size: 14px;
+    font-size: 24px;
+    margin: auto;
+}
+
+.login-body {
+    width: 100%;
+    background-color: @base-color;
+    padding: 20px;
+    height: 280px;
+    text-align: center;
+    border-radius: 0px 0px 6px 6px;
+}
+
+.login-btn {
+    width: 80%;
+    padding: 20px;
+    margin: 20px 30px 15px 30px;
+    // box-shadow: inset 0 0 10px #fff, 0 0 5px #000;
+    background-color: darken(@base-color, 40%);
+    border-radius: 6px;
+    border: none;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #f0f0f0;
+    cursor: pointer;
+    .transition();
+
+    &:hover, &active, &:visited {
+        background-color: darken(@base-color, 25%);
+        box-shadow: inset 0 0 10px #000, 0 0 5px #c2c2c2;        
+    }
+}
+
+.md-block {
+    width: 240px;
+    color: #4d4d4d;
+}
+
+.mat-input-element {
+    font-weight: 600;
+}
+
+.material-icons {
+    position: relative;
+    top: 6px;
+    font-size: 20px;
+}
+
+.forgot-pass {
+    color: blue;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: underline;
+}

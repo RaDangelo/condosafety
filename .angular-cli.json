@@ -1,6 +1,6 @@
 {
   "project": {
-    "version": "1.0.0-beta.32.3",
+    "version": "1.0.0",
     "name": "condosafety"
   },
   "apps": [
@@ -54,7 +54,19 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
-    "component": {}
+    "styleExt": "less",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
   }
 }

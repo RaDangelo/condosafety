@@ -10,16 +10,26 @@ import { RouterModule, PreloadAllModules} from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
+import { MonitoringComponent } from './monitoring-page/monitoring.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MaterialModule } from '@angular/material';
+import 'hammerjs';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ByteFormatPipe
+    ByteFormatPipe,
+    MonitoringComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    BrowserAnimationsModule,
+    MaterialModule.forRoot()
     // RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [
