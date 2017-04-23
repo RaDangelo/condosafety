@@ -1,0 +1,1 @@
+export {PessoaServiceInterface} from './pessoa.service.interface';

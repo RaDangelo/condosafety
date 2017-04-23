@@ -1,0 +1,1 @@
+export {PessoaService} from './pessoa.service';

@@ -1,4 +1,4 @@
-<h1>Total Images: {{ imageStats().count }}</h1>
+<!--<h1>Total Images: {{ imageStats().count }}</h1>
 <h1>Total Size: {{ imageStats().size | byteFormat}}</h1>
 <div
   (dragover)="false"
@@ -19,4 +19,18 @@
     <h4 class="media-heading">{{image.name}}</h4>
     <p>{{image.size | byteFormat}}</p>
   </div>
-</div>
+</div>-->
+
+Nome:
+<input type="text" [(ngModel)]="pessoa.nome" />
+Apelido:
+<input type="text" [(ngModel)]="pessoa.apelido" />
+Tipo:
+<input type="text" [(ngModel)]="pessoa.tipo" />
+Andar:
+<input type="text" [(ngModel)]="pessoa.apartamento.andar" />
+Apto:
+<input type="text" [(ngModel)]="pessoa.apartamento.numApto" />
+
+<button class="btn-md" (click)="savePessoa()">Save </button>
+
