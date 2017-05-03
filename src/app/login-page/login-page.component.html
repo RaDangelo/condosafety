@@ -7,16 +7,16 @@
       <div class="username">
         <md-icon class="material-icons">person</md-icon>
         <md-input-container class="md-block" flex-gt-sm>
-          <input mdInput placeholder="Username" />
+          <input [(ngModel)]="user.username" mdInput placeholder="Username" />
         </md-input-container>
       </div>
       <div class="password">
         <md-icon class="material-icons">lock</md-icon>
         <md-input-container class="md-block md-icon-left" flex-gt-sm>
-          <input mdInput placeholder="Password" />
+          <input [(ngModel)]="user.password" mdInput placeholder="Password" />
         </md-input-container>
       </div>
-      <button class="login-btn"> Login </button>
+      <button (click)="login()" class="login-btn"> Login </button>
       <label class="forgot-pass">Esqueceu sua senha?</label>
     </div>
 
