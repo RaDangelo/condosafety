@@ -1,0 +1,10 @@
+User Registration <br> <br>
+
+Usuário:
+<input class=" username" type="text" [(ngModel)]="user.username" />
+Senha:
+<input class=" password" type="text" [(ngModel)]="user.password" />
+Nível de acesso:
+<input class=" access-lvl" type="text" [(ngModel)]="user.accessLevel" />
+
+<button class="btn-save" class="btn-md" (click)="saveUser()">Cadastrar</button>

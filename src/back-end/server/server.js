@@ -59,17 +59,14 @@ app.use(function (req, res, next) {
 
 
 // api
-// require('../api/pessoa.rest')(app);
-// require('../api/login.rest')(app);
+require('../api/pessoa.rest')(app);
 
-var routes = require('../api/login.rest')(passport);
-app.use('/', routes);
+var loginRoute = require('../api/login.rest')(passport);
+app.use('/', loginRoute);
 
 // port
 app.listen(port);
 console.log("App listening on port " + port);
-
-
 
 
 
@@ -84,6 +81,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
+        console.log(err.status + 'here')
         res.status(err.status || 500);
         res.json({
             message: err.message,

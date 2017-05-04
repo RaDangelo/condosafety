@@ -21,7 +21,7 @@ module.exports = function(passport){
                     // usuário existente
                     if (user) {
                         console.log('Usuário ' + username + ' já cadastrado!');
-                        return done(null, false, req.flash('message','User já existente!'));
+                        return done(null, false, { error: 'Usuário já cadastrado!'});
                     } else {
                         // se usuario nao existe, cria um novo
                         var newUser = new User();

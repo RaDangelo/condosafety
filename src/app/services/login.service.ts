@@ -10,17 +10,40 @@ import { UserModel } from '../models';
 @Injectable()
 export class LoginService extends LoginServiceInterface {
 
-    url = '/login/';
+    userUrl = '/user/';
 
     constructor(private restService: RESTService) {
         super();
     }
 
     login(user: UserModel): Observable<UserModel> {
-        return this.restService.post(this.url, user)
+        return this.restService.post(this.userUrl + 'login/', user)
             .map((res: Response) => <UserModel>res.json())
             .catch(RESTService.handleErrorMessage);
     }
 
+    userRegister(user: UserModel): Observable<any> {
+        return this.restService.post(this.userUrl, user)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
+
+    getUsers(): Observable<UserModel[]> {
+        return this.restService.get(this.userUrl)
+            .map((res: Response) => <UserModel>res.json().map(u => new UserModel(u)))
+            .catch(RESTService.handleErrorMessage);
+    }
+
+    // userEdit(user: UserModel): Observable<any> {
+    //     return this.restService.post(this.signUpUrl, user)
+    //         .map((res: Response) => <any>res.json())
+    //         .catch(RESTService.handleErrorMessage);
+    // }
+
+    // userDelete(user: UserModel): Observable<any> {
+    //     return this.restService.post(this.signUpUrl, user)
+    //         .map((res: Response) => <any>res.json())
+    //         .catch(RESTService.handleErrorMessage);
+    // }
 
 }

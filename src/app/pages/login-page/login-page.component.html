@@ -10,12 +10,14 @@
           <input [(ngModel)]="user.username" mdInput placeholder="Username" />
         </md-input-container>
       </div>
+      <label class="error" *ngIf="alertUsername">* Informe um nome de usuário!</label>
       <div class="password">
         <md-icon class="material-icons">lock</md-icon>
         <md-input-container class="md-block md-icon-left" flex-gt-sm>
           <input [(ngModel)]="user.password" mdInput placeholder="Password" />
         </md-input-container>
       </div>
+      <label class="error" *ngIf="alertPassword">* Informe uma senha!</label>      
       <button (click)="login()" class="login-btn"> Login </button>
       <label class="forgot-pass">Esqueceu sua senha?</label>
     </div>

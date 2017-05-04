@@ -13,35 +13,23 @@ var isAuthenticated = function (req, res, next) {
 
 module.exports = function(passport){
 
-	// app.get('/', function(req, res) {
-	// 	res.render('index', { message: req.flash('message') });
-	// });
-
-	router.post('/login', passport.authenticate('login', {
-		successRedirect: '/home',
-		failureRedirect: '/',
-		failureFlash : true  
+	router.post('/user/login', passport.authenticate('login', {
+		successMessage: 'Login executado com sucesso!',
+		failureMessage: 'Falha no login!'
 	}));
 
-	// /* GET Registration Page */
-	// app.get('/signup', function(req, res){
-	// 	res.render('register',{message: req.flash('message')});
-	// });
-
-	// /* Handle Registration POST */
-	// app.post('/signup', passport.authenticate('signup', {
-	// 	successRedirect: '/home',
-	// 	failureRedirect: '/signup',
-	// 	failureFlash : true  
-	// }));
+	router.post('/user/', passport.authenticate('signup', {
+		successMessage: 'Usuário cadastrado com sucesso!',
+		failureMessage: 'Falha cadastrar usuário!'
+	}));
 
 	// /* GET Home Page */
-	// app.get('/home', isAuthenticated, function(req, res){
+	// router.get('/home', isAuthenticated, function(req, res){
 	// 	res.render('home', { user: req.user });
 	// });
 
 	// /* Handle Logout */
-	// app.get('/signout', function(req, res) {
+	// router.get('/signout', function(req, res) {
 	// 	req.logout();
 	// 	res.redirect('/');
 	// });

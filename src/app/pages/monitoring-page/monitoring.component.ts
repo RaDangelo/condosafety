@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { PessoaModel } from '../models';
-import { PessoaServiceInterface } from '../interfaces';
+import { PessoaModel } from '../../models';
+import { PessoaServiceInterface } from '../../interfaces';
 
 @Component({
   selector: 'monitoring',
