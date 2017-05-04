@@ -14,8 +14,15 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Launch Program Elec",
             "program": "${workspaceRoot}\\src\\electron\\main.js",
+            "outFiles": []
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}\\src\\back-end\\server\\server.js",
             "outFiles": []
         },
         {
@@ -23,7 +30,7 @@
             "request": "attach",
             "name": "Attach to Port",
             "address": "localhost",
-            "port": 5858,
+            "port": 8080,
             "outFiles": []
         }
     ]

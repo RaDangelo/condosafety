@@ -32,16 +32,15 @@ export class LoginPageComponent {
 
       this.loginService.login(this.user)
         .subscribe((data: UserModel) => {
-          console.log('Usuario retornado: ' + data),
-            localStorage.setItem('username', JSON.stringify(this.user.username));
+          console.log('Login executado com sucesso! Usuário logado: ' + data);
+          localStorage.setItem('username', JSON.stringify(this.user.username));
         },
         (error) => {
           console.log('Ocorreu um erro: ' + error);
           this.route.navigate(['/admin']);
-          
+
         },
         () => {
-          console.log('Login executado com sucesso! Usuário logado: ');
           this.route.navigate(['/admin']);
         });
     }

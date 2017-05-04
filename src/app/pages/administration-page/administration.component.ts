@@ -2,6 +2,8 @@ import { LoginServiceInterface } from '../../interfaces';
 import { Component } from '@angular/core';
 import { UserModel } from '../../models';
 
+declare var $: any;
+
 @Component({
   selector: 'administration',
   templateUrl: './administration.component.html',
@@ -13,6 +15,8 @@ export class AdministrationComponent {
 
   constructor(private userService: LoginServiceInterface) {
     this.user = new UserModel();
+    // $('body').css('background-color', 'transparent');
+
   }
 
   saveUser() {
