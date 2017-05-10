@@ -3,7 +3,7 @@ module.exports = function (app) {
     var Pessoa = require('../models/pessoa.vo');
     var Apartamento = require('../models/apartamento.vo');
 
-    app.get('/pessoa', function (req, res) {
+    app.get('/person', function (req, res) {
 
         Pessoa.find(function (err, pessoas) {
 
@@ -15,7 +15,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post('/pessoa', function (req, res) {
+    app.post('/person', function (req, res) {
 
         var pessoa = new Pessoa(req.body);
         var apto = new Apartamento(req.body.apartamento);
@@ -43,7 +43,7 @@ module.exports = function (app) {
     });
 
     // delete pessoa
-    app.delete('/pessoa/:pessoa_id', function (req, res) {
+    app.delete('/person/:person_id', function (req, res) {
         Pessoa.remove({
             _id: req.params.pessoa_id
         }, function (err, pessoa) {

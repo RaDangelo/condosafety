@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { PessoaModel } from '../../models';
-import { PessoaServiceInterface } from '../../interfaces';
+import { PersonModel } from '../../models';
+import { PersonServiceInterface } from '../../interfaces';
 
 @Component({
   selector: 'monitoring',
@@ -10,24 +10,24 @@ import { PessoaServiceInterface } from '../../interfaces';
 })
 export class MonitoringComponent {
 
-  pessoa: PessoaModel;
-  mensagemRetorno: string;
+  person: PersonModel;
+  retorno: string;
 
-  constructor(private pessoaService: PessoaServiceInterface) {
-    this.pessoa = new PessoaModel();
+  constructor(private personService: PersonServiceInterface) {
+    this.person = new PersonModel();
   }
 
   savePessoa() {
-    this.pessoaService.save(this.pessoa)
+    this.personService.save(this.person)
       .subscribe((data: string) =>
-        this.mensagemRetorno = data,
+        this.retorno = data,
       (error) => {
         console.log('Ocorreu um erro!');
         alert(error);
       },
       () => {
         console.log('Pessoa salva com sucesso!');
-        alert(this.mensagemRetorno);
+        alert(this.retorno);
       });
   }
 

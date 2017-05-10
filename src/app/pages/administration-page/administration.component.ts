@@ -1,6 +1,7 @@
 import { LoginServiceInterface } from '../../interfaces';
 import { Component } from '@angular/core';
-import { UserModel } from '../../models';
+import { UserModel, MessagesModel } from '../../models';
+import { MessageDialogBehavior } from '../../behaviors';
 
 declare var $: any;
 
@@ -13,7 +14,7 @@ export class AdministrationComponent {
 
   user: UserModel;
 
-  constructor(private userService: LoginServiceInterface) {
+  constructor(private userService: LoginServiceInterface, private dialogBehavior: MessageDialogBehavior) {
     this.user = new UserModel();
     // $('body').css('background-color', 'transparent');
 
@@ -22,10 +23,10 @@ export class AdministrationComponent {
   saveUser() {
     this.userService.userRegister(this.user)
       .subscribe(() => { },
-      (error) => {
-        console.log('Ocorreu um erro: ' + error);
-        alert('Erro ao cadastrar usuário!');
-
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
       },
       () => {
         console.log('Usuário cadastrado com sucesso! ');

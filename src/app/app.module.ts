@@ -17,8 +17,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';
 import 'hammerjs';
 
-import { PessoaServiceInterface, LoginServiceInterface } from './interfaces';
-import { PessoaService, LoginService } from './services';
+import { PersonServiceInterface, LoginServiceInterface } from './interfaces';
+import { PersonService, LoginService } from './services';
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
@@ -48,7 +48,7 @@ import { MessageDialogBehavior } from './behaviors';
   providers: [
     ConfigService,
     MessageDialogBehavior,
-    { provide: PessoaServiceInterface, useClass: PessoaService },
+    { provide: PersonServiceInterface, useClass: PersonService },
     { provide: LoginServiceInterface, useClass: LoginService },
     { provide: RESTService, useClass: RESTService },
     { provide: LOCALE_ID, useValue: `pt-BR` },

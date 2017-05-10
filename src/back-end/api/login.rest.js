@@ -28,10 +28,19 @@ module.exports = function (passport) {
 	});
 
 
-	router.post('/user/', passport.authenticate('signup', {
-		successMessage: 'Usuário cadastrado com sucesso!',
-		failureMessage: 'Falha cadastrar usuário!'
-	}));
+	router.post('/user/', function (req, res, next) {
+		passport.authenticate('signup', function (err, user, info) {
+			if (err) {
+				return next(err);
+			}
+			if (!user) {
+				var err = new Error(info.message);
+				err.status = 500;
+				return next(err);
+			}
+			res.json({status: 200});
+		})(req, res, next)
+	});
 
 	// /* GET Home Page */
 	// router.get('/home', isAuthenticated, function(req, res){
