@@ -7,14 +7,14 @@
       <div class="username">
         <md-icon class="material-icons">person</md-icon>
         <md-input-container class="md-block" flex-gt-sm>
-          <input [(ngModel)]="user.username" mdInput placeholder="Username" />
+          <input type="text" [(ngModel)]="user.username" mdInput placeholder="Username" />
         </md-input-container>
       </div>
       <label class="error" *ngIf="alertUsername">* Informe um nome de usuário!</label>
       <div class="password">
         <md-icon class="material-icons">lock</md-icon>
         <md-input-container class="md-block md-icon-left" flex-gt-sm>
-          <input [(ngModel)]="user.password" mdInput placeholder="Password" />
+          <input type="password" [(ngModel)]="user.password" mdInput placeholder="Password" />
         </md-input-container>
       </div>
       <label class="error" *ngIf="alertPassword">* Informe uma senha!</label>      

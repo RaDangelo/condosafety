@@ -11,12 +11,22 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
-module.exports = function(passport){
+module.exports = function (passport) {
 
-	router.post('/user/login', passport.authenticate('login', {
-		successMessage: 'Login executado com sucesso!',
-		failureMessage: 'Falha no login!'
-	}));
+	router.post('/user/login', function (req, res, next) {
+		passport.authenticate('login', function (err, user, info) {
+			if (err) {
+				return next(err);
+			}
+			if (!user) {
+				var err = new Error(info.message);
+				err.status = 401;
+				return next(err);
+			}
+			res.json(user);
+		})(req, res, next)
+	});
+
 
 	router.post('/user/', passport.authenticate('signup', {
 		successMessage: 'Usuário cadastrado com sucesso!',
@@ -34,6 +44,6 @@ module.exports = function(passport){
 	// 	res.redirect('/');
 	// });
 
-    return router;
+	return router;
 
 }

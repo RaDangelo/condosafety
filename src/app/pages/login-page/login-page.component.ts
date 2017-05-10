@@ -1,8 +1,10 @@
+import { MessagesModel } from '../../models/messages.model';
 import { Router } from '@angular/router';
 import { LoginServiceInterface } from '../../interfaces';
 import { userInfo } from 'os';
 import { Component } from '@angular/core';
 import { UserModel } from '../../models';
+import { MessageDialogBehavior } from '../../behaviors';
 
 declare var $: any;
 
@@ -17,7 +19,8 @@ export class LoginPageComponent {
   alertPassword: boolean;
   alertUsername: boolean;
 
-  constructor(private loginService: LoginServiceInterface, private route: Router) {
+  constructor(private loginService: LoginServiceInterface, private route: Router,
+    private dialogBehavior: MessageDialogBehavior) {
     $('body').css('background-color', 'transparent');
     this.user = new UserModel();
     this.alertPassword = false;
@@ -35,10 +38,10 @@ export class LoginPageComponent {
           console.log('Login executado com sucesso! Usuário logado: ' + data);
           localStorage.setItem('username', JSON.stringify(this.user.username));
         },
-        (error) => {
-          console.log('Ocorreu um erro: ' + error);
-          this.route.navigate(['/admin']);
-
+        (error: MessagesModel) => {
+          console.log('Ocorreu um erro: ' + error.message);
+          error.severity = MessagesModel.SEVERITIES.ERROR;
+          this.dialogBehavior.showErrorMessage(error);
         },
         () => {
           this.route.navigate(['/admin']);
@@ -50,9 +53,13 @@ export class LoginPageComponent {
     if (!this.user.username || !this.user.password) {
       if (!this.user.username) {
         this.alertUsername = true;
+      } else {
+        this.alertUsername = false;
       }
       if (!this.user.password) {
         this.alertPassword = true;
+      } else {
+        this.alertPassword = false;
       }
       return false;
     }

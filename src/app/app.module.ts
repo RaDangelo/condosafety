@@ -6,23 +6,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule, PreloadAllModules} from '@angular/router';
+import { RouterModule, PreloadAllModules } from '@angular/router';
 import { ROUTES } from './app.routes';
+import {NgxElectronModule} from 'ngx-electron';
 
 import { AppComponent } from './app.component';
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
-import { MonitoringComponent } from './pages/monitoring-page/monitoring.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from '@angular/material';
+import 'hammerjs';
 
 import { PessoaServiceInterface, LoginServiceInterface } from './interfaces';
 import { PessoaService, LoginService } from './services';
 
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
-import 'hammerjs';
-import { AdministrationComponent } from './pages/administration-page/administration.component';
-import { PeopleComponent } from './pages/people-page/people.component';
-import { ReportsComponent } from './pages/reports-page/reports.component';
+import {
+  MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
+  ReportsComponent
+} from './pages/';
+import { MessageDialogBehavior } from './behaviors';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { ReportsComponent } from './pages/reports-page/reports.component';
   imports: [
     BrowserModule,
     FormsModule,
+    NgxElectronModule,
     HttpModule,
     BrowserAnimationsModule,
     MaterialModule.forRoot(),
@@ -44,11 +47,12 @@ import { ReportsComponent } from './pages/reports-page/reports.component';
   ],
   providers: [
     ConfigService,
-    { provide : PessoaServiceInterface, useClass: PessoaService },
-    { provide : LoginServiceInterface, useClass: LoginService },    
-    { provide: RESTService, useClass: RESTService},
-    { provide: LOCALE_ID, useValue: `pt-BR`},
-    
+    MessageDialogBehavior,
+    { provide: PessoaServiceInterface, useClass: PessoaService },
+    { provide: LoginServiceInterface, useClass: LoginService },
+    { provide: RESTService, useClass: RESTService },
+    { provide: LOCALE_ID, useValue: `pt-BR` },
+
   ],
   bootstrap: [AppComponent]
 })

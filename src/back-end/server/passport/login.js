@@ -20,14 +20,14 @@ module.exports = function (passport) {
                     if (!user) {
                         console.log('Usuário ' + username + ' não encontrado!');
                         return done(null, false,
-                            req.flash('message', 'Usuário não encontrado.'));
+                            {message: 'Usuário não existente!'});
                     }
 
                     // Usuário existe mas a senha está errada
                     if (!isValidPassword(user, password)) {
                         console.log('Senha Inválida');
                         return done(null, false,
-                            req.flash('message', 'Senha Inválida'));
+                            {message: 'Senha inválida!'});
                     }
 
                     // retorna usuario com sucesso
