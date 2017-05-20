@@ -1,1 +1,1 @@
-export * from './toastr.behavior';
+export * from './msg-dialog.behavior';
