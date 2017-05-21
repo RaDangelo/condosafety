@@ -60,6 +60,7 @@ app.use(function (req, res, next) {
 
 // api
 require('../api/pessoa.rest')(app);
+require('../api/apartment.rest')(app);
 
 var loginRoute = require('../api/login.rest')(passport);
 app.use('/', loginRoute);
