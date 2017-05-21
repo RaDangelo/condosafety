@@ -30,7 +30,7 @@
             "request": "attach",
             "name": "Attach to Port",
             "address": "localhost",
-            "port": 8080,
+            "port": 8081,
             "outFiles": []
         }
     ]

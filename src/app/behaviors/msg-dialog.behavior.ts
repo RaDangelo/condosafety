@@ -16,7 +16,7 @@ export class MessageDialogBehavior {
         let toast = new MessagesModel();
         if (!msg.message) {
             toast.message = 'Ocorreu um erro inesperado!';
-            toast.severity = MessagesModel.SEVERITIES.ERROR;
+            // toast.severity = MessagesModel.SEVERITIES.ERROR;
         } else {
             toast.message = msg.message;
         }
