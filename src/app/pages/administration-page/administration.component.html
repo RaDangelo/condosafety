@@ -1,8 +1,58 @@
 <div class="adm-page">
-    User Registration <br> <br> Usuário:
-    <input class=" username" type="text" [(ngModel)]="user.username" /> Senha:
-    <input class=" password" type="password" [(ngModel)]="user.password" /> Nível de acesso:
-    <input class=" access-lvl" type="text" [(ngModel)]="user.accessLevel" />
 
-    <button class="btn-save" class="btn-md" (click)="saveUser()">Cadastrar</button>
+    <div id="apartment-register">
+        <label>Apartamentos</label>
+        <div id="apt-list">
+            <ul>
+                <li *ngFor="let apt of apartments; let i = index" (click)="editApartment(apt, i)">
+                    <!--<label [class]="apt.active ? ">•</label>  {{apt.number}}-->
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="person-type-register">
+        <label>Tipos de Pessoa</label>
+        <div id="type-list">
+            <ul>
+                <li *ngFor="let t of types; let i = index" (click)="editType(t, i)">
+                    {{t.type}}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="user-register">
+        <label>Usuários</label>
+        <div id="user-list">
+            <ul>
+                <li *ngFor="let us of users; let i = index" (click)="editUser(us, i)">
+                    • {{us.username}}
+                </li>
+            </ul>
+        </div>
+        <div class="cont-edit">
+            <div>
+                Usuário:
+                <input [disabled]="disableFields" class="username w-150" type="text" [(ngModel)]="user.username" />
+            </div>
+            <div style="padding-left: 8px;">
+                Senha:
+                <input [disabled]="disableFields" class="password  w-150" type="password" [(ngModel)]="user.password" />
+            </div>
+            <div style="padding-left: 17px;">
+                Nível:
+                <input [disabled]="disableFields" class="access-lvl w-50" type="text" [(ngModel)]="user.accessLevel" />
+            </div>
+            <div class="btns">
+                <button class="btn-new" class="btn-md" (click)="newUser()">+</button>
+                <button [disabled]="!user._id" class="btn-delete" class="btn-md" (click)="deleteUser()">Excluir</button>
+                <button class="btn-save" class="btn-md" (click)="saveUser()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ot-register">
+        <label>Tempo de Ociosidade Permitido</label>
+    </div>
 </div>

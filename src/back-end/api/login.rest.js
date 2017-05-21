@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../models/user.vo');
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -38,20 +39,32 @@ module.exports = function (passport) {
 				err.status = 500;
 				return next(err);
 			}
-			res.json({status: 200});
+			res.json({ status: 200 });
 		})(req, res, next)
 	});
 
-	// /* GET Home Page */
-	// router.get('/home', isAuthenticated, function(req, res){
-	// 	res.render('home', { user: req.user });
-	// });
+	router.get('/user', function (req, res) {
+		User.find(function (err, users) {
+			if (err)
+				res.send(err)
+			res.json(users);
+		});
+	});
 
-	// /* Handle Logout */
-	// router.get('/signout', function(req, res) {
-	// 	req.logout();
-	// 	res.redirect('/');
-	// });
+	 router.post('/user/delete', function (req, res) {
+        User.remove({
+            _id: req.body._id
+        }, function (err, user) {
+            if (err)
+                res.send(err);
+
+            User.find(function (err, user) {
+                if (err)
+                    res.send(err)
+                res.json(user);
+            });
+        });
+    });
 
 	return router;
 

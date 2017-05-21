@@ -41,7 +41,7 @@ export class PersonService extends PersonServiceInterface {
     }
 
     delete(person: PersonModel): Observable<any> {
-        return this.restService.delete(this.url + person.id)
+        return this.restService.delete(this.url + person._id)
             .map((res: Response) => <any>res.json())
             .catch(RESTService.handleErrorMessage);
     }

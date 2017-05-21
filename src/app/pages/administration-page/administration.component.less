@@ -1,18 +1,95 @@
 @import "../../variables.less";
 
-@data: ~".username, .password";
-@accessLvl: ~".access-lvl";
+@user-data: ~".username, .password, .access-lvl";
+@containers: ~"#apartment-register, #person-type-register, #user-register, #ot-register";
+@lists: ~"#apt-list, #type-list, #user-list";
 
-@{data} {
-  background-color: @base-color;
+@{user-data} {
+  background-color: white;
 }
 
-@{accessLvl} {
-    background-color: lighten(@base-color, 20%);
+@{containers} {
+  margin: 10px;
+  height: 310px;
+  width: 710px;
+  float: left;
+  border: @base-border;
+}
+
+@{lists} {
+  min-height: 240px;
+  max-height: 240px;
+  width: 200px;
+  overflow-y: auto;
+  margin: 10px;
+  border: @base-border;
+  background-color: white;
+  float: left;
+}
+
+.cont-edit > div {
+  width: 100%;
+  margin: 4px;
 }
 
 .adm-page {
   height: 700px;
   width: 1500px;
+  padding: 20px;
   background-color: @base-color;
+}
+
+label {
+  padding: 10px;
+  font-size: 20px;
+  width: 100%;
+  float: left;
+}
+
+ul {
+    padding: 0px;
+}
+
+li {
+  border-bottom: 1px solid #c2c2c2;
+  padding: 2px 20px;
+}
+
+li:hover {
+  background-color: lighten(@base-color, 10%);
+  cursor: pointer;
+}
+
+.cont-edit {
+  height: 240px;
+  width: 280px;
+  margin: 10px;
+  float: left;
+}
+
+.btns {
+    margin-left: 60px !important;
+    margin-top: 8px !important;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+input:disabled {
+  background-color: darken(@base-color, 10%);
+}
+
+input {
+  padding-left: 2px;
+}
+
+.active {
+  color: green;
+  font-size: 14px;
+}
+
+.inactive {
+  color: red;
+  font-size: 14px;
 }

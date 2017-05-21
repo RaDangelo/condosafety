@@ -28,22 +28,16 @@ export class LoginService extends LoginServiceInterface {
             .catch(RESTService.handleErrorMessage);
     }
 
-    getUsers(): Observable<UserModel[]> {
+    getList(): Observable<UserModel[]> {
         return this.restService.get(this.userUrl)
             .map((res: Response) => <UserModel>res.json().map(u => new UserModel(u)))
             .catch(RESTService.handleErrorMessage);
     }
 
-    // userEdit(user: UserModel): Observable<any> {
-    //     return this.restService.post(this.signUpUrl, user)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // userDelete(user: UserModel): Observable<any> {
-    //     return this.restService.post(this.signUpUrl, user)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    userDelete(user: UserModel): Observable<any> {
+        return this.restService.post(this.userUrl + 'delete', user)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
 }

@@ -1,6 +1,6 @@
 export class VisitorModel {
 
-    id: number;
+    _id: number;
     name: string;
     document: string;
     documentType: string;
@@ -9,7 +9,7 @@ export class VisitorModel {
 
     constructor(visitor: VisitorModel = null) {
         if (visitor) {
-            this.id = visitor.id;
+            this._id = visitor._id;
             this.name = visitor.name;
             this.document = visitor.document;
             this.documentType = visitor.documentType;

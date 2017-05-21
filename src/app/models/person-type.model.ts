@@ -1,11 +1,11 @@
 export class PersonTypeModel {
 
-    id: number;
+    _id: number;
     type: string;
 
     constructor(type: PersonTypeModel = null) {
         if (type) {
-            this.id = type.id;
+            this._id = type._id;
             this.type = type.type;
         }
     }

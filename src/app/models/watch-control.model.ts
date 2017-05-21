@@ -2,7 +2,7 @@ import { UserModel } from './';
 
 export class WatchControlModel {
 
-    id: number;
+    _id: number;
     user: UserModel;
     date: Date;
     action: Action;
@@ -11,7 +11,7 @@ export class WatchControlModel {
 
     constructor(watch: WatchControlModel = null) {
         if (watch) {
-            this.id = watch.id;
+            this._id = watch._id;
             this.date = watch.date;
             this.action = watch.action;
             this.obs = watch.obs;

@@ -9,3 +9,39 @@
     -ms-filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=80);
     filter: alpha(opacity=80);
 }
+
+.w-50 {
+    width: 50px;
+}
+
+.w-60 {
+    width: 60px;
+}
+
+.w-70 {
+    width: 70px;
+}
+
+.w-80 {
+    width: 80px;
+}
+
+.w-90 {
+    width: 90px;
+}
+
+.w-100 {
+    width: 100px;
+}
+.w-120 {
+    width: 120px;
+}
+.w-140 {
+    width: 140px;
+}
+.w-150 {
+    width: 150px;
+}
+.w-160 {
+    width: 160px;
+}
