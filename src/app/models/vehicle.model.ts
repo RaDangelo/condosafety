@@ -2,7 +2,7 @@ import { ApartmentModel } from './';
 
 export class VehicleModel {
 
-    id: number;
+    _id: number;
     plate: string;
     color: string;
     brand: string;
@@ -12,7 +12,7 @@ export class VehicleModel {
 
     constructor(vehicle: VehicleModel = null) {
         if (vehicle) {
-            this.id = vehicle.id;
+            this._id = vehicle._id;
             this.plate = vehicle.plate;
             this.color = vehicle.color;
             this.brand = vehicle.brand;

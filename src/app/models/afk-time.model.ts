@@ -1,9 +1,9 @@
 export class AfkTimeModel {
-    id: number;
+    _id: number;
     time: Date;
 
     constructor(afk: AfkTimeModel = null) {
-        this.id = afk.id;
+        this._id = afk._id;
         this.time = afk.time;
     }
 }

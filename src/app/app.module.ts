@@ -17,8 +17,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';
 import 'hammerjs';
 
-import { PersonServiceInterface, LoginServiceInterface } from './interfaces';
-import { PersonService, LoginService } from './services';
+import { PersonServiceInterface, LoginServiceInterface, PersonTypeServiceInterface, AccessServiceInterface, AFKTimeServiceInterface, ApartmentServiceInterface, 
+VehicleServiceInterface, WatchControlServiceInterface } from './interfaces';
+import { PersonService, LoginService, PersonTypeService, AccessService, AFKTimeService, ApartmentService, VehicleService, WatchControlService } from './services';
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
@@ -50,6 +51,12 @@ import { MessageDialogBehavior } from './behaviors';
     MessageDialogBehavior,
     { provide: PersonServiceInterface, useClass: PersonService },
     { provide: LoginServiceInterface, useClass: LoginService },
+    { provide: AccessServiceInterface, useClass: AccessService },
+    { provide: PersonTypeServiceInterface, useClass: PersonTypeService },
+    { provide: AFKTimeServiceInterface, useClass: AFKTimeService },
+    { provide: ApartmentServiceInterface, useClass: ApartmentService },
+    { provide: VehicleServiceInterface, useClass: VehicleService },
+    { provide: WatchControlServiceInterface, useClass: WatchControlService },
     { provide: RESTService, useClass: RESTService },
     { provide: LOCALE_ID, useValue: `pt-BR` },
 

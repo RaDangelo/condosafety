@@ -1,6 +1,6 @@
 export class ApartmentModel {
 
-    id: number;
+    _id: number;
     floor: number;
     number: number;
     status: boolean;
@@ -9,7 +9,7 @@ export class ApartmentModel {
 
     constructor(apt: ApartmentModel = null) {
         if (apt) {
-            this.id = apt.id;
+            this._id = apt._id;
             this.floor = apt.floor;
             this.number = apt.number;
             this.status = apt.status;

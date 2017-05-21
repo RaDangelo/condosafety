@@ -14,7 +14,7 @@ let mainWindow
 function createWindow() {
   // Create the browser window.
   // mainWindow = new BrowserWindow({width: 350, height: 360, frame: false, transparent: true})
-  mainWindow = new BrowserWindow({ useContentSize: true, frame: false, transparent: true })
+  mainWindow = new BrowserWindow({ useContentSize: false, frame: false, center: true, transparent: true, height: 700, width: 1500 })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({

@@ -2,7 +2,7 @@ import { UserModel, VehicleModel, ApartmentModel, PersonModel, VisitorModel } fr
 
 export class AccessModel {
 
-    id: number;
+    _id: number;
     date: Date;
     user: UserModel;
 
@@ -15,7 +15,7 @@ export class AccessModel {
 
     constructor(access: AccessModel = null) {
         if (access) {
-            this.id = access.id;
+            this._id = access._id;
             this.date = access.date;
             this.type = access.type; // only front?
 

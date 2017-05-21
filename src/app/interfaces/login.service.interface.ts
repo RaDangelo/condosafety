@@ -10,4 +10,9 @@ export abstract class LoginServiceInterface {
 
     abstract userRegister(user: UserModel): Observable<any>;
 
+    abstract getList(): Observable<Array<UserModel>>;
+
+    abstract userDelete(user: UserModel): Observable<any>;
+
+
 }

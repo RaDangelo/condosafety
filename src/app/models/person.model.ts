@@ -2,7 +2,7 @@ import { ApartmentModel, PersonTypeModel } from './';
 
 export class PersonModel {
 
-    id: number;
+    _id: number;
     name: string;
     nickname: string;
     accessPassword: string;
@@ -15,7 +15,7 @@ export class PersonModel {
 
     constructor(person: PersonModel = null) {
         if (person) {
-            this.id = person.id;
+            this._id = person._id;
             this.nickname = person.nickname;
             this.name = person.name;
             this.accessPassword = person.accessPassword;
