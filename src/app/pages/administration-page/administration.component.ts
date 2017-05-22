@@ -1,6 +1,6 @@
-import { LoginServiceInterface } from '../../interfaces';
+import { LoginServiceInterface, ApartmentServiceInterface, VehicleServiceInterface } from '../../interfaces';
 import { Component } from '@angular/core';
-import { UserModel, MessagesModel } from '../../models';
+import { UserModel, MessagesModel, ApartmentModel, VehicleModel } from '../../models';
 import { MessageDialogBehavior } from '../../behaviors';
 
 declare var $: any;
@@ -14,13 +14,48 @@ export class AdministrationComponent {
 
   user: UserModel;
   users: UserModel[];
+  apartment: ApartmentModel;
+  apartments: ApartmentModel[];
+  vehicle: VehicleModel;
+  vehicles: VehicleModel[];
   disableFields = true;
 
-  constructor(private userService: LoginServiceInterface, private dialogBehavior: MessageDialogBehavior) {
+  constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
+    private vehicleService: VehicleServiceInterface,
+    private dialogBehavior: MessageDialogBehavior) {
     this.user = new UserModel();
     this.getUsers();
+    this.getApartments();
+    this.getVehicles();
+
     // $('body').css('background-color', 'transparent');
 
+  }
+
+  private getApartments() {
+    this.apartmentService.getList()
+      .subscribe((data) => {
+        this.apartments = data;
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+      },
+      () => {
+        console.log('Apartamentos obtidos com sucesso! ');
+      });
+  }
+
+  private getVehicles() {
+    this.vehicleService.getList()
+      .subscribe((data) => {
+        this.vehicles = data;
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+      },
+      () => {
+        console.log('Veículos obtidos com sucesso! ');
+      });
   }
 
 
@@ -28,7 +63,6 @@ export class AdministrationComponent {
     this.userService.getList()
       .subscribe((data) => {
         this.users = data;
-        console.log(this.users);
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);

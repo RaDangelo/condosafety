@@ -7,6 +7,7 @@ export class PersonModel {
     nickname: string;
     accessPassword: string;
     phoneNumber: string;
+    cpf: string;
     email: string;
     picture: File;
     status: boolean;
@@ -23,6 +24,7 @@ export class PersonModel {
             this.email = person.email;
             this.picture = person.picture;
             this.status = person.status;
+            this.cpf = person.cpf;
 
             if (person.personType) {
                 this.personType = person.personType;

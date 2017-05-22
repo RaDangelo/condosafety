@@ -4,7 +4,7 @@ module.exports = mongoose.model('Visitor', {
     name: String,
     document: String,
     documentType: String,
-    picture: File,
+    picture: { data: Buffer, contentType: String },
     obs: String,
 }, 'visitor'
 );

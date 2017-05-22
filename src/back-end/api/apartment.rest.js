@@ -1,6 +1,6 @@
 module.exports = function (app) {
 
-    var Apartment = require('../models/apartamento.vo');
+    var Apartment = require('../models/apartment.vo');
 
     app.get('/apartment', function (req, res) {
 
@@ -13,42 +13,63 @@ module.exports = function (app) {
 
     app.post('/apartment', function (req, res) {
 
-        var apt = new Apartment(req.body);
+        Apartment.findById(req.param('_id'), function (err, apt) {
 
-        Apartment.create({
-            nome: pessoa.nome,
-            apelido: pessoa.apelido,
-            tipo: pessoa.tipo,
-            apartamento: apto._id
-        }, function (err) {
             if (err) {
-                res.send(err);
-            } else {
-                apto.save({
-                    andar: apto.andar,
-                    numApto: apto.numApto
-                }, function (err) {
+                console.log('Erro ao cadastrar apartamento: ' + err);
+                return done(err);
+            }
+
+            if (!apt) {
+                Apartment.findOne({ 'complex': req.param('complex'), 'floor': req.param('floor') }, function (err, apt) {
+
                     if (err) {
-                        res.send(err);
+                        console.log('Erro ao cadastrar apartamento: ' + err);
+                        return done(err);
                     }
+
+                    if (apt) {
+                        console.log('Apartamento no compelexo: ' + apt.complex + ' de número:' + apt.number + ' já cadastrado!');
+                        return done(null, false, { message: 'Apartamento já cadastrado!' });
+                    }
+
+                    var aptartment = new Apartment(req.body);
+
+                    aptartment.save(function (err) {
+                        if (err) {
+                            res.send(err);
+                        } else {
+                            res.send('Apartamento salvo com sucesso!');
+                        }
+                    });
                 });
-                res.send('Pessoa salva com sucesso!');
+            } else {
+                // atualiza apt
+                apt = req.body;
+                // atualizar um por um?
+                apt.save(function (err) {
+                    if (err) {
+                        console.log('Erro ao alterar apartamento: ' + err);
+                        throw err;
+                    }
+                    console.log('Apartamento alterado com sucesso!');
+                    return done(null, apt);
+                });
             }
         });
     });
 
-    // delete pessoa
-    app.delete('/person/:person_id', function (req, res) {
-        Pessoa.remove({
-            _id: req.params.pessoa_id
-        }, function (err, pessoa) {
+    app.post('/apartment/delete', function (req, res) {
+        Apartment.remove({
+            _id: req.body._id
+        }, function (err, apartment) {
             if (err)
                 res.send(err);
 
-            Pessoa.find(function (err, pessoas) {
+            Apartment.find(function (err, apartment) {
                 if (err)
                     res.send(err)
-                res.json(pessoas);
+                res.json(apartment);
             });
         });
     });

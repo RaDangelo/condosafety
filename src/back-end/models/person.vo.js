@@ -5,8 +5,9 @@ module.exports = mongoose.model('Person', {
     nickname: String,
     accessPassword: String,
     phoneNumber: String,
+    cpf: String,
     email: String,
-    picture: File,
+    picture: { data: Buffer, contentType: String },
     status: Boolean,
     personType: { type: mongoose.Schema.Types.ObjectId, ref: 'PersonType' },
     apartment: { type: mongoose.Schema.Types.ObjectId, ref: 'Apartment' }

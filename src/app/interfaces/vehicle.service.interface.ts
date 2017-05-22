@@ -1,17 +1,18 @@
-import {Observable} from 'rxjs/Observable';
-import {Injectable} from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { VehicleModel } from '../models';
 
 @Injectable()
 export abstract class VehicleServiceInterface {
 
-    // abstract save(person: PersonModel): Observable<any>;
+    abstract save(v: VehicleModel): Observable<any>;
 
-    // abstract getList(): Observable<Array<PersonModel>>;
+    abstract getList(): Observable<Array<VehicleModel>>;
 
-    // abstract getSingle (person: PersonModel): Observable<PersonModel>;    
+    // abstract getSingle (v: VehicleModel): Observable<VehicleModel>;    
 
-    // abstract update(person: PersonModel): Observable<any>;
+    // abstract update(v: VehicleModel): Observable<any>;
 
-    // abstract delete(person: PersonModel): Observable<any>;
-    
+    abstract delete(v: VehicleModel): Observable<any>;
+
 }

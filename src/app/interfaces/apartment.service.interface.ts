@@ -1,17 +1,18 @@
-import {Observable} from 'rxjs/Observable';
-import {Injectable} from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { ApartmentModel } from '../models';
 
 @Injectable()
 export abstract class ApartmentServiceInterface {
 
-    // abstract save(person: PersonModel): Observable<any>;
+    abstract save(ap: ApartmentModel): Observable<any>;
 
-    // abstract getList(): Observable<Array<PersonModel>>;
+    abstract getList(): Observable<Array<ApartmentModel>>;
 
-    // abstract getSingle (person: PersonModel): Observable<PersonModel>;    
+    // abstract getSingle (ap: ApartmentModel): Observable<ApartmentModel>;    
 
-    // abstract update(person: PersonModel): Observable<any>;
+    // abstract update(ap: ApartmentModel): Observable<any>;
 
-    // abstract delete(person: PersonModel): Observable<any>;
-    
+    abstract delete(ap: ApartmentModel): Observable<any>;
+
 }

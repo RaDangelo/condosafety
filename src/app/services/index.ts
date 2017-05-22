@@ -6,4 +6,7 @@ export * from './apartment.service';
 export * from './person-type.service';
 export * from './vehicle.service';
 export * from './watch-control.service';
+export * from './visitor.service';
+
+
 

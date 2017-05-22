@@ -5,7 +5,6 @@ module.exports = mongoose.model('Vehicle', {
     color: String,
     brand: String,
     status: Boolean,
-    apartment: { type: mongoose.Schema.Types.ObjectId, ref: 'Apartment' },
-    picture: File
+    picture: { data: Buffer, contentType: String }
 }, 'vehicle'
 );

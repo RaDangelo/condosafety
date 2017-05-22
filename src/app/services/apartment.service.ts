@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { RESTService } from '../rest.service';
+import { ApartmentModel } from '../models';
 
 @Injectable()
 export class ApartmentService extends ApartmentServiceInterface {
@@ -15,34 +16,34 @@ export class ApartmentService extends ApartmentServiceInterface {
         super();
     }
 
-    // getList(): Observable<Array<PersonModel>> {
+    getList(): Observable<Array<ApartmentModel>> {
+        return this.restService.get(this.url)
+            .map((res: Response) => <ApartmentModel[]>res.json().map(ap => new ApartmentModel(ap)))
+            .catch(RESTService.handleErrorMessage);
+    }
+
+    // getSingle(ap: ApartmentModel): Observable<ApartmentModel> {
     //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel[]>res.json().map(p => new PersonModel(p)))
+    //         .map((res: Response) => <ApartmentModel>res.json())
     //         .catch(RESTService.handleErrorMessage);
     // }
 
-    // getSingle(person: PersonModel): Observable<PersonModel> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    save(ap: ApartmentModel): Observable<any> {
+        return this.restService.post(this.url, ap)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
-    // save(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
+    // update(ap: ApartmentModel): Observable<any> {
+    //     return this.restService.post(this.url, ap)
     //         .map((res: Response) => <any>res.json())
     //         .catch(RESTService.handleErrorMessage);
     // }
 
-    // update(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // delete(person: PersonModel): Observable<any> {
-    //     return this.restService.delete(this.url + person.id)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    delete(ap: ApartmentModel): Observable<any> {
+        return this.restService.post(this.url + 'delete', ap)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
 }

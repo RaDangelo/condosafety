@@ -5,6 +5,7 @@ module.exports = mongoose.model('Apartment', {
     number: Number,
     status: Boolean,
     complex: Number,
-    type: String
+    type: String,
+    vehicles: { type: Array, ref: 'Vehicle' },
 }, 'apartment'
 );

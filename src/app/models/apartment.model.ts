@@ -1,3 +1,5 @@
+import { VehicleModel } from './';
+
 export class ApartmentModel {
 
     _id: number;
@@ -6,6 +8,7 @@ export class ApartmentModel {
     status: boolean;
     complex?: number;
     type?: string;
+    vehicles?: Array<VehicleModel>;
 
     constructor(apt: ApartmentModel = null) {
         if (apt) {
@@ -15,7 +18,15 @@ export class ApartmentModel {
             this.status = apt.status;
             this.complex = apt.complex;
             this.type = apt.type;
+
+            if (apt.vehicles) {
+                this.vehicles = apt.vehicles;
+            }
+        } else {
+            this.vehicles = new Array<VehicleModel>();
         }
+
+
     }
 
 }
