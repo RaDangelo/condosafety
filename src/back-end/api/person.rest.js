@@ -74,7 +74,7 @@ module.exports = function (app) {
     });
 
     // delete pessoa
-    app.delete('/person/delete', function (req, res) {
+    app.post('/person/delete', function (req, res) {
         Person.remove({
             _id: req.body._id
         }, function (err, p) {

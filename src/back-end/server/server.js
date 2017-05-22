@@ -65,9 +65,9 @@ require('../api/person-type.rest')(app);
 require('../api/vehicle.rest')(app);
 require('../api/visitor.rest')(app);
 
-
 var loginRoute = require('../api/login.rest')(passport);
 app.use('/', loginRoute);
+
 
 // port
 app.listen(port);

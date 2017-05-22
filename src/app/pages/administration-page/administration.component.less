@@ -1,8 +1,8 @@
 @import "../../variables.less";
 
 @user-data: ~".username, .password, .access-lvl";
-@containers: ~"#apartment-register, #person-type-register, #user-register, #ot-register";
-@lists: ~"#apt-list, #type-list, #user-list";
+@containers: ~"#apartment-register, #vehicle-register, #user-register, #ot-register";
+@lists: ~"#apt-list, #vehicle-list, #user-list";
 
 @{user-data} {
   background-color: white;
@@ -67,8 +67,13 @@ li:hover {
   float: left;
 }
 
-.btns {
+.btns-user {
     margin-left: 60px !important;
+    margin-top: 8px !important;
+}
+
+.btns-vehicle {
+    margin-left: 50px !important;
     margin-top: 8px !important;
 }
 
@@ -85,11 +90,20 @@ input {
 }
 
 .active {
-  color: green;
-  font-size: 14px;
+  background-color: green;
 }
 
 .inactive {
-  color: red;
-  font-size: 14px;
+  background-color: red;
+}
+
+.btn-status {
+    height: 18px;
+    border-radius: 8px;
+    border: 0px;
+    width: 18px;
+    position: relative;
+    top: 3px;
+    cursor: default;
+    outline: none;
 }

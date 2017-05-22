@@ -58,7 +58,7 @@ module.exports = function (app) {
     });
 
     // delete pessoa
-    app.delete('/visitor/delete', function (req, res) {
+    app.post('/visitor/delete', function (req, res) {
         Visitor.remove({
             _id: req.body._id
         }, function (err, v) {

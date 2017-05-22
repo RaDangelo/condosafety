@@ -10,25 +10,27 @@ module.exports = function (app) {
         });
     });
 
-    app.post('/vehicle', function (req, res) {
+    app.all('/vehicle', function (req, res, next) {
 
         Vehicle.findById(req.param('_id'), function (err, v) {
             if (err) {
                 console.log('Erro ao cadastrar veículo: ' + err);
-                return done(err);
+                return next(err);
             }
 
             if (!v) {
-                Vehicle.findOne({ '_id': req.param('_id') }, function (err, v) {
+                Vehicle.findOne({ 'plate': req.param('plate') }, function (err, v) {
 
                     if (err) {
                         console.log('Erro ao cadastrar veículo: ' + err);
-                        return done(err);
+                        return next(err);
                     }
 
                     if (v) {
                         console.log('Veículo já cadastrado!');
-                        return done(null, false, { message: 'Veículo já cadastrado!' });
+                        var err = new Error('Veículo já cadastrado!');
+                        err.status = 500;
+                        return next(err);
                     }
 
                     var vehicle = new Vehicle(req.body);
@@ -37,7 +39,7 @@ module.exports = function (app) {
                         if (err) {
                             res.send(err);
                         } else {
-                            res.send('Veículo salvo com sucesso!');
+                            res.json({ status: 200 });
                         }
                     });
                 });
@@ -51,14 +53,14 @@ module.exports = function (app) {
                         throw err;
                     }
                     console.log('Veículo alterado com sucesso!');
-                    return done(null, apt);
+                    res.json({ status: 200 });
                 });
             }
         });
     });
 
     // delete pessoa
-    app.delete('/vehicle/delete', function (req, res) {
+    app.post('/vehicle/delete', function (req, res) {
         Vehicle.remove({
             _id: req.body._id
         }, function (err, v) {

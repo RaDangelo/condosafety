@@ -18,18 +18,28 @@ export class AdministrationComponent {
   apartments: ApartmentModel[];
   vehicle: VehicleModel;
   vehicles: VehicleModel[];
-  disableFields = true;
+  disableUserFields = true;
+  disableAptFields = true;
+  disableVehicleFields = true;
+  active = 'btn-status active';
+  inactive = 'btn-status inactive';
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
     private vehicleService: VehicleServiceInterface,
     private dialogBehavior: MessageDialogBehavior) {
     this.user = new UserModel();
+    this.vehicle = new VehicleModel();
+    this.apartment = new ApartmentModel();
     this.getUsers();
     this.getApartments();
     this.getVehicles();
 
     // $('body').css('background-color', 'transparent');
 
+  }
+
+  changeVehicleStatus() {
+    this.vehicle.status = !this.vehicle.status;
   }
 
   private getApartments() {
@@ -45,6 +55,51 @@ export class AdministrationComponent {
       });
   }
 
+  newApartment() {
+    this.apartment = new ApartmentModel();
+    this.disableAptFields = false;
+  }
+
+  editApartment(apt: ApartmentModel, i: number) {
+    this.apartment = apt;
+    this.disableAptFields = false;
+  }
+
+  deleteApartment() {
+    this.apartmentService.delete(this.apartment)
+      .subscribe(() => { },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      },
+      () => {
+        this.getApartments();
+        console.log('Apartamento excluído com sucesso! ');
+        alert('Apartamento excluído com sucesso! ');
+      });
+  }
+
+  saveApartment() {
+    this.apartmentService.save(this.apartment)
+      .subscribe(() => { },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      },
+      () => {
+        this.getApartments();
+        if (this.apartment._id) {
+          console.log('Apartamento alterado com sucesso! ');
+          alert('Apartamento alterado com sucesso! ');
+        } else {
+          console.log('Apartamento cadastrado com sucesso! ');
+          alert('Apartamento cadastrado com sucesso! ');
+        }
+      });
+  }
+
   private getVehicles() {
     this.vehicleService.getList()
       .subscribe((data) => {
@@ -55,6 +110,51 @@ export class AdministrationComponent {
       },
       () => {
         console.log('Veículos obtidos com sucesso! ');
+      });
+  }
+
+  newVehicle() {
+    this.vehicle = new VehicleModel();
+    this.disableVehicleFields = false;
+  }
+
+  editVehicle(v: VehicleModel, i: number) {
+    this.vehicle = v;
+    this.disableVehicleFields = false;
+  }
+
+  deleteVehicle() {
+    this.vehicleService.delete(this.vehicle)
+      .subscribe(() => { },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      },
+      () => {
+        this.getVehicles();
+        console.log('Veículo excluído com sucesso! ');
+        alert('Veículo excluído com sucesso! ');
+      });
+  }
+
+  saveVehicle() {
+    this.vehicleService.save(this.vehicle)
+      .subscribe(() => { },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      },
+      () => {
+        this.getVehicles();
+        if (this.vehicle._id) {
+          console.log('Veículo alterado com sucesso! ');
+          alert('Veículo alterado com sucesso! ');
+        } else {
+          console.log('Veículo cadastrado com sucesso! ');
+          alert('Veículo cadastrado com sucesso! ');
+        }
       });
   }
 
@@ -74,12 +174,12 @@ export class AdministrationComponent {
 
   newUser() {
     this.user = new UserModel();
-    this.disableFields = false;
+    this.disableUserFields = false;
   }
 
   editUser(us: UserModel, i: number) {
     this.user = us;
-    this.disableFields = false;
+    this.disableUserFields = false;
   }
 
   deleteUser() {

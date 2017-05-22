@@ -11,14 +11,38 @@
         </div>
     </div>
 
-    <div id="person-type-register">
-        <label>Tipos de Pessoa</label>
-        <div id="type-list">
+    <div id="vehicle-register">
+        <label>Veículos</label>
+        <div id="vehicle-list">
             <ul>
-                <li *ngFor="let t of types; let i = index" (click)="editType(t, i)">
-                    {{t.type}}
+                <li *ngFor="let v of vehicles; let i = index" (click)="editVehicle(v, i)">
+                    {{v.brand}} - {{v.plate}}
                 </li>
             </ul>
+        </div>
+        <div class="cont-edit">
+            <div style="padding-left: 4px;">
+                Placa:
+                <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.plate" />
+            </div>
+            <div>
+                Marca:
+                <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.brand" />
+            </div>
+            <div style="padding-left: 17px;">
+                Cor:
+                <input [disabled]="disableVehicleFields" class="w-120" type="text" [(ngModel)]="vehicle.color" />
+            </div>
+            <div style="padding-left: 1px;">
+                Status:
+                <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active' : vehicle.status === false ? 'btn-status inactive' : 'btn-status'"
+                    (click)="changeVehicleStatus()"></button>
+            </div>
+            <div class="btns-vehicle">
+                <button class="btn-new" class="btn-md" (click)="newVehicle()">+</button>
+                <button [disabled]="!vehicle || !vehicle._id" class="btn-delete" class="btn-md" (click)="deleteVehicle()">Excluir</button>
+                <button [disabled]="!vehicle" class="btn-save" class="btn-md" (click)="saveVehicle()">Salvar</button>
+            </div>
         </div>
     </div>
 
@@ -34,20 +58,20 @@
         <div class="cont-edit">
             <div>
                 Usuário:
-                <input [disabled]="disableFields" class="username w-150" type="text" [(ngModel)]="user.username" />
+                <input [disabled]="disableUserFields" class="username w-150" type="text" [(ngModel)]="user.username" />
             </div>
             <div style="padding-left: 8px;">
                 Senha:
-                <input [disabled]="disableFields" class="password  w-150" type="password" [(ngModel)]="user.password" />
+                <input [disabled]="disableUserFields" class="password  w-150" type="password" [(ngModel)]="user.password" />
             </div>
             <div style="padding-left: 17px;">
                 Nível:
-                <input [disabled]="disableFields" class="access-lvl w-50" type="text" [(ngModel)]="user.accessLevel" />
+                <input [disabled]="disableUserFields" class="access-lvl w-50" type="text" [(ngModel)]="user.accessLevel" />
             </div>
-            <div class="btns">
+            <div class="btns-user">
                 <button class="btn-new" class="btn-md" (click)="newUser()">+</button>
-                <button [disabled]="!user._id" class="btn-delete" class="btn-md" (click)="deleteUser()">Excluir</button>
-                <button class="btn-save" class="btn-md" (click)="saveUser()">Salvar</button>
+                <button [disabled]="!user || !user._id" class="btn-delete" class="btn-md" (click)="deleteUser()">Excluir</button>
+                <button [disabled]="!user" class="btn-save" class="btn-md" (click)="saveUser()">Salvar</button>
             </div>
         </div>
     </div>

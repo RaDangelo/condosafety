@@ -15,7 +15,7 @@ export class VehicleModel {
             this.brand = vehicle.brand;
             this.status = vehicle.status;
             this.picture = vehicle.picture;
-        }
+        } 
     }
 
 }
