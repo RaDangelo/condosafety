@@ -6,7 +6,7 @@ export class ApartmentModel {
     floor: number;
     number: number;
     status: boolean;
-    complex?: number;
+    complex?: string;
     type?: string;
     vehicles?: Array<VehicleModel>;
 

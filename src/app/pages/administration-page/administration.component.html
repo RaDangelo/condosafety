@@ -5,9 +5,61 @@
         <div id="apt-list">
             <ul>
                 <li *ngFor="let apt of apartments; let i = index" (click)="editApartment(apt, i)">
-                    <!--<label [class]="apt.active ? ">•</label>  {{apt.number}}-->
+                    <span [class]="apt.status ? 'active-c' : 'inactive-c'">•</span>
+                    <ng-container *ngIf="apt.complex">{{apt.complex}} - </ng-container>
+                    {{apt.number}}
                 </li>
             </ul>
+        </div>
+        <div class="cont-edit">
+            <div style="width: 100%; height: 38px;">
+                <div class="floor">
+                    Andar:
+                    <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.floor" />
+                </div>
+                <div style="width: 160px; float: left;">
+                    Número:
+                    <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.number" />
+                </div>
+            </div>
+            <div style="width: 100%; height: 38px;">
+                <div style="padding-left: 17px; width: 160px; float: left">
+                    Bloco:
+                    <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.complex" />
+                </div>
+                <div style="width: 160px; float: left">
+                    Tipo:
+                    <input [disabled]="disableAptFields" class="w-120" type="text" [(ngModel)]="apartment.type" />
+                </div>
+            </div>
+            <div style="width: 100%; height: 38px;">
+                <div style="padding-left: 12px; float: left;">
+                    Status:
+                    <button [disabled]="disableAptFields" [class]="apartment.status === true ? 'btn-status active-bg' : apartment.status === false ? 'btn-status inactive-bg' : 'btn-status'"
+                        (click)="changeAptStatus()"></button>
+                </div>
+                <div style="float: left; position: relative; left: 10px;">
+                    Veículos:
+                    <select [disabled]="disableAptFields" class="w-120" [(ngModel)]="selectedVehicle">
+                <option value="null" selected disabled>Selecione...</option>
+                <option *ngFor="let v of vehicles" [ngValue]="v"> {{v.brand}} - {{v.plate}}</option>
+                </select>
+                    <button [disabled]="!selectedVehicle || !selectedVehicle._id" class="btn-md" (click)="setApartmentVehicle()"> + </button>
+                </div>
+            </div>
+
+            <div *ngIf="apartment.vehicles.length > 0" style="padding-left: 30px; height: 20px;">
+                <ng-container *ngFor="let vehic of apartment.vehicles">
+                    <button class="close" (click)="eraseAptVehicle(vehic)">&times;</button>
+                    <div style="float: left; width: 104px; margin: 0px; margin-right: 2px;"> {{vehic.brand}} - {{vehic.plate}};</div>
+                </ng-container>
+            </div>
+
+            <div class="btns-apartment">
+                <button class="btn-new" class="btn-md" (click)="newApartment()">+</button>
+                <button [disabled]="!apartment || !apartment._id" class="btn-delete" class="btn-md" (click)="deleteApartment()">Excluir</button>
+                <button [disabled]="!apartment" class="btn-save" class="btn-md" (click)="saveApartment()">Salvar</button>
+            </div>
         </div>
     </div>
 
@@ -16,7 +68,7 @@
         <div id="vehicle-list">
             <ul>
                 <li *ngFor="let v of vehicles; let i = index" (click)="editVehicle(v, i)">
-                    {{v.brand}} - {{v.plate}}
+                    <span [class]="v.status ? 'active-c' : 'inactive-c'">•</span> {{v.brand}} - {{v.plate}}
                 </li>
             </ul>
         </div>
@@ -35,7 +87,7 @@
             </div>
             <div style="padding-left: 1px;">
                 Status:
-                <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active' : vehicle.status === false ? 'btn-status inactive' : 'btn-status'"
+                <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active-bg' : vehicle.status === false ? 'btn-status inactive-bg' : 'btn-status'"
                     (click)="changeVehicleStatus()"></button>
             </div>
             <div class="btns-vehicle">

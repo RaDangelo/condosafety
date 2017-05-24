@@ -27,9 +27,9 @@
   float: left;
 }
 
-.cont-edit > div {
-  width: 100%;
-  margin: 4px;
+.cont-edit > div > div,
+.cont-edit > div{
+  margin: 4px 10px;
 }
 
 .adm-page {
@@ -62,7 +62,7 @@ li:hover {
 
 .cont-edit {
   height: 240px;
-  width: 280px;
+  width: 450px;
   margin: 10px;
   float: left;
 }
@@ -77,6 +77,11 @@ li:hover {
     margin-top: 8px !important;
 }
 
+.btns-apartment {
+    margin-left: 70px !important;
+    margin-top: 14px !important;
+}
+
 button:disabled {
   opacity: 0.5;
 }
@@ -85,16 +90,28 @@ input:disabled {
   background-color: darken(@base-color, 10%);
 }
 
+select:disabled {
+  opacity: 0.5;
+}
+
 input {
   padding-left: 2px;
 }
 
-.active {
+.active-bg {
   background-color: green;
 }
 
-.inactive {
+.inactive-bg {
   background-color: red;
+}
+
+.active-c{
+  color: green;
+}
+
+.inactive-c {
+  color: red;
 }
 
 .btn-status {
@@ -106,4 +123,18 @@ input {
     top: 3px;
     cursor: default;
     outline: none;
+}
+
+.floor {
+  padding-left: 4px; 
+  width: 150px; 
+  float: left;
+  position: relative;
+  left: 10px;
+}
+
+.close {
+  color: red;
+  opacity: .4;
+  float: left;
 }

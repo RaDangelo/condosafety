@@ -2,62 +2,72 @@ module.exports = function (app) {
 
     var Apartment = require('../models/apartment.vo');
 
-    app.get('/apartment', function (req, res) {
+    app.route('/apartment')
 
-        Apartment.find(function (err, apartments) {
-            if (err)
-                res.send(err)
-            res.json(apartments);
-        });
-    });
+        .get(function (req, res) {
 
-    app.post('/apartment', function (req, res) {
+            Apartment.find(function (err, apartments) {
+                if (err)
+                    res.send(err)
+                res.json(apartments);
+            });
+        })
 
-        Apartment.findById(req.param('_id'), function (err, apt) {
+        .post(function (req, res, next) {
 
-            if (err) {
-                console.log('Erro ao cadastrar apartamento: ' + err);
-                return done(err);
-            }
+            Apartment.findById(req.param('_id'), function (err, apt) {
 
-            if (!apt) {
-                Apartment.findOne({ 'complex': req.param('complex'), 'floor': req.param('floor') }, function (err, apt) {
+                if (err) {
+                    console.log('Erro ao cadastrar apartamento: ' + err);
+                    return next(err);
+                }
 
-                    if (err) {
-                        console.log('Erro ao cadastrar apartamento: ' + err);
-                        return done(err);
-                    }
+                if (!apt) {
+                    Apartment.findOne({ 'complex': req.param('complex'), 'floor': req.param('floor') }, function (err, apt) {
 
-                    if (apt) {
-                        console.log('Apartamento no compelexo: ' + apt.complex + ' de número:' + apt.number + ' já cadastrado!');
-                        return done(null, false, { message: 'Apartamento já cadastrado!' });
-                    }
-
-                    var aptartment = new Apartment(req.body);
-
-                    aptartment.save(function (err) {
                         if (err) {
-                            res.send(err);
-                        } else {
-                            res.send('Apartamento salvo com sucesso!');
+                            console.log('Erro ao cadastrar apartamento: ' + err);
+                            return next(err);
                         }
+
+                        if (apt) {
+                            console.log('Apartamento no compelexo: ' + apt.complex + ' de número:' + apt.number + ' já cadastrado!');
+                            var err = new Error('Apartamento já cadastrado!');
+                            err.status = 500;
+                            return next(err);
+                        }
+
+                        var aptartment = new Apartment(req.body);
+
+                        aptartment.save(function (err) {
+                            if (err) {
+                                res.send(err);
+                            } else {
+                                res.json({ status: 200 });
+                            }
+                        });
                     });
-                });
-            } else {
-                // atualiza apt
-                apt = req.body;
-                // atualizar um por um?
-                apt.save(function (err) {
-                    if (err) {
-                        console.log('Erro ao alterar apartamento: ' + err);
-                        throw err;
-                    }
-                    console.log('Apartamento alterado com sucesso!');
-                    return done(null, apt);
-                });
-            }
+                } else {
+                    // atualiza apt
+                    apt.floor = req.param('floor');
+                    apt.number = req.param('number');
+                    apt.complex = req.param('complex');
+                    apt.type = req.param('type');
+                    apt.vehicles = req.param('vehicles');
+                    apt.status = req.param('status');
+
+                    // atualizar um por um?
+                    apt.save(function (err) {
+                        if (err) {
+                            console.log('Erro ao alterar apartamento: ' + err);
+                            throw err;
+                        }
+                        console.log('Apartamento alterado com sucesso!');
+                        res.json({ status: 200 });
+                    });
+                }
+            });
         });
-    });
 
     app.post('/apartment/delete', function (req, res) {
         Apartment.remove({

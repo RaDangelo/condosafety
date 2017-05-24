@@ -16,13 +16,13 @@ export class AdministrationComponent {
   users: UserModel[];
   apartment: ApartmentModel;
   apartments: ApartmentModel[];
+  selectedVehicle: VehicleModel;
   vehicle: VehicleModel;
   vehicles: VehicleModel[];
+  warning: MessagesModel = new MessagesModel();
   disableUserFields = true;
   disableAptFields = true;
   disableVehicleFields = true;
-  active = 'btn-status active';
-  inactive = 'btn-status inactive';
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
     private vehicleService: VehicleServiceInterface,
@@ -30,6 +30,7 @@ export class AdministrationComponent {
     this.user = new UserModel();
     this.vehicle = new VehicleModel();
     this.apartment = new ApartmentModel();
+    this.selectedVehicle = null;
     this.getUsers();
     this.getApartments();
     this.getVehicles();
@@ -42,10 +43,38 @@ export class AdministrationComponent {
     this.vehicle.status = !this.vehicle.status;
   }
 
+  changeAptStatus() {
+    this.apartment.status = !this.apartment.status;
+  }
+
+  setApartmentVehicle() {
+    if (this.apartment.vehicles.length > 2) {
+      this.warning.severity = MessagesModel.SEVERITIES.WARNING;
+      this.warning.message = 'Número máximo de veículos inserido!';
+      this.dialogBehavior.showErrorMessage(this.warning);
+    }
+    if (this.selectedVehicle) {
+      for (let v of this.apartment.vehicles) {
+        if (v === this.selectedVehicle) {
+          this.warning.severity = MessagesModel.SEVERITIES.WARNING;
+          this.warning.message = 'Veículo já inserido!';
+          this.dialogBehavior.showErrorMessage(this.warning);
+          return false;
+        }
+      }
+      this.apartment.vehicles.push(this.selectedVehicle);
+    }
+  }
+
+  eraseAptVehicle(vehic: VehicleModel) {
+    this.apartment.vehicles.splice(this.apartment.vehicles.indexOf(vehic));
+  }
+
   private getApartments() {
     this.apartmentService.getList()
       .subscribe((data) => {
         this.apartments = data;
+        this.selectedVehicle = null;
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
@@ -75,6 +104,8 @@ export class AdministrationComponent {
       },
       () => {
         this.getApartments();
+        this.apartment = new ApartmentModel();
+        this.disableAptFields = true;
         console.log('Apartamento excluído com sucesso! ');
         alert('Apartamento excluído com sucesso! ');
       });
@@ -133,6 +164,8 @@ export class AdministrationComponent {
       },
       () => {
         this.getVehicles();
+        this.vehicle = new VehicleModel();
+        this.disableVehicleFields = true;
         console.log('Veículo excluído com sucesso! ');
         alert('Veículo excluído com sucesso! ');
       });
@@ -192,6 +225,8 @@ export class AdministrationComponent {
       },
       () => {
         this.getUsers();
+        this.user = new UserModel();
+        this.disableUserFields = true;
         console.log('Usuário excluído com sucesso! ');
         alert('Usuário excluído com sucesso! ');
       });
