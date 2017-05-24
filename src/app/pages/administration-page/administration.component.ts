@@ -15,10 +15,10 @@ export class AdministrationComponent {
   user: UserModel;
   users: UserModel[];
   apartment: ApartmentModel;
-  apartments: ApartmentModel[];
+  _apartments: ApartmentModel[];
   selectedVehicle: VehicleModel;
   vehicle: VehicleModel;
-  vehicles: VehicleModel[];
+  _vehicles: VehicleModel[];
   warning: MessagesModel = new MessagesModel();
   disableUserFields = true;
   disableAptFields = true;
@@ -37,6 +37,24 @@ export class AdministrationComponent {
 
     // $('body').css('background-color', 'transparent');
 
+  }
+
+  get apartments() {
+    if (this._apartments) {
+      this._apartments.sort((a: ApartmentModel, b: ApartmentModel) => {
+        return (a.complex > b.complex) ? 1 : (a.complex < b.complex) ? -1 : (a.number - b.number);
+      });
+    }
+    return this._apartments;
+  }
+
+  get vehicles() {
+    if (this._vehicles) {
+      this._vehicles.sort((a: VehicleModel, b: VehicleModel) => {
+        return b.status > a.status ? 1 : -1;
+      });
+    }
+    return this._vehicles;
   }
 
   changeVehicleStatus() {
@@ -73,8 +91,10 @@ export class AdministrationComponent {
   private getApartments() {
     this.apartmentService.getList()
       .subscribe((data) => {
-        this.apartments = data;
+        this._apartments = data;
         this.selectedVehicle = null;
+        this.apartment = new ApartmentModel();
+        this.disableAptFields = true;
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
@@ -104,8 +124,6 @@ export class AdministrationComponent {
       },
       () => {
         this.getApartments();
-        this.apartment = new ApartmentModel();
-        this.disableAptFields = true;
         console.log('Apartamento excluído com sucesso! ');
         alert('Apartamento excluído com sucesso! ');
       });
@@ -134,7 +152,9 @@ export class AdministrationComponent {
   private getVehicles() {
     this.vehicleService.getList()
       .subscribe((data) => {
-        this.vehicles = data;
+        this._vehicles = data;
+        this.vehicle = new VehicleModel();
+        this.disableVehicleFields = true;
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
@@ -164,8 +184,6 @@ export class AdministrationComponent {
       },
       () => {
         this.getVehicles();
-        this.vehicle = new VehicleModel();
-        this.disableVehicleFields = true;
         console.log('Veículo excluído com sucesso! ');
         alert('Veículo excluído com sucesso! ');
       });
@@ -196,6 +214,8 @@ export class AdministrationComponent {
     this.userService.getList()
       .subscribe((data) => {
         this.users = data;
+        this.user = new UserModel();
+        this.disableUserFields = true;
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
@@ -225,8 +245,6 @@ export class AdministrationComponent {
       },
       () => {
         this.getUsers();
-        this.user = new UserModel();
-        this.disableUserFields = true;
         console.log('Usuário excluído com sucesso! ');
         alert('Usuário excluído com sucesso! ');
       });

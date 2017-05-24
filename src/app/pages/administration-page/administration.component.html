@@ -51,7 +51,7 @@
             <div *ngIf="apartment.vehicles.length > 0" style="padding-left: 30px; height: 20px;">
                 <ng-container *ngFor="let vehic of apartment.vehicles">
                     <button class="close" (click)="eraseAptVehicle(vehic)">&times;</button>
-                    <div style="float: left; width: 104px; margin: 0px; margin-right: 2px;"> {{vehic.brand}} - {{vehic.plate}};</div>
+                    <div style="float: left; min-width: 104px; margin: 0px; margin-right: 2px;"> {{vehic.brand}} - {{vehic.plate}};</div>
                 </ng-container>
             </div>
 

@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { ROUTES } from './app.routes';
-import {NgxElectronModule} from 'ngx-electron';
+import { NgxElectronModule } from 'ngx-electron';
 
 import { AppComponent } from './app.component';
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
@@ -17,13 +17,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';
 import 'hammerjs';
 
-import { PersonServiceInterface, LoginServiceInterface, PersonTypeServiceInterface, AccessServiceInterface, AFKTimeServiceInterface, ApartmentServiceInterface, 
-VehicleServiceInterface, WatchControlServiceInterface } from './interfaces';
-import { PersonService, LoginService, PersonTypeService, AccessService, AFKTimeService, ApartmentService, VehicleService, WatchControlService } from './services';
+import {
+  PersonServiceInterface, LoginServiceInterface, PersonTypeServiceInterface, AccessServiceInterface, AFKTimeServiceInterface,
+  ApartmentServiceInterface, VehicleServiceInterface, WatchControlServiceInterface
+} from './interfaces';
+import {
+  PersonService, LoginService, PersonTypeService, AccessService, AFKTimeService,
+  ApartmentService, VehicleService, WatchControlService
+} from './services';
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
-  ReportsComponent
+  ReportsComponent, NavbarComponent
 } from './pages/';
 import { MessageDialogBehavior } from './behaviors';
 
@@ -35,7 +40,8 @@ import { MessageDialogBehavior } from './behaviors';
     LoginPageComponent,
     AdministrationComponent,
     PeopleComponent,
-    ReportsComponent
+    ReportsComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
