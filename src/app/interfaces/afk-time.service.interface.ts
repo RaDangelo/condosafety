@@ -1,17 +1,12 @@
-import {Observable} from 'rxjs/Observable';
-import {Injectable} from '@angular/core';
+import { AfkTimeModel } from '../models/afk-time.model';
+import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export abstract class AFKTimeServiceInterface {
 
-    // abstract save(person: PersonModel): Observable<any>;
+    abstract save(afk: AfkTimeModel): Observable<any>;
 
-    // abstract getList(): Observable<Array<PersonModel>>;
+    abstract get(): Observable<AfkTimeModel>;
 
-    // abstract getSingle (person: PersonModel): Observable<PersonModel>;    
-
-    // abstract update(person: PersonModel): Observable<any>;
-
-    // abstract delete(person: PersonModel): Observable<any>;
-    
 }

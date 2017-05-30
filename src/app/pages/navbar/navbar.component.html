@@ -1,26 +1,29 @@
 <nav id="nav-bar">
   <div>
     <ul class="nav">
-      <li [class.active]="router.isActive('/monitoring')">
-        <a [routerLink]=" ['./monitoring']"><label class="label-topo">Monitorar
+      <li class="cont-icon-img">
+        <div class="icon-condosafety"></div>
+      </li>
+      <li [class.active]="isActive('/monitoring')">
+        <a [routerLink]=" ['./monitoring']"><label class="label-topo">MONITORAR
           </label></a>
       </li>
       <!--<li *ngIf="user.accessLvl === 0" [class.active]="router.isActive('/admin')">-->
-      <li [class.active]="router.isActive('/admin')">
+      <li [class.active]="isActive('/admin')">
         <a [routerLink]=" ['./admin'] ">
           <label>ADMINISTRAÇÃO
           </label>
         </a>
       </li>
       <!--<li *ngIf="user.accessLvl === 0" [class.active]="router.isActive('/people')">-->
-      <li [class.active]="router.isActive('/people')">
+      <li [class.active]="isActive('/people')">
         <a [routerLink]=" ['./people']">
           <label>CADASTRO PESSOAS
           </label>
         </a>
       </li>
       <!--<li *ngIf="user.accessLvl === 0" [class.active]="router.isActive('/reports')">-->
-      <li [class.active]="router.isActive('/reports')">
+      <li [class.active]="isActive('/reports')">
         <a [routerLink]=" ['./reports'] ">
           <label>RELATÓRIOS
           </label>

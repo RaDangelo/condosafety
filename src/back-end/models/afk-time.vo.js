@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('AFK_TIME', {
-    time: Date
+    time: Number
 }, 'afk-time'
 );

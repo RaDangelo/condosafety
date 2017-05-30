@@ -6,6 +6,7 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+const http = require('http');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,8 +24,22 @@ function createWindow() {
     slashes: true
   }))
 
+  var optionsCallAfkTime = {
+    host: 'localhost',
+    port: 8081,
+    path: '/afk-time',
+    method: 'GET'
+  };
+
+  // http.request(optionsCallAfkTime, function (res) {
+  //   res.on('data', function (afkTime) {
+  //     var afk = JSON.parse(afkTime);
+  //     console.log(afk);
+  //   });
+  // }).end();
+
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

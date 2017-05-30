@@ -66,4 +66,10 @@ export class LoginPageComponent {
 
     return true;
   }
+
+  onEnterPress(e: KeyboardEvent) {
+    if (e.keyCode === 13) {
+      this.login();
+    }
+  }
 }

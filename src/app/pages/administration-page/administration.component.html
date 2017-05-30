@@ -29,7 +29,7 @@
                 </div>
                 <div style="width: 160px; float: left">
                     Tipo:
-                    <input [disabled]="disableAptFields" class="w-120" type="text" [(ngModel)]="apartment.type" />
+                    <input [disabled]="disableAptFields" class="w-114" type="text" [(ngModel)]="apartment.type" />
                 </div>
             </div>
             <div style="width: 100%; height: 38px;">
@@ -130,5 +130,11 @@
 
     <div id="ot-register">
         <label>Tempo de Ociosidade Permitido</label>
+        <div class="cont-edit">
+                Tempo permitido em minutos:
+                <input class="w-60" type="number" [(ngModel)]="afk.time" />
+                <button class="btn-save" class="btn-md" (click)="saveAfk()">Salvar</button>                
+        </div>
     </div>
+
 </div>

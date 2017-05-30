@@ -1,6 +1,6 @@
-import { LoginServiceInterface, ApartmentServiceInterface, VehicleServiceInterface } from '../../interfaces';
+import { LoginServiceInterface, ApartmentServiceInterface, VehicleServiceInterface, AFKTimeServiceInterface } from '../../interfaces';
 import { Component } from '@angular/core';
-import { UserModel, MessagesModel, ApartmentModel, VehicleModel } from '../../models';
+import { AfkTimeModel, ApartmentModel, MessagesModel, UserModel, VehicleModel } from '../../models';
 import { MessageDialogBehavior } from '../../behaviors';
 
 declare var $: any;
@@ -19,21 +19,24 @@ export class AdministrationComponent {
   selectedVehicle: VehicleModel;
   vehicle: VehicleModel;
   _vehicles: VehicleModel[];
+  afk: AfkTimeModel;
   warning: MessagesModel = new MessagesModel();
   disableUserFields = true;
   disableAptFields = true;
   disableVehicleFields = true;
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
-    private vehicleService: VehicleServiceInterface,
+    private vehicleService: VehicleServiceInterface, private afkService: AFKTimeServiceInterface,
     private dialogBehavior: MessageDialogBehavior) {
     this.user = new UserModel();
     this.vehicle = new VehicleModel();
     this.apartment = new ApartmentModel();
+    this.afk = new AfkTimeModel();
     this.selectedVehicle = null;
     this.getUsers();
     this.getApartments();
     this.getVehicles();
+    this.getAfkTime();
 
     // $('body').css('background-color', 'transparent');
 
@@ -266,6 +269,41 @@ export class AdministrationComponent {
         } else {
           console.log('Usuário cadastrado com sucesso! ');
           alert('Usuário cadastrado com sucesso! ');
+        }
+      });
+  }
+
+  private getAfkTime() {
+    this.afkService.get()
+      .subscribe((data) => {
+        if (data) {
+          this.afk = new AfkTimeModel(data);
+        }
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+      },
+      () => {
+        console.log('Tempo de ociosidade obtido com sucesso! ');
+      });
+  }
+
+  saveAfk() {
+    this.afkService.save(this.afk)
+      .subscribe(() => { },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      },
+      () => {
+        this.getAfkTime();
+        if (this.afk._id) {
+          console.log('Tempo de ociosidade permitido alterado com sucesso! ');
+          alert('Tempo de ociosidade permitido alterado com sucesso! ');
+        } else {
+          console.log('Tempo de ociosidade permitido cadastrado com sucesso! ');
+          alert('Tempo de ociosidade permitido cadastrado com sucesso! ');
         }
       });
   }

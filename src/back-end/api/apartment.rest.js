@@ -37,9 +37,9 @@ module.exports = function (app) {
                             return next(err);
                         }
 
-                        var aptartment = new Apartment(req.body);
+                        var apartment = new Apartment(req.body);
 
-                        aptartment.save(function (err) {
+                        apartment.save(function (err) {
                             if (err) {
                                 res.send(err);
                             } else {

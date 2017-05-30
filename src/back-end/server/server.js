@@ -66,6 +66,7 @@ app.use(function (req, res, next) {
 require('../api/person.rest')(app);
 require('../api/apartment.rest')(app);
 require('../api/person-type.rest')(app);
+require('../api/afk-time.rest')(app);
 require('../api/vehicle.rest')(app);
 require('../api/visitor.rest')(app);
 
