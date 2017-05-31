@@ -5,7 +5,7 @@ module.exports = function (app) {
     var PersonType = require('../models/person-type.vo');
 
     app.get('/person', function (req, res) {
-        Pessoa.find(function (err, people) {
+        Person.find(function (err, people) {
             if (err)
                 res.send(err)
             res.json(people);
