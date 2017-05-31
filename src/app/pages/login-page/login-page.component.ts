@@ -44,7 +44,7 @@ export class LoginPageComponent {
           this.dialogBehavior.showErrorMessage(error);
         },
         () => {
-          this.route.navigate(['/admin']);
+          this.route.navigate(['/monitoring']);
         });
     }
   }

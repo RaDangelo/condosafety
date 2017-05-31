@@ -31,15 +31,15 @@ function createWindow() {
     method: 'GET'
   };
 
-  // http.request(optionsCallAfkTime, function (res) {
-  //   res.on('data', function (afkTime) {
-  //     var afk = JSON.parse(afkTime);
-  //     console.log(afk);
-  //   });
-  // }).end();
+  http.request(optionsCallAfkTime, function (res) {
+    res.on('data', function (afkTime) {
+        // var afk = JSON.parse(afkTime).time;
+        // console.log(JSON.parse(afkTime).time);
+    });
+  }).end();
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
