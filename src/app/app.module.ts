@@ -49,7 +49,7 @@ import { MessageDialogBehavior } from './behaviors';
     NgxElectronModule,
     HttpModule,
     BrowserAnimationsModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [
