@@ -14,7 +14,7 @@
                 <button>Buscar </button>
                 <div class="person-search-list">
                     <ul>
-                        <li *ngFor="let p of people">
+                        <li *ngFor="let p of persons; let i = index" (click)="selectedPerson(p, i)">
                             {{p.name || p.brand}} - {{p.cpf || p.document || p.plate}}
                         </li>
                     </ul>
@@ -32,13 +32,13 @@
             </ng-container>-->
             <div class="cont-access-data">
                 <md-input-container id="input-name" class="md-block" flex-gt-sm>
-                    <input type="text" disabled value="Rafael" mdInput placeholder="Nome" />
+                    <input type="text" disabled [value]="selected?.name" mdInput placeholder="Nome" />
                 </md-input-container>
                 <md-input-container id="input-complex" class="md-block" flex-gt-sm>
                     <input type="text" disabled value="A" mdInput placeholder="Bloco" />
                 </md-input-container>
                 <md-input-container id="input-cpf" class="md-block" flex-gt-sm>
-                    <input type="text" disabled value="44244016856" mdInput placeholder="CPF" />
+                    <input type="text" disabled [value]="selected?.cpf || selected?.document" mdInput placeholder="CPF" />
                 </md-input-container>
                 <md-input-container id="input-apt" class="md-block" flex-gt-sm>
                     <input type="text" disabled value="91" mdInput placeholder="Apto" />

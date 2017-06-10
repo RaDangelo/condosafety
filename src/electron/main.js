@@ -15,14 +15,15 @@ let mainWindow
 function createWindow() {
   // Create the browser window.
   // mainWindow = new BrowserWindow({width: 350, height: 360, frame: false, transparent: true})
-  mainWindow = new BrowserWindow({ useContentSize: false, frame: false, center: true, transparent: true, height: 700, width: 1500 })
+  mainWindow = new BrowserWindow({ useContentSize: false, show:false, frame: false, center: true, transparent: true, height: 760, width: 1500 })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
     pathname: path.join('../../dist', 'index.html'),
     protocol: 'file:',
     slashes: true
-  }))
+  }));
+  mainWindow.show();
 
   var optionsCallAfkTime = {
     host: 'localhost',
@@ -33,8 +34,8 @@ function createWindow() {
 
   http.request(optionsCallAfkTime, function (res) {
     res.on('data', function (afkTime) {
-        // var afk = JSON.parse(afkTime).time;
-        // console.log(JSON.parse(afkTime).time);
+        var afk = JSON.parse(afkTime).time;
+        console.log(JSON.parse(afkTime).time);
     });
   }).end();
 

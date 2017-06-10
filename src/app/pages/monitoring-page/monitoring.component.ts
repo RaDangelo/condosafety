@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { Stream } from 'stream';
-import { Component, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 
-import { PersonModel, VisitorModel } from '../../models';
+import { PersonModel, VisitorModel, MessagesModel } from '../../models';
 import { PersonServiceInterface } from '../../interfaces';
 
 @Component({
@@ -10,13 +10,14 @@ import { PersonServiceInterface } from '../../interfaces';
   templateUrl: './monitoring.component.html',
   styleUrls: ['./monitoring.component.less']
 })
-export class MonitoringComponent {
+export class MonitoringComponent implements AfterViewInit{
 
   people: Array<any>;
   persons: Array<PersonModel>;
   visitors: Array<VisitorModel>;
   img: string;
   videos: Array<ElementRef>;
+  selected: any;
 
   @ViewChild('myname') input: ElementRef;
   @ViewChild('video4') video1: ElementRef;
@@ -34,6 +35,7 @@ export class MonitoringComponent {
     this.visitors = new Array<VisitorModel>();
     this.videos = new Array<ElementRef>();
     this.img = '../../../../dist/assets/img-test.png';
+    this.getPersons();
     this.initMockArrays();
   }
 
@@ -60,7 +62,7 @@ export class MonitoringComponent {
     visitor3.name = 'Gustavo Bergamini';
     visitor3.document = '33325557893';
 
-    this.persons = [person1, person2, person3, person4];
+    // this.persons = [person1, person2, person3, person4];
     this.visitors = [visitor1, visitor2, visitor3];
     this.people = [visitor1, visitor2, visitor3, person1, person2, person3, person4];
   }
@@ -70,7 +72,6 @@ export class MonitoringComponent {
     for (let v of this.videos) {
       let _video = v.nativeElement;
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia
         navigator.mediaDevices.getUserMedia({ video: true })
           .then(stream => {
             _video.src = window.URL.createObjectURL(stream);
@@ -78,6 +79,24 @@ export class MonitoringComponent {
           })
       }
     }
+  }
+
+  selectedPerson(p: any, i: number) {
+    this.selected = p;
+  }
+
+  private getPersons() {
+      this.personService.getList()
+      .subscribe((data) => {
+        this.persons = data;
+        console.log(this.persons);
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+      },
+      () => {
+        console.log('Pessoas obtidas com sucesso! ');
+      });
   }
 
 

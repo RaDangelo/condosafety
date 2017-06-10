@@ -51,7 +51,7 @@ import { PersonTypeModalComponent } from './person-type-modal/person-type-modal.
     NgxElectronModule,
     HttpModule,
     BrowserAnimationsModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [
