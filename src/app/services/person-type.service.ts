@@ -1,3 +1,4 @@
+import { PersonModel, PersonTypeModel } from '../models';
 import { PersonTypeServiceInterface } from '../interfaces';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
@@ -15,34 +16,22 @@ export class PersonTypeService extends PersonTypeServiceInterface {
         super();
     }
 
-    // getList(): Observable<Array<PersonModel>> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel[]>res.json().map(p => new PersonModel(p)))
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    getList(): Observable<Array<PersonTypeModel>> {
+        return this.restService.get(this.url)
+            .map((res: Response) => <PersonTypeModel[]>res.json().map(t => new PersonTypeModel(t)))
+            .catch(RESTService.handleErrorMessage);
+    }
 
-    // getSingle(person: PersonModel): Observable<PersonModel> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    save(t: PersonTypeModel): Observable<any> {
+        return this.restService.post(this.url, t)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
-    // save(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // update(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // delete(person: PersonModel): Observable<any> {
-    //     return this.restService.delete(this.url + person.id)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    delete(t: PersonTypeModel): Observable<any> {
+        return this.restService.post(this.url + 'delete', t)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
 }

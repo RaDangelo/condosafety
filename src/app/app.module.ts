@@ -28,10 +28,9 @@ import {
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
-  ReportsComponent, NavbarComponent
+  ReportsComponent, NavbarComponent, PersonTypeModalComponent
 } from './pages/';
 import { MessageDialogBehavior } from './behaviors';
-import { PersonTypeModalComponent } from './person-type-modal/person-type-modal.component';
 
 @NgModule({
   declarations: [

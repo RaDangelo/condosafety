@@ -9,7 +9,7 @@ module.exports = mongoose.model('Person', {
     email: String,
     picture: { data: Buffer, contentType: String },
     status: Boolean,
-    personType: { type: mongoose.Schema.Types.ObjectId, ref: 'PersonType' },
-    apartment: { type: mongoose.Schema.Types.ObjectId, ref: 'Apartment' }
+    personType: { type: Object, ref: 'PersonType' },
+    apartment: { type: Object, ref: 'Apartment' }
 }, 'person'
 );

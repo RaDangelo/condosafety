@@ -41,8 +41,10 @@ module.exports = function (app) {
 
                         apartment.save(function (err) {
                             if (err) {
+                                console.log('Erro ao cadastrar apartamento: ' + err);
                                 res.send(err);
                             } else {
+                                console.log('Apartamento cadastrado com sucesso!');
                                 res.json({ status: 200 });
                             }
                         });

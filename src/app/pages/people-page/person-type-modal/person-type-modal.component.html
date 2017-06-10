@@ -1,0 +1,38 @@
+<div id="person-type-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-md">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+        <span class="modal-title modal-titulo"><b>TIPOS</b> DE PESSOA</span>
+      </div>
+      <!-- Fim Modal Header -->
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="r-40">
+          <div class="coluna cont w-208 h-40">
+            <md-input-container class="md-block" flex-gt-sm>
+              <input type="text" [(ngModel)]="type.type" mdInput placeholder="Tipo de pessoa" />
+            </md-input-container>
+          </div>
+          <div class="coluna w-104 cont h-40" style="text-align: right !important;">
+            <button class="btn-new" class="btn-md" (click)="newPersonType()">+</button>
+          </div>
+        </div>
+
+        <div class="body-container">
+          <div id="vehicle-list">
+            <ul>
+              <li *ngFor="let t of types; let i = index">
+                {{t.type}} <button type="button" class="close" (click)="deleteType(t)">&times;</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Fim Modal Body -->
+      </div>
+    </div>
+  </div>
+</div>

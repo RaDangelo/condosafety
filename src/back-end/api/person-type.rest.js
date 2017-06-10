@@ -2,40 +2,45 @@ module.exports = function (app) {
 
     var PersonType = require('../models/person-type.vo');
 
-    app.get('/person-type', function (req, res) {
+    app.route('/person-type')
 
-        PersonType.find(function (err, types) {
-            if (err)
-                res.send(err)
-            res.json(types);
-        });
-    });
+        .get(function (req, res) {
 
-    app.post('/person-type', function (req, res) {
+            PersonType.find(function (err, types) {
+                if (err)
+                    res.send(err)
+                res.json(types);
+            });
+        })
 
-        PersonType.findOne({ 'type': req.param('type') }, function (err, type) {
+        .post(function (req, res, next) {
 
-            if (err) {
-                console.log('Erro ao cadastrar tipo de pessoa: ' + err);
-                return done(err);
-            }
+            PersonType.findOne({ 'type': req.param('type') }, function (err, type) {
 
-            if (type) {
-                console.log('Tipo de pessoa: ' + type.type + ' já cadastrado!');
-                return done(null, false, { message: 'Tipo de Pessoa já cadastrado!' });
-            }
-
-            var type = new PersonType(req.body);
-
-            type.save(function (err) {
                 if (err) {
-                    res.send(err);
-                } else {
-                    res.send('Tipo de pessoa cadastrado com sucesso!');
+                    console.log('Erro ao cadastrar tipo de pessoa: ' + err);
+                    return next(err);
                 }
+
+                if (type) {
+                    console.log('Tipo de pessoa: ' + type.type + ' já cadastrado!');
+                    var err = new Error('Tipo de pessoa já cadastrado!');
+                    err.status = 500;
+                    return next(next);
+                }
+
+                var type = new PersonType(req.body);
+
+                type.save(function (err) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        console.log('Tipo de pessoa cadastrado com sucesso!');
+                        res.json({ status: 200 });
+                    }
+                });
             });
         });
-    });
 
 
     app.post('/person-type/delete', function (req, res) {

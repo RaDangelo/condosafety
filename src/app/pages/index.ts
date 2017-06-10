@@ -4,4 +4,5 @@ export * from './people-page/people.component';
 export * from './reports-page/reports.component';
 export * from './login-page/login-page.component';
 export * from './navbar/navbar.component';
+export * from './people-page/person-type-modal/person-type-modal.component';
 

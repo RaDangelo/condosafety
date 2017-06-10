@@ -15,7 +15,7 @@ let mainWindow
 function createWindow() {
   // Create the browser window.
   // mainWindow = new BrowserWindow({width: 350, height: 360, frame: false, transparent: true})
-  mainWindow = new BrowserWindow({ useContentSize: false, show:false, frame: false, center: true, transparent: true, height: 760, width: 1500 })
+  mainWindow = new BrowserWindow({ useContentSize: false, show: false, frame: false, center: true, transparent: true, height: 760, width: 1500 })
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
@@ -34,8 +34,10 @@ function createWindow() {
 
   http.request(optionsCallAfkTime, function (res) {
     res.on('data', function (afkTime) {
+      if (afkTime && afkTime.time) {
         var afk = JSON.parse(afkTime).time;
         console.log(JSON.parse(afkTime).time);
+      }
     });
   }).end();
 
