@@ -31,6 +31,7 @@ import {
   ReportsComponent, NavbarComponent
 } from './pages/';
 import { MessageDialogBehavior } from './behaviors';
+import { PersonTypeModalComponent } from './person-type-modal/person-type-modal.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { MessageDialogBehavior } from './behaviors';
     AdministrationComponent,
     PeopleComponent,
     ReportsComponent,
-    NavbarComponent
+    NavbarComponent,
+    PersonTypeModalComponent
   ],
   imports: [
     BrowserModule,
