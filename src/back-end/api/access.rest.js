@@ -11,6 +11,8 @@ module.exports = function (app) {
 
     app.post(('/access/validate-pass'), function (req, res, next) {
         let username = req.param('username');
+        // let username = 'admin';
+        console.log(req.param('username'))
         let pass = req.param('password');
 
         if (isNaN(req.param('username'))) {
