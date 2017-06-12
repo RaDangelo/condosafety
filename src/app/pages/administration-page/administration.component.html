@@ -90,6 +90,12 @@
                 <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active-bg' : vehicle.status === false ? 'btn-status inactive-bg' : 'btn-status'"
                     (click)="changeVehicleStatus()"></button>
             </div>
+            <!--<div style="padding-left: 1px;" (click)="resetQueue()" class="cont-btn-inputfile">
+                Foto:
+                <md-icon class="material-icons">file</md-icon>
+                <input id="fileChooser" type="file" class="inputfile" [(ngModel)]="vehicle.picture" />
+                <label for="fileChooser"> <span class="glyphicon glyphicon-open-file" style="margin-right:3px"></span>Selecionar...</label>
+            </div>-->
             <div class="btns-vehicle">
                 <button class="btn-new" class="btn-md" (click)="newVehicle()">+</button>
                 <button [disabled]="!vehicle || !vehicle._id" class="btn-delete" class="btn-md" (click)="deleteVehicle()">Excluir</button>
@@ -131,9 +137,9 @@
     <div id="ot-register">
         <label>Tempo de Ociosidade Permitido</label>
         <div class="cont-edit">
-                Tempo permitido em minutos:
-                <input class="w-60" type="number" [(ngModel)]="afk.time" />
-                <button class="btn-save" class="btn-md" (click)="saveAfk()">Salvar</button>                
+            Tempo permitido em minutos:
+            <input class="w-60" type="number" [(ngModel)]="afk.time" />
+            <button class="btn-save" class="btn-md" (click)="saveAfk()">Salvar</button>
         </div>
     </div>
 

@@ -9,9 +9,7 @@ export abstract class VehicleServiceInterface {
 
     abstract getList(): Observable<Array<VehicleModel>>;
 
-    // abstract getSingle (v: VehicleModel): Observable<VehicleModel>;    
-
-    // abstract update(v: VehicleModel): Observable<any>;
+    abstract getUploadEndpoint(): string;
 
     abstract delete(v: VehicleModel): Observable<any>;
 

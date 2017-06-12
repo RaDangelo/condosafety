@@ -32,6 +32,9 @@ import {
 } from './pages/';
 import { MessageDialogBehavior } from './behaviors';
 
+import { FileUploadModule } from 'ng2-file-upload';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,6 +49,7 @@ import { MessageDialogBehavior } from './behaviors';
   ],
   imports: [
     BrowserModule,
+    FileUploadModule,
     FormsModule,
     NgxElectronModule,
     HttpModule,

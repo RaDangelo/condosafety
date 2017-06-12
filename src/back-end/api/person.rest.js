@@ -38,6 +38,7 @@ module.exports = function (app) {
                         }
 
                         var person = new Person(req.body);
+                        person.accessPassword = createHash(person.accessPassword);
 
                         person.save(function (err) {
                             if (err) {
@@ -51,7 +52,20 @@ module.exports = function (app) {
                     });
                 } else {
                     // atualiza pessoa
-                    p = req.body;
+                    p.name = req.param('name');
+                    p.nickname = req.param('nickname');
+                    if (p.accessPassword === req.param('accessPassword')) {
+                        p.accessPassword = req.param('accessPassword');
+                    } else {
+                        p.accessPassword = createHash(req.param('accessPassword'));
+                    }
+                    p.phoneNumber = req.param('phoneNumber');
+                    p.cpf = req.param('cpf');
+                    p.email = req.param('email');
+                    p.status = req.param('status');
+                    p.personType = req.param('personType');
+                    p.apartment = req.param('apartment');
+
                     // atualizar um por um?
                     p.save(function (err) {
                         if (err) {
@@ -80,4 +94,9 @@ module.exports = function (app) {
             });
         });
     });
+}
+
+// Generates hash using bCrypt
+var createHash = function (password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }

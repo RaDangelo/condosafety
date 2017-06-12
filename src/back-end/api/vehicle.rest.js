@@ -12,6 +12,9 @@ module.exports = function (app) {
             });
         })
 
+        .put(function (req, res) {
+        })
+
         .post(function (req, res, next) {
 
             Vehicle.findById(req.param('_id'), function (err, v) {
@@ -51,6 +54,7 @@ module.exports = function (app) {
                     v.brand = req.param('brand');
                     v.color = req.param('color');
                     v.status = req.param('status');
+                    v.picture = req.param('picture');
 
                     v.save(function (err) {
                         if (err) {

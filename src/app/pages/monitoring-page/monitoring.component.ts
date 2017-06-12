@@ -1,23 +1,25 @@
+import { MessageDialogBehavior } from '../../behaviors';
 import * as path from 'path';
 import { Stream } from 'stream';
 import { Component, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 
-import { PersonModel, VisitorModel, MessagesModel } from '../../models';
-import { PersonServiceInterface } from '../../interfaces';
+import { PersonModel, UserModel, VisitorModel, MessagesModel } from '../../models';
+import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 
 @Component({
   selector: 'monitoring',
   templateUrl: './monitoring.component.html',
   styleUrls: ['./monitoring.component.less']
 })
-export class MonitoringComponent implements AfterViewInit{
+export class MonitoringComponent implements AfterViewInit {
 
-  people: Array<any>;
-  persons: Array<PersonModel>;
-  visitors: Array<VisitorModel>;
+  filterResult: Array<Object>;
   img: string;
   videos: Array<ElementRef>;
   selected: any;
+  filter = '';
+  accessPassword: string;
+  user: UserModel;
 
   @ViewChild('myname') input: ElementRef;
   @ViewChild('video4') video1: ElementRef;
@@ -29,42 +31,11 @@ export class MonitoringComponent implements AfterViewInit{
 
   @ViewChildren('div1,div2,div3') divs: QueryList<ElementRef>;
 
-  constructor(private personService: PersonServiceInterface) {
-    this.people = new Array<any>();
-    this.persons = new Array<PersonModel>();
-    this.visitors = new Array<VisitorModel>();
+  constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
+    this.filterResult = new Array<Object>();
     this.videos = new Array<ElementRef>();
+    this.user = new UserModel();
     this.img = '../../../../dist/assets/img-test.png';
-    this.getPersons();
-    this.initMockArrays();
-  }
-
-  private initMockArrays() {
-    let person1 = new PersonModel();
-    person1.name = 'João de Oliveira';
-    person1.cpf = '44244016856';
-    let person2 = new PersonModel();
-    person2.name = 'João de Silva'
-    person2.cpf = '12345678922';
-    let person3 = new PersonModel();
-    person3.name = 'João de Macedo';
-    person3.cpf = '12375853223';
-    let person4 = new PersonModel();
-    person4.name = 'João de Maria';
-    person4.cpf = '15053434368';
-    let visitor1 = new VisitorModel();
-    visitor1.name = 'Rafael Bergamini';
-    visitor1.document = '48943103702';
-    let visitor2 = new VisitorModel();
-    visitor2.name = 'Rafael DAngelo';
-    visitor2.document = '32445656877';
-    let visitor3 = new VisitorModel();
-    visitor3.name = 'Gustavo Bergamini';
-    visitor3.document = '33325557893';
-
-    // this.persons = [person1, person2, person3, person4];
-    this.visitors = [visitor1, visitor2, visitor3];
-    this.people = [visitor1, visitor2, visitor3, person1, person2, person3, person4];
   }
 
   ngAfterViewInit() {
@@ -81,21 +52,64 @@ export class MonitoringComponent implements AfterViewInit{
     }
   }
 
-  selectedPerson(p: any, i: number) {
-    this.selected = p;
+  selectedItem(data: any, i: number) {
+    this.selected = data;
   }
 
-  private getPersons() {
-      this.personService.getList()
+  filterData() {
+    this.accessService.filterData(this.filter)
       .subscribe((data) => {
-        this.persons = data;
-        console.log(this.persons);
+        this.filterResult = [...data];
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
       },
       () => {
-        console.log('Pessoas obtidas com sucesso! ');
+        console.log('Dados filtrados com sucesso! ');
+      });
+  }
+
+  allowAccess() {
+    this.user.password = this.accessPassword;
+    this.user.username = localStorage.getItem('username');
+    this.accessService.validatePassword(this.user)
+      .subscribe((data) => {
+        if (data) {
+          console.log(data);
+          // pass accessmodel
+        } else {
+          console.log('Senha incorreta');
+          let error = new MessagesModel();
+          error.severity = MessagesModel.SEVERITIES.ERROR;
+          this.dialogBehavior.showErrorMessage(error);
+        }
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      });
+  }
+
+  denyAccess() {
+    this.user.password = this.accessPassword;
+    this.user.username = localStorage.getItem('username');
+    this.accessService.validatePassword(this.user)
+      .subscribe((data) => {
+        if (data) {
+          console.log(data);
+          // pass accessmodel
+        } else {
+          console.log('Senha incorreta');
+          let error = new MessagesModel();
+          error.severity = MessagesModel.SEVERITIES.ERROR;
+          this.dialogBehavior.showErrorMessage(error);
+        }
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
       });
   }
 

@@ -24,7 +24,7 @@
         </div>
         <div>
             Email:
-            <input [disabled]="disableFields" class="w-150" type="text" [(ngModel)]="person.email" />
+            <input [disabled]="disableFields" class="w-150" type="email" [(ngModel)]="person.email" />
         </div>
 
         <div style="padding-left: 1px;">
@@ -37,7 +37,7 @@
             Tipo de pessoa:
             <select [disabled]="disableFields" class="w-120" [(ngModel)]="person.personType">
                 <option value="undefined" selected disabled>Selecione...</option>
-                <option *ngFor="let t of types" [ngValue]="t"> {{t.type}}</option>
+                <option *ngFor="let t of types" [ngValue]="t"> {{t?.type}}</option>
                 </select>
         </div>
 
@@ -66,7 +66,7 @@
         <div id="person-list" style="float: left;">
             <ul>
                 <li *ngFor="let p of persons; let i = index" (click)="editPerson(p, i)">
-                    <span [class]="p.status ? 'active-c' : 'inactive-c'">•</span> {{p.name}} - {{p.personType.type}}
+                    <span [class]="p.status ? 'active-c' : 'inactive-c'">•</span> {{p.name}} - {{p.personType?.type}}
                 </li>
             </ul>
         </div>

@@ -5,6 +5,8 @@ module.exports = mongoose.model('Vehicle', {
     color: String,
     brand: String,
     status: Boolean,
-    picture: { data: Buffer, contentType: String }
+    // type: ENUM
+    picture: { data: Buffer, contentType: String },
+    apartment: { type: Object, ref: 'Apartment' },
 }, 'vehicle'
 );
