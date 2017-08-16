@@ -47,7 +47,7 @@ export class RESTService extends BaseRequestOptions {
             console.log('[GET] - Service Url: ' + serviceUrl);
             console.log(JSON.stringify(options));
         }
-        return this.http.get(serviceUrl, options).timeout(10000, new Error('TimeOut!'));
+        return this.http.get(serviceUrl, options);
     }
 
     post(url: string, body: any, options?: RequestOptions): Observable<Response> {
@@ -57,7 +57,7 @@ export class RESTService extends BaseRequestOptions {
             console.log('[POST] - Service Url: ' + serviceUrl);
             console.log(JSON.stringify(options));
         }
-        return this.http.post(serviceUrl, body, options).timeout(10000, new Error('TimeOut!'));
+        return this.http.post(serviceUrl, body, options);
     };
 
     put(url: string, body: any, options?: RequestOptions): Observable<Response> {
@@ -67,7 +67,7 @@ export class RESTService extends BaseRequestOptions {
             console.log('[PUT] - Service Url: ' + serviceUrl);
             console.log(JSON.stringify(options));
         }
-        return this.http.put(serviceUrl, body, options).timeout(10000, new Error('TimeOut!'));
+        return this.http.put(serviceUrl, body, options);
 
     }
 
@@ -78,7 +78,7 @@ export class RESTService extends BaseRequestOptions {
             console.log('[DELETE] - Service Url: ' + serviceUrl);
             console.log(JSON.stringify(options));
         }
-        return this.http.delete(serviceUrl, options).timeout(10000, new Error('TimeOut!'));
+        return this.http.delete(serviceUrl, options);
     }
 
     getBaseUrl() {
