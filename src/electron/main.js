@@ -27,7 +27,7 @@ function createWindow() {
 
   var optionsCallAfkTime = {
     host: 'localhost',
-    port: 8081,
+    port: 8082,
     path: '/afk-time',
     method: 'GET'
   };

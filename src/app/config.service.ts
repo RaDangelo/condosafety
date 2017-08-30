@@ -6,7 +6,7 @@ export class ConfigService {
 
     get apiUrl(): string {
         let url = environment.apiUrl;
-        return url ? url : 'http://localhost:8081';
+        return url ? url : 'http://localhost:8082';
     }
 
     get showServiceUrl(): boolean {

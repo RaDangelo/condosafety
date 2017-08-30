@@ -10,8 +10,8 @@ module.exports = function (app) {
     var filteredData = new Array();
 
     app.post(('/access/validate-pass'), function (req, res, next) {
-        let username = req.param('username');
-        // let username = 'admin';
+        // let username = req.param('username') + ' ';
+        let username = 'admin';
         console.log(req.param('username'))
         let pass = req.param('password');
 
@@ -23,13 +23,13 @@ module.exports = function (app) {
 
                 if (!user) {
                     console.log('Usuário ' + req.param('username') + ' não encontrado!');
-                    var err = new Error('Usuário não existente cadastrado!');
+                    var err = new Error('Usuário não existente!');
                     err.status = 500;
                     return next(err);
                 }
 
                 // Usuário existe mas a senha está errada
-                if (!isValidPassword(user, password)) {
+                if (!isValidPassword(user, pass)) {
                     console.log('Senha Inválida');
                     var err = new Error('Senha inválida!');
                     err.status = 401;

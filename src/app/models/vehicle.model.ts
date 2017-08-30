@@ -7,6 +7,7 @@ export class VehicleModel {
     color: string;
     brand: string;
     status: boolean;
+    // type: ENUM? 
     apartment: ApartmentModel;
     picture?: File;
 

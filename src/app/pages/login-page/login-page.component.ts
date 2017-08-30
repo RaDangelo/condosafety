@@ -36,7 +36,7 @@ export class LoginPageComponent {
       this.loginService.login(this.user)
         .subscribe((data: UserModel) => {
           console.log('Login executado com sucesso! Usuário logado: ' + data);
-          localStorage.setItem('username', JSON.stringify(this.user.username));
+          localStorage.setItem('username', this.user.username);
         },
         (error: MessagesModel) => {
           console.log('Ocorreu um erro: ' + error.message);

@@ -16,6 +16,7 @@ export class MonitoringComponent implements AfterViewInit {
   filterResult: Array<Object>;
   img: string;
   videos: Array<ElementRef>;
+  videos2: Array<ElementRef>;
   selected: any;
   filter = '';
   accessPassword: string;
@@ -34,21 +35,43 @@ export class MonitoringComponent implements AfterViewInit {
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
     this.filterResult = new Array<Object>();
     this.videos = new Array<ElementRef>();
+    this.videos2 = new Array<ElementRef>();
     this.user = new UserModel();
     this.img = '../../../../dist/assets/img-test.png';
   }
 
   ngAfterViewInit() {
     this.videos = [this.video1, this.video2, this.video3, this.video4];
-    for (let v of this.videos) {
-      let _video = v.nativeElement;
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true })
-          .then(stream => {
-            _video.src = window.URL.createObjectURL(stream);
-            _video.play();
-          })
+
+    navigator.mediaDevices.enumerateDevices()
+      .then(this.gotDevices.bind(this));
+
+    console.log(navigator.mediaDevices.enumerateDevices());
+  }
+
+  private gotDevices(infos) {
+    let inputs: any[] = [];
+    for (let i of infos) {
+      if (i.kind === 'videoinput') {
+        inputs.push(i);
       }
+    }
+
+    for (let v of this.videos) {
+      let nv = v.nativeElement;
+      let userMedia: any;
+      if (inputs[this.videos.indexOf(v)]) {
+        userMedia = inputs[this.videos.indexOf(v)];
+      } else {
+        userMedia = inputs[0];
+      }
+      let media: MediaTrackConstraints = { deviceId: userMedia.deviceId };
+      navigator.mediaDevices.getUserMedia({ video: media })
+        .then(stream => {
+          console.log(stream);
+          nv.src = window.URL.createObjectURL(stream);
+          nv.play();
+        })
     }
   }
 
