@@ -60,11 +60,11 @@ export class MonitoringComponent implements AfterViewInit {
     for (let v of this.videos) {
       let nv = v.nativeElement;
       let userMedia: any;
-      if (inputs[this.videos.indexOf(v)]) {
-        userMedia = inputs[this.videos.indexOf(v)];
-      } else {
-        userMedia = inputs[0];
-      }
+      // if (inputs[this.videos.indexOf(v)]) {
+        userMedia = inputs[1];
+      // } else {
+        // userMedia = inputs[1];
+      // }
       let media: MediaTrackConstraints = { deviceId: userMedia.deviceId };
       navigator.mediaDevices.getUserMedia({ video: media })
         .then(stream => {

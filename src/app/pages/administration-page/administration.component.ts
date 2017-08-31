@@ -113,7 +113,11 @@ export class AdministrationComponent {
   }
 
   eraseAptVehicle(vehic: VehicleModel) {
+    console.log(this.apartment.vehicles);
+    console.log(vehic);
+    console.log(this.apartment.vehicles.indexOf(vehic));
     this.apartment.vehicles.splice(this.apartment.vehicles.indexOf(vehic));
+    console.log(this.apartment.vehicles);
   }
 
   private getApartments() {
