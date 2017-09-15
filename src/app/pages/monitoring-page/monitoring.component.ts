@@ -44,12 +44,12 @@ export class MonitoringComponent implements AfterViewInit {
     this.videos = [this.video1, this.video2, this.video3, this.video4];
 
     navigator.mediaDevices.enumerateDevices()
-      .then(this.gotDevices.bind(this));
+      .then(this.getDevices.bind(this));
 
     console.log(navigator.mediaDevices.enumerateDevices());
   }
 
-  private gotDevices(infos) {
+  private getDevices(infos) {
     let inputs: any[] = [];
     for (let i of infos) {
       if (i.kind === 'videoinput') {
