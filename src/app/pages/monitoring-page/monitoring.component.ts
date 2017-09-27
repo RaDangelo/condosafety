@@ -87,7 +87,7 @@ export class MonitoringComponent implements AfterViewInit {
       this.user.username = localStorage.getItem('username');
       this.accessService.validatePassword(this.user)
         .subscribe((data) => {
-          this.user.password = '';
+          this.accessPassword = '';
 
           if (data) {
             // take picture
@@ -132,7 +132,7 @@ export class MonitoringComponent implements AfterViewInit {
       this.user.username = localStorage.getItem('username');
       this.accessService.validatePassword(this.user)
         .subscribe((data) => {
-          this.user.password = '';
+          this.accessPassword = '';
           if (data) {
             // take picture
             // validate facial recognition

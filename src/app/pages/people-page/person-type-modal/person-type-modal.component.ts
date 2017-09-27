@@ -1,6 +1,6 @@
 import { PersonTypeServiceInterface } from '../../../interfaces';
 import { PersonTypeModel, MessagesModel } from '../../../models';
-import { Component } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { MessageDialogBehavior } from '../../../behaviors';
 
 declare var $: any;
@@ -15,6 +15,14 @@ export class PersonTypeModalComponent {
   _types: PersonTypeModel[];
   type: PersonTypeModel;
 
+  @Output() getTypes = new EventEmitter();
+
+  @Input() set types(t: PersonTypeModel[]) {
+    if (t) {
+      this._types = t;
+    }
+  }
+
   get types() {
     if (this._types) {
       this._types.sort((a: PersonTypeModel, b: PersonTypeModel) => {
@@ -26,22 +34,21 @@ export class PersonTypeModalComponent {
 
   constructor(private typeService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior) {
     this.type = new PersonTypeModel();
-    this.getTypes();
   }
 
-  private getTypes() {
-    this.typeService.getList()
-      .subscribe((data) => {
-        this._types = data;
-        this.type = new PersonTypeModel();
-      },
-      (error: MessagesModel) => {
-        console.log('Ocorreu um erro: ' + error.message);
-      },
-      () => {
-        console.log('Tipos de pessoa obtidos com sucesso! ');
-      });
-  }
+  // private getTypes() {
+  //   this.typeService.getList()
+  //     .subscribe((data) => {
+  //       this._types = data;
+  //       this.type = new PersonTypeModel();
+  //     },
+  //     (error: MessagesModel) => {
+  //       console.log('Ocorreu um erro: ' + error.message);
+  //     },
+  //     () => {
+  //       console.log('Tipos de pessoa obtidos com sucesso! ');
+  //     });
+  // }
 
   newPersonType() {
     this.typeService.save(this.type)
@@ -52,7 +59,7 @@ export class PersonTypeModalComponent {
         this.dialogBehavior.showErrorMessage(error);
       },
       () => {
-        this.getTypes();
+        this.getTypes.emit();
         console.log('Tipo de pessoa cadastrado com sucesso! ');
         alert('Tipo de pessoa cadastrado com sucesso! ');
       });
@@ -67,7 +74,7 @@ export class PersonTypeModalComponent {
         this.dialogBehavior.showErrorMessage(error);
       },
       () => {
-        this.getTypes();
+        this.getTypes.emit();
         console.log('Tipo de pessoa excluído com sucesso! ');
         alert('Tipo de pessoa excluído com sucesso! ');
       });

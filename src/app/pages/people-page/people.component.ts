@@ -93,6 +93,7 @@ export class PeopleComponent {
   }
 
   private getTypes() {
+    console.log('enrtei');
     this.typesService.getList()
       .subscribe((data) => {
         this._types = data;

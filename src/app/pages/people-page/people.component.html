@@ -72,4 +72,4 @@
         </div>
     </div>
 </div>
-<person-type-modal> </person-type-modal>
+<person-type-modal [types]="types" (getTypes)="getTypes($event)"> </person-type-modal>
