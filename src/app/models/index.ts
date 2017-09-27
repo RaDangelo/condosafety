@@ -8,6 +8,9 @@ export * from './messages.model';
 export * from './watch-control.model';
 export * from './afk-time.model';
 export * from './video-input.model';
+export * from './access.model';
+
+
 
 
 

@@ -1,4 +1,21 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+/* material adjustments */
+
+.mat-select:focus:not(.mat-select-disabled) .mat-select-trigger {
+    color: darkblue !important;
+}
+
+.mat-option {
+    font-size: 14px;
+    height: 44px;
+}
+
+.mat-select-trigger, .mat-input-element:disabled {
+    color: black;
+}
+
+/* toastr */
 .toastr-position {
     top: 5%;
     left: 33%;
@@ -10,6 +27,7 @@
     filter: alpha(opacity=80);
 }
 
+/* fixed sizes */
 .w-50 {
     width: 50px;
 }

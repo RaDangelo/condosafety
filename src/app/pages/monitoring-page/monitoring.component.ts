@@ -3,7 +3,7 @@ import * as path from 'path';
 import { Stream } from 'stream';
 import { Component, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@angular/core';
 
-import { PersonModel, UserModel, VisitorModel, MessagesModel, VideoInputModel } from '../../models';
+import { PersonModel, UserModel, VisitorModel, MessagesModel, VideoInputModel, AccessModel, AccessType, AccessAction } from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 
 @Component({
@@ -18,6 +18,7 @@ export class MonitoringComponent implements AfterViewInit {
   img: string;
   selected: any;
   filter = '';
+  access: AccessModel = new AccessModel();
   accessPassword: string;
   user: UserModel;
   videoInputs: Array<VideoInputModel> = new Array<VideoInputModel>();
@@ -29,15 +30,13 @@ export class MonitoringComponent implements AfterViewInit {
   @ViewChild('video3') video3: ElementRef;
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
-    this.videos = [this.video0, this.video1, this.video2, this.video3];
     this.filterResult = new Array<Object>();
     this.user = new UserModel();
     this.img = '../../../../dist/assets/img-test.png';
-    console.log(this.videos);
   }
 
   ngAfterViewInit() {
-
+    this.videos = [this.video0, this.video1, this.video2, this.video3];
     navigator.mediaDevices.enumerateDevices()
       .then(this.getDevices.bind(this));
 
@@ -60,7 +59,6 @@ export class MonitoringComponent implements AfterViewInit {
     const media: MediaTrackConstraints = { deviceId: this.selectedVideos[i].id };
     navigator.mediaDevices.getUserMedia({ video: media })
       .then(stream => {
-        console.log(stream);
         nv.src = window.URL.createObjectURL(stream);
         nv.play();
       });
@@ -84,47 +82,113 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   allowAccess() {
-    this.user.password = this.accessPassword;
-    this.user.username = localStorage.getItem('username');
-    this.accessService.validatePassword(this.user)
-      .subscribe((data) => {
-        if (data) {
-          console.log(data);
-          // pass accessmodel
-        } else {
-          console.log('Senha incorreta');
-          let error = new MessagesModel();
+    if (this.selected) {
+      this.user.password = this.accessPassword;
+      this.user.username = localStorage.getItem('username');
+      this.accessService.validatePassword(this.user)
+        .subscribe((data) => {
+          this.user.password = '';
+
+          if (data) {
+            // take picture
+            // validate facial recognition
+
+            this.getAccess();
+            this.access.action = AccessAction.ALLOW;
+            this.accessService.insertAccess(this.access)
+              .subscribe((data) => {
+                console.log(data);
+                alert('Entrada permitida! ');
+              },
+              (error: MessagesModel) => {
+                console.log('Ocorreu um erro: ' + error.message);
+                error.severity = MessagesModel.SEVERITIES.ERROR;
+                this.dialogBehavior.showErrorMessage(error);
+              });
+
+          } else {
+            console.log('Senha incorreta');
+            const error = new MessagesModel();
+            error.severity = MessagesModel.SEVERITIES.ERROR;
+            this.dialogBehavior.showErrorMessage(error);
+          }
+        },
+        (error: MessagesModel) => {
+          console.log('Ocorreu um erro: ' + error.message);
           error.severity = MessagesModel.SEVERITIES.ERROR;
           this.dialogBehavior.showErrorMessage(error);
-        }
-      },
-      (error: MessagesModel) => {
-        console.log('Ocorreu um erro: ' + error.message);
-        error.severity = MessagesModel.SEVERITIES.ERROR;
-        this.dialogBehavior.showErrorMessage(error);
-      });
+        });
+    } else {
+      const error = new MessagesModel();
+      error.severity = MessagesModel.SEVERITIES.WARNING;
+      error.message = 'Busque e selecione uma pessoa ou veículo!';
+      this.dialogBehavior.showErrorMessage(error);
+    }
   }
 
   denyAccess() {
-    this.user.password = this.accessPassword;
-    this.user.username = localStorage.getItem('username');
-    this.accessService.validatePassword(this.user)
-      .subscribe((data) => {
-        if (data) {
-          console.log(data);
-          // pass accessmodel
-        } else {
-          console.log('Senha incorreta');
-          let error = new MessagesModel();
+    if (this.selected) {
+      this.user.password = this.accessPassword;
+      this.user.username = localStorage.getItem('username');
+      this.accessService.validatePassword(this.user)
+        .subscribe((data) => {
+          this.user.password = '';
+          if (data) {
+            // take picture
+            // validate facial recognition
+
+            this.getAccess();
+            this.access.action = AccessAction.DENY;
+            this.accessService.insertAccess(this.access)
+              .subscribe((data) => {
+                console.log(data);
+                alert('Entrada negada! ');
+              },
+              (error: MessagesModel) => {
+                console.log('Ocorreu um erro: ' + error.message);
+                error.severity = MessagesModel.SEVERITIES.ERROR;
+                this.dialogBehavior.showErrorMessage(error);
+              });
+          } else {
+            console.log('Senha incorreta');
+            const error = new MessagesModel();
+            error.severity = MessagesModel.SEVERITIES.ERROR;
+            this.dialogBehavior.showErrorMessage(error);
+          }
+        },
+        (error: MessagesModel) => {
+          console.log('Ocorreu um erro: ' + error.message);
           error.severity = MessagesModel.SEVERITIES.ERROR;
           this.dialogBehavior.showErrorMessage(error);
-        }
-      },
-      (error: MessagesModel) => {
-        console.log('Ocorreu um erro: ' + error.message);
-        error.severity = MessagesModel.SEVERITIES.ERROR;
-        this.dialogBehavior.showErrorMessage(error);
-      });
+        });
+    } else {
+      const error = new MessagesModel();
+      error.severity = MessagesModel.SEVERITIES.WARNING;
+      error.message = 'Busque e selecione uma pessoa ou veículo!';
+      this.dialogBehavior.showErrorMessage(error);
+    }
+  }
+
+  private getAccess() {
+    // if (this.selected.personType) {
+    // access.person = this.selected;
+    // access.type = AccessType.PERSON;
+    // } else if (this.selected.plate) {
+    //   access.vehicle = this.selected;
+    // access.type = AccessType.VEHICLE;
+    // } else {
+    //   access.visitor = this.selected;    
+    // access.type = AccessType.VISITOR;
+    // }
+    this.access.date = new Date();
+    this.access.user.username = localStorage.getItem('username');
+    if (this.selected.cpf) {
+      this.access.person = this.selected;
+      this.access.type = AccessType.PERSON;
+    } else if (this.selected.plate) {
+      this.access.vehicle = this.selected;
+      this.access.type = AccessType.VEHICLE;
+    }
   }
 
 

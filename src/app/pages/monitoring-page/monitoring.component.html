@@ -56,35 +56,32 @@
     <div class="right-container">
 
         <div id="camera0" class="camera-container">
-            <video #video0 width="368" height="260" autoplay></video>
+            <video #video0 width="346" height="260" autoplay class="video"></video>
+            <md-select [(ngModel)]="selectedVideos[0]" (change)="showCamera(0)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
+            </md-select>
         </div>
-        <select [(ngModel)]="selectedVideos[0]" (change)="showCamera(0)">
-                            <option value="null" selected disabled>Selecione</option>
-                            <option *ngFor="let input of videoInputs" [ngValue]="input" >{{input.name}}</option>
-                        </select>
 
         <div id="camera1" class="camera-container">
-            <video #video1 width="368" height="260" autoplay></video>
+            <video #video1 width="346" height="260" autoplay class="video"></video>
+            <md-select [(ngModel)]="selectedVideos[1]" (change)="showCamera(1)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
+            </md-select>
         </div>
-        <select [(ngModel)]="selectedVideos[1]" (change)="showCamera(1)">
-                            <option value="null" selected disabled>Selecione</option>
-                            <option *ngFor="let input of videoInputs" [ngValue]="input" >{{input.name}}</option>
-                        </select>
 
         <div id="camera2" class="camera-container">
-            <video #video2 width="368" height="260" autoplay></video>
+            <video #video2 width="346" height="260" autoplay class="video"></video>
+            <md-select [(ngModel)]="selectedVideos[2]" (change)="showCamera(2)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
+            </md-select>
         </div>
-        <select [(ngModel)]="selectedVideos[2]" (change)="showCamera(2)">
-                            <option value="null" selected disabled>Selecione</option>
-                            <option *ngFor="let input of videoInputs" [ngValue]="input" >{{input.name}}</option>
-                        </select>
 
         <div id="camera3" class="camera-container">
-            <video #video3 width="368" height="260" autoplay></video>
+            <video #video3 width="346" height="260" autoplay class="video"></video>
+            <md-select [(ngModel)]="selectedVideos[3]" (change)="showCamera(3)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
+            </md-select>
         </div>
-        <select [(ngModel)]="selectedVideos[3]" (change)="showCamera(3)">
-                            <option value="null" selected disabled>Selecione</option>
-                            <option *ngFor="let input of videoInputs" [ngValue]="input" >{{input.name}}</option>
-                        </select>
+
     </div>
 </div>

@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { RESTService } from '../rest.service';
-import { UserModel } from '../models';
+import { UserModel, AccessModel } from '../models';
 
 @Injectable()
 export class AccessService extends AccessServiceInterface {
@@ -24,6 +24,12 @@ export class AccessService extends AccessServiceInterface {
 
     validatePassword(user: UserModel): Observable<boolean> {
         return this.restService.post(this.url + 'validate-pass/', user)
+            .map((res: Response) => <boolean>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
+
+    insertAccess(access: AccessModel): Observable<boolean> {
+        return this.restService.post(this.url, access)
             .map((res: Response) => <boolean>res.json())
             .catch(RESTService.handleErrorMessage);
     }

@@ -4,60 +4,67 @@ module.exports = function (app) {
     var User = require('../models/user.vo');
     var Visitor = require('../models/visitor.vo');
     var Vehicle = require('../models/vehicle.vo');
+    var Access = require('../models/access.vo');
     var Apartment = require('../models/apartment.vo');
     var bCrypt = require('bcrypt-nodejs');
 
     var filteredData = new Array();
 
     app.post(('/access/validate-pass'), function (req, res, next) {
-        // let username = req.param('username') + ' ';
-        let username = 'admin';
-        console.log(req.param('username'))
         let pass = req.param('password');
 
-        if (isNaN(req.param('username'))) {
+        User.findOne({ 'username': req.param('username') }, function (err, user) {
+            if (err)
+                return next(err);
 
-            User.findOne({ 'username': username}, function (err, user) {
-                if (err)
-                    return next(err);
+            if (!user) {
+                console.log('Usuário ' + req.param('username') + ' não encontrado!');
+                var err = new Error('Usuário não existente!');
+                err.status = 500;
+                return next(err);
+            }
 
-                if (!user) {
-                    console.log('Usuário ' + req.param('username') + ' não encontrado!');
-                    var err = new Error('Usuário não existente!');
-                    err.status = 500;
-                    return next(err);
-                }
-
-                // Usuário existe mas a senha está errada
-                if (!isValidPassword(user, pass)) {
-                    console.log('Senha Inválida');
-                    var err = new Error('Senha inválida!');
-                    err.status = 401;
-                    return next(err);
-                }
-            });
-        } else {
-            Person.findOne({ 'cpf': req.param('username') }, function (err, user) {
-                if (err)
-                    return next(err);
-
-                if (!user) {
-                    console.log('Usuário ' + req.param('username') + ' não encontrado!');
-                    var err = new Error('Usuário não existente cadastrado!');
-                    err.status = 500;
-                    return next(err);
-                }
-
-                // Usuário existe mas a senha está errada
-                if (!isValidPassword(user, req.param('password'))) {
-                    console.log('Senha Inválida');
-                    var err = new Error('Senha inválida!');
-                    err.status = 401;
-                    return next(err);
-                }
-            });
-        }
+            // Usuário existe mas a senha está errada
+            if (!isValidPassword(user, pass)) {
+                console.log('Senha Inválida');
+                var err = new Error('Senha inválida!');
+                err.status = 401;
+                return next(err);
+            } else {
+                return res.json(true);
+            }
+        });
     });
+
+    app.post(('/access/'), function (req, res, next) {
+        var access = new Access(req.body);
+        User.findOne({ 'username': access.user.username }, function (err, user) {
+            if (err)
+                return next(err);
+
+            if (!user) {
+                console.log('Usuário ' + access.user.username + ' não encontrado!');
+                var err = new Error('Usuário não existente!');
+                err.status = 500;
+                return next(err);
+            } else {
+                access.user = user;
+                access.save(function (err) {
+                    if (err) {
+                        console.log('Erro ao registrar acesso: ' + err);
+                        res.send(err);
+                    } else {
+                        console.log('Acesso registrado com sucesso!');
+                        res.json(true);
+                    }
+                });
+            }
+        });
+
+
+
+    });
+
 
     app.get(('/access/filter/:filter'), function (req, res, next) {
 
