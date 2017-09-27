@@ -3,7 +3,7 @@ import * as path from 'path';
 import { Stream } from 'stream';
 import { Component, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 
-import { PersonModel, UserModel, VisitorModel, MessagesModel } from '../../models';
+import { PersonModel, UserModel, VisitorModel, MessagesModel, VideoInputModel } from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 
 @Component({
@@ -16,32 +16,32 @@ export class MonitoringComponent implements AfterViewInit {
   filterResult: Array<Object>;
   img: string;
   videos: Array<ElementRef>;
-  videos2: Array<ElementRef>;
   selected: any;
   filter = '';
   accessPassword: string;
   user: UserModel;
-
-  @ViewChild('myname') input: ElementRef;
-  @ViewChild('video4') video1: ElementRef;
-  @ViewChild('video1') video2: ElementRef;
-  @ViewChild('video2') video3: ElementRef;
-  @ViewChild('video3') video4: ElementRef;
+  videoInputs: Array<VideoInputModel> = new Array<VideoInputModel>();
+  selectedVideos: Array<VideoInputModel> = new Array<VideoInputModel>();
+  // inputList: Array
 
 
+  @ViewChild('video0') video0: ElementRef;
+  @ViewChild('video1') video1: ElementRef;
+  @ViewChild('video2') video2: ElementRef;
+  @ViewChild('video3') video3: ElementRef;
 
   @ViewChildren('div1,div2,div3') divs: QueryList<ElementRef>;
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
     this.filterResult = new Array<Object>();
     this.videos = new Array<ElementRef>();
-    this.videos2 = new Array<ElementRef>();
     this.user = new UserModel();
     this.img = '../../../../dist/assets/img-test.png';
   }
 
   ngAfterViewInit() {
-    this.videos = [this.video1, this.video2, this.video3, this.video4];
+    this.videos = [this.video0, this.video1, this.video2, this.video3];
+    console.log('videos1', this.videos);
 
     navigator.mediaDevices.enumerateDevices()
       .then(this.getDevices.bind(this));
@@ -50,29 +50,32 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   private getDevices(infos) {
-    let inputs: any[] = [];
-    for (let i of infos) {
+    for (const i of infos) {
       if (i.kind === 'videoinput') {
-        inputs.push(i);
+        if (i.deviceId !== 'db400b322ef9c2c2e774848fe24cc53697b478621b88946dfda758efd3b75604') {
+          const vid = new VideoInputModel();
+          vid.id = i.deviceId;
+          vid.name = i.label;
+          this.videoInputs.push(vid);
+        }
       }
     }
+  }
 
-    for (let v of this.videos) {
-      let nv = v.nativeElement;
-      let userMedia: any;
-      // if (inputs[this.videos.indexOf(v)]) {
-        userMedia = inputs[1];
-      // } else {
-        // userMedia = inputs[1];
-      // }
-      let media: MediaTrackConstraints = { deviceId: userMedia.deviceId };
-      navigator.mediaDevices.getUserMedia({ video: media })
-        .then(stream => {
-          console.log(stream);
-          nv.src = window.URL.createObjectURL(stream);
-          nv.play();
-        })
-    }
+  showCamera(i: number) {
+    console.log(this.selectedVideos);
+    console.log('videos', this.videos);
+    console.log('v', this.selectedVideos[i]);
+    console.log('i', i);
+
+    const nv = this.videos[i].nativeElement;
+    const media: MediaTrackConstraints = { deviceId: this.selectedVideos[i].id };
+    navigator.mediaDevices.getUserMedia({ video: media })
+      .then(stream => {
+        console.log(stream);
+        nv.src = window.URL.createObjectURL(stream);
+        nv.play();
+      });
   }
 
   selectedItem(data: any, i: number) {
