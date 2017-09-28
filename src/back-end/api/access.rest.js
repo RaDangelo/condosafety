@@ -36,6 +36,10 @@ module.exports = function (app) {
         });
     });
 
+    // app.get(('/access/:filter'), function (req, res, next) {
+
+    // })
+
     app.post(('/access/'), function (req, res, next) {
         var access = new Access(req.body);
         User.findOne({ 'username': access.user.username }, function (err, user) {
@@ -60,9 +64,6 @@ module.exports = function (app) {
                 });
             }
         });
-
-
-
     });
 
 

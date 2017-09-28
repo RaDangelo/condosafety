@@ -6,7 +6,8 @@
         <div class="left-body">
 
             <div class="person-img">
-                <img [src]="img" />
+                <img *ngIf="img" [src]="img" />
+                <video *nfIg="!img" #frontCamera width="160" height="200" autoplay></video>
             </div>
 
             <div class="person-search">

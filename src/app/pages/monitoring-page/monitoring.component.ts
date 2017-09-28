@@ -28,6 +28,7 @@ export class MonitoringComponent implements AfterViewInit {
   @ViewChild('video1') video1: ElementRef;
   @ViewChild('video2') video2: ElementRef;
   @ViewChild('video3') video3: ElementRef;
+  @ViewChild('frontCamera') frontCamera: ElementRef;
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
     this.filterResult = new Array<Object>();
@@ -79,6 +80,16 @@ export class MonitoringComponent implements AfterViewInit {
       () => {
         console.log('Dados filtrados com sucesso! ');
       });
+  }
+
+  showFrontCamera() {
+    const nv = this.frontCamera.nativeElement;
+    // const media: MediaTrackConstraints = { deviceId: id };
+    // navigator.mediaDevices.getUserMedia()
+    //   .then(stream => {
+    //     nv.src = window.URL.createObjectURL(stream);
+    //     nv.play();
+    //   });
   }
 
   allowAccess() {
