@@ -6,6 +6,8 @@ import { Component, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@
 import { PersonModel, UserModel, VisitorModel, MessagesModel, VideoInputModel, AccessModel, AccessType, AccessAction } from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 
+declare var $: any;
+
 @Component({
   selector: 'monitoring',
   templateUrl: './monitoring.component.html',
@@ -201,6 +203,5 @@ export class MonitoringComponent implements AfterViewInit {
       this.access.type = AccessType.VEHICLE;
     }
   }
-
 
 }

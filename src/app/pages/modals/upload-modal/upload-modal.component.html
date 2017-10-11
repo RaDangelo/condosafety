@@ -1,0 +1,44 @@
+<div id="upload-modal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-md">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeModal()">&times;</button>
+                <h3 class="modal-title">Inserir imagem</h3>
+                <div id="upload-proc-modal-alert" class="alert {{alertMessage?.severidade}} alert-dismissable " style="display: none">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                    <strong>{{alertMessage?.titulo}}</strong> {{alertMessage?.mensagem}}
+                </div>
+            </div>
+            <!-- Fim Modal Header -->
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <div class="row">
+                    <a *ngIf="uploader && uploader.queue.length > 0" class="close reset-close" (click)="resetQueue()" aria-label="close">×</a>
+                    <div ng2FileDrop multiple [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" [uploader]="uploader"
+                        class="well my-drop-zone">
+                        <span class="glyphicon glyphicon-file"></span> {{uploader && uploader.queue.length > 0 ? uploader.queue[uploader.queue.length
+                        - 1].file.name : "Arraste seu arquivo!"}}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div (click)="resetQueue()" class="cont-btn-inputfile">
+                        <input id="fileChooser" type="file" class="inputfile" ng2FileSelect multiple [uploader]="uploader" />
+                        <label for="fileChooser"> <span class="glyphicon glyphicon-open-file" style="margin-right:3px"></span>Selecionar arquivos</label>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div>
+                        <button type="button" (click)="upload()">
+                            <span class="glyphicon glyphicon-send"></span><div style="float: left;">Enviar</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

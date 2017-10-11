@@ -34,8 +34,8 @@ export class VehicleService extends VehicleServiceInterface {
             .catch(RESTService.handleErrorMessage);
     }
 
-    getUploadEndpoint(): string {
-        return this.restService.getBaseUrl() + this.url;
+    getUploadEndpoint(id: string): string {
+        return this.restService.getBaseUrl() + this.url + 'image/' + id;
     }
 
     delete(v: VehicleModel): Observable<any> {

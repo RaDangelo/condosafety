@@ -1,8 +1,7 @@
 import { LoginServiceInterface, ApartmentServiceInterface, VehicleServiceInterface, AFKTimeServiceInterface } from '../../interfaces';
 import { Component } from '@angular/core';
-import { AfkTimeModel, ApartmentModel, MessagesModel, UserModel, VehicleModel } from '../../models';
-import { MessageDialogBehavior } from '../../behaviors';
-import { FileUploader, FileItem, FileUploaderOptions } from 'ng2-file-upload';
+import { AfkTimeModel, ApartmentModel, MessagesModel, UserModel, VehicleModel, AccessType } from '../../models';
+import { MessageDialogBehavior, UploadBehavior } from '../../behaviors';
 
 declare var $: any;
 
@@ -12,9 +11,6 @@ declare var $: any;
   styleUrls: ['./administration.component.less']
 })
 export class AdministrationComponent {
-
-  uploader: FileUploader;
-
   user: UserModel;
   users: UserModel[];
   apartment: ApartmentModel;
@@ -30,7 +26,7 @@ export class AdministrationComponent {
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
     private vehicleService: VehicleServiceInterface, private afkService: AFKTimeServiceInterface,
-    private dialogBehavior: MessageDialogBehavior) {
+    private dialogBehavior: MessageDialogBehavior, private uploadBehavior: UploadBehavior) {
     this.user = new UserModel();
     this.vehicle = new VehicleModel();
     this.apartment = new ApartmentModel();
@@ -40,31 +36,8 @@ export class AdministrationComponent {
     this.getApartments();
     this.getVehicles();
     this.getAfkTime();
-
-    this.setUploader();
-
     // $('body').css('background-color', 'transparent');
 
-  }
-
-  upload() {
-    if (this.uploader.queue.length > 0) {
-      this.uploader.queue[this.uploader.queue.length - 1].upload();
-    }
-  }
-
-  resetQueue() {
-    if (this.uploader.queue.length > 0) {
-      this.uploader.queue = new Array<FileItem>();
-    }
-  }
-
-  private setUploader() {
-    let fileUploaderOptions: FileUploaderOptions = { url: this.vehicleService.getUploadEndpoint(), disableMultipart: false, queueLimit: 1 };
-    this.uploader = new FileUploader(fileUploaderOptions);
-    this.uploader.onCompleteItem = ((item: any, response: any, status: any, headers: any): any => {
-
-    });
   }
 
   get apartments() {
@@ -335,5 +308,9 @@ export class AdministrationComponent {
           alert('Tempo de ociosidade permitido cadastrado com sucesso! ');
         }
       });
+  }
+
+  uploadFile() {
+    this.uploadBehavior.openModal$.next({ type: AccessType.VEHICLE.toString(), id: this.vehicle._id });
   }
 }

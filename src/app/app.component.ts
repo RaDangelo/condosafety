@@ -1,6 +1,8 @@
 import { Router } from '@angular/router/';
 import { ElementRef, Component, AfterViewInit } from '@angular/core/';
+import { UploadBehavior } from '../app/behaviors';
 
+declare var $: any;
 
 @Component({
   selector: 'app-root',
@@ -10,8 +12,14 @@ import { ElementRef, Component, AfterViewInit } from '@angular/core/';
 export class AppComponent implements AfterViewInit {
 
   rootNode: any;
+  imageOwner: any;
 
-  constructor(rootNode: ElementRef, private route: Router) {
+  constructor(rootNode: ElementRef, private route: Router, private uploadBehavior: UploadBehavior) {
+    this.uploadBehavior.init();
+    this.uploadBehavior.openModal$.subscribe(x => {
+      this.imageOwner = x;
+      $('#upload-modal').modal('show');
+    });
     this.rootNode = rootNode;
   }
 

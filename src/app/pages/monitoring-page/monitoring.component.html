@@ -7,7 +7,7 @@
 
             <div class="person-img">
                 <img *ngIf="img" [src]="img" />
-                <video *nfIg="!img" #frontCamera width="160" height="200" autoplay></video>
+                <!-- <video *nfIg="!img" #frontCamera width="160" height="200" autoplay></video> -->
             </div>
 
             <div class="person-search">
@@ -83,6 +83,5 @@
                 <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
             </md-select>
         </div>
-
     </div>
 </div>

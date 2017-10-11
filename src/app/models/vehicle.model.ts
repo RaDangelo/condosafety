@@ -7,9 +7,8 @@ export class VehicleModel {
     color: string;
     brand: string;
     status: boolean;
-    // type: ENUM? 
     apartment: ApartmentModel;
-    picture?: File;
+    picture?: string;
 
     constructor(vehicle: VehicleModel = null) {
         if (vehicle) {
@@ -19,12 +18,12 @@ export class VehicleModel {
             this.brand = vehicle.brand;
             this.status = vehicle.status;
             this.picture = vehicle.picture;
-
-             if (vehicle.apartment) {
+            console.log('IMAGEM', this.picture);
+            if (vehicle.apartment) {
                 this.apartment = vehicle.apartment;
             }
-        } 
-        
+        }
+
     }
 
 }
