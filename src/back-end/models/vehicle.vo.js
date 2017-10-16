@@ -5,8 +5,7 @@ module.exports = mongoose.model('Vehicle', {
     color: String,
     brand: String,
     status: Boolean,
-    picture: String,
-    // picture: { type: File, FileSchema, collection: 'fs.files' },
     apartment: { type: Object, ref: 'Apartment' },
+    picture: String
 }, 'vehicle'
 );

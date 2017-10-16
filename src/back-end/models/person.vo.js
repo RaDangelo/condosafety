@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 module.exports = mongoose.model('Person', {
     name: String,
@@ -7,9 +8,9 @@ module.exports = mongoose.model('Person', {
     phoneNumber: String,
     cpf: String,
     email: String,
-    picture: { data: Buffer, contentType: String },
+    picture: String,
     status: Boolean,
-    personType: { type: Object, ref: 'PersonType' },
-    apartment: { type: Object, ref: 'Apartment' }
+    personType: { type: Schema.Types.ObjectId, ref: 'PersonType' },
+    apartment: { type: Schema.Types.ObjectId, ref: 'Apartment' }
 }, 'person'
 );

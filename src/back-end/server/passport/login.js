@@ -1,6 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../../models/user.vo');
-var bCrypt = require('bcrypt-nodejs');
+var Crypto = require('../../config/crypto');
 
 module.exports = function (passport) {
 
@@ -20,14 +20,14 @@ module.exports = function (passport) {
                     if (!user) {
                         console.log('Usuário ' + username + ' não encontrado!');
                         return done(null, false,
-                            {message: 'Usuário não existente!'});
+                            { message: 'Usuário não existente!' });
                     }
 
                     // Usuário existe mas a senha está errada
-                    if (!isValidPassword(user, password)) {
+                    if (!Crypto.isValidPassword(user, password)) {
                         console.log('Senha Inválida');
                         return done(null, false,
-                            {message: 'Senha inválida!'});
+                            { message: 'Senha inválida!' });
                     }
 
                     // retorna usuario com sucesso
@@ -36,9 +36,6 @@ module.exports = function (passport) {
             );
         }));
 
-    var isValidPassword = function (user, password) {
-        return bCrypt.compareSync(password, user.password);
-    }
 }
 
     // falha = primeiroparametro === true || segundoparametro === false

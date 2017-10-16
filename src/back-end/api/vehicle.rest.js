@@ -1,203 +1,65 @@
 'use strict';
 
 const router = require('express').Router();
-const config = require('../config/database');
 const mongoose = require('mongoose');
-require('promise');
-const fs = require('fs');
 
-let Grid = require("gridfs-stream");
 let conn = mongoose.connection;
-Grid.mongo = mongoose.mongo;
-var gfs;
 
 var Vehicle = require('../models/vehicle.vo');
+var daoVehicle = require('../daos/vehicle.dao');
+var daoImg = require('../daos/image.dao');
 
 conn.once('open', () => {
-    gfs = Grid(conn.db);
+
+    // Get all vehicles
     router.get('/', (req, res) => {
-        function vehicles$() {
-            return Vehicle.find().exec();
-        }
-        var promise = vehicles$();
-
-        promise.then(function (v) {
-            v.forEach(function (vehic) {
-                var img;
-                gfs.files.find({
-                    filename: vehic._id.toString()
-                }).toArray((err, files) => {
-                    img = setImg(files);
-                    if (!img) {
-                        console.log('Image not found for: ' + vehic.brand);
-                    }
-                    console.log('1', img);
-                    vehic.picture = img;
-                });
-            });
-            res.json(v);
-        }).catch(function (error) {
-            console.log(error);
-        });
-
-
-        function setImg(files) {
-                let data = [];
-                var img = null;
-                if (files.length === 0) {
-                    res.end(img);
-                }
-                let readstream = gfs.createReadStream({
-                    filename: files[0].filename
-                });
-
-                readstream.on('data', (chunk) => {
-                    data.push(chunk);
-                });
-
-                readstream.on('error', (err) => {
-                    res.status(500).send(err);
-                    console.log('An error occurred getting vehicle\'s image!', err);
-                });
-
-                readstream.on('end', () => {
-                    data = Buffer.concat(data);
-                    img = 'data:image/png;base64,' + Buffer(data).toString('base64');
-                    res.end(img);
-                });
-            };
+        daoVehicle.getVehicles().then(v => {
+            if (v) {
+                daoImg.getImages(v).then(data => res.json(data)).catch(err => res.send(err));
+            } else {
+                res.send('Nenhum veículo encontrado!');
+            }
+        }).catch(error => res.send(error));
     });
 
-    router.put('/', (req, res) => {
-    });
-
+    // Save or Update vehicle
     router.post('/', (req, res, next) => {
 
-        Vehicle.findById(req.param('_id'), function (err, v) {
-            if (err) {
-                console.log('Erro ao cadastrar veículo: ' + err);
-                return next(err);
-            }
-
+        daoVehicle.getById(req.param('_id')).then(v => {
+            let vehicle;
             if (!v) {
-                Vehicle.findOne({ 'plate': req.param('plate') }, function (err, v) {
-
-                    if (err) {
-                        console.log('Erro ao cadastrar veículo: ' + err);
-                        return next(err);
-                    }
-
-                    if (v) {
+                daoVehicle.getByPlate(req.param('plate')).then(vehiclesByPlate => {
+                    if (vehiclesByPlate) {
                         console.log('Veículo já cadastrado!');
                         var err = new Error('Veículo já cadastrado!');
                         err.status = 500;
                         return next(err);
+                    } else {
+                        daoVehicle.saveVehicle(new Vehicle(req.body)).then(data => res.json({ status: 200 })).catch(err => res.send(err));
                     }
-
-                    var vehicle = new Vehicle(req.body);
-
-                    vehicle.save(function (err) {
-                        if (err) {
-                            res.send(err);
-                        } else {
-                            res.json({ status: 200 });
-                        }
-                    });
-                });
+                }).catch(err => {
+                    console.log('Erro ao cadastrar veículo: ' + err);
+                    return next(err);
+                })
             } else {
                 // atualiza veiculo
                 v.plate = req.param('plate');
                 v.brand = req.param('brand');
                 v.color = req.param('color');
                 v.status = req.param('status');
-                v.picture = req.param('picture');
-
-                v.save(function (err) {
-                    if (err) {
-                        console.log('Erro ao alterar veículo: ' + err);
-                        throw err;
-                    }
-                    console.log('Veículo alterado com sucesso!');
-                    res.json({ status: 200 });
-                });
+                daoVehicle.saveVehicle(v).then(data => res.json({ status: 200 })).catch(err => res.send(err));
             }
+        }).catch(err => {
+            console.log('Erro ao cadastrar veículo: ' + err);
+            return next(err);
         });
     });
 
-    // delete pessoa
+    // Delete vehicle
     router.post('/delete', (req, res) => {
-        Vehicle.remove({
-            _id: req.body._id
-        }, function (err, v) {
-            if (err)
-                res.send(err);
-
-            Vehicle.find(function (err, v) {
-                if (err)
-                    res.send(err)
-                res.json(v);
-            });
-        });
+        daoVehicle.deleteVehicle(req.body._id).then(data => res.json({ status: 200 })).catch(err => res.send(err));
     });
 
-    router.post('/image/:id', (req, res) => {
-        let id = req.params.id;
-        let part = req.files.file;
-        let writeStream = gfs.createWriteStream({
-            filename: id,
-            mode: 'w',
-            content_type: part.mimetype
-        });
-
-        writeStream.on('close', (file) => {
-            // checking for file
-            if (!file) {
-                res.status(400).send('No file received');
-            }
-            return res.status(200).send({
-                message: 'Success',
-                file: file
-            });
-        });
-        // using callbacks is important !
-        // writeStream should end the operation once all data is written to the DB 
-        writeStream.write(part.data, () => {
-            writeStream.end();
-        });
-    });
 });
-
-function getImage(id) {
-    console.log('AAAAAAAAAAAAA', gfs.files);
-    let imgname = id;
-    gfs.files.find({
-        filename: imgname
-    }).toArray((err, files) => {
-
-        if (files.length === 0) {
-            return null;
-        }
-        let data = [];
-        let readstream = gfs.createReadStream({
-            filename: files[0].filename
-        });
-
-        readstream.on('data', (chunk) => {
-            data.push(chunk);
-        });
-
-        readstream.on('end', () => {
-            data = Buffer.concat(data);
-            let img = 'data:image/png;base64,' + Buffer(data).toString('base64');
-            return img;
-        });
-
-        readstream.on('error', (err) => {
-            res.status(500).send(err);
-            console.log('An error occurred getting vehicle\'s image!', err);
-        });
-    });
-}
-
 
 module.exports = router;

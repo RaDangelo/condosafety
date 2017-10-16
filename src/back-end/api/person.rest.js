@@ -1,102 +1,77 @@
-module.exports = function (app) {
+'use strict';
 
-    var Person = require('../models/person.vo');
-    var Apartment = require('../models/apartment.vo');
-    var PersonType = require('../models/person-type.vo');
+const router = require('express').Router();
+const mongoose = require('mongoose');
 
-    app.route('/person')
+let conn = mongoose.connection;
 
-        .get(function (req, res) {
-            Person.find(function (err, people) {
-                if (err)
-                    res.send(err)
-                res.json(people);
-            });
-        })
+var Person = require('../models/person.vo');
+var Crypto = require('../config/crypto');
 
-        .post(function (req, res, next) {
+var daoPerson = require('../daos/person.dao');
+var daoImg = require('../daos/image.dao');
 
-            Person.findById(req.param('_id'), function (err, p) {
-                if (err) {
+conn.once('open', () => {
+
+    // Get all persons
+    router.get('/', (req, res) => {
+        daoPerson.getPersons().then(p => {
+            if (p) {
+                daoImg.getImages(p).then(data => res.json(data)).catch(err => res.send(err));
+            } else {
+                res.send('Nenhuma pessoa encontrada!');
+            }
+        }).catch(error => res.send(error));
+    });
+
+    // Save or Update person
+    router.post('/', (req, res, next) => {
+
+        daoPerson.getById(req.param('_id')).then(p => {
+            if (!p) {
+                daoPerson.getByDocument(req.param('cpf')).then(personByDocument => {
+                    if (personByDocument) {
+                        console.log('Pessoa com o documento: ' + p.cpf + ' já cadastrada!');
+                        var err = new Error('Pessoa já cadastrada!');
+                        err.status = 500;
+                        return next(err);
+                    } else {
+                        let person = new Person(req.body);
+                        person.accessPassword = Crypto.createHash(person.accessPassword);
+                        daoPerson.savePerson(person).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+                    }
+                }).catch(err => {
                     console.log('Erro ao cadastrar pessoa: ' + err);
                     return next(err);
-                }
-
-                if (!p) {
-                    Person.findOne({ 'cpf': req.param('cpf') }, function (err, p) {
-
-                        if (err) {
-                            console.log('Erro ao cadastrar pessoa: ' + err);
-                            return next(err);
-                        }
-
-                        if (p) {
-                            console.log('Pessoa com o documento: ' + p.cpf + ' já cadastrada!');
-                            var err = new Error('Pessoa já cadastrada!');
-                            err.status = 500;
-                            return next(err);
-                        }
-
-                        var person = new Person(req.body);
-                        person.accessPassword = createHash(person.accessPassword);
-
-                        person.save(function (err) {
-                            if (err) {
-                                console.log('Erro ao cadastrar pessoa: ' + err);
-                                res.send(err);
-                            } else {
-                                console.log('Pessoa cadastrada com sucesso!');
-                                res.json({ status: 200 });
-                            }
-                        });
-                    });
+                })
+            } else {
+                // atualiza pessoa
+                p.name = req.param('name');
+                p.nickname = req.param('nickname');
+                if (p.accessPassword === req.param('accessPassword')) {
+                    p.accessPassword = req.param('accessPassword');
                 } else {
-                    // atualiza pessoa
-                    p.name = req.param('name');
-                    p.nickname = req.param('nickname');
-                    if (p.accessPassword === req.param('accessPassword')) {
-                        p.accessPassword = req.param('accessPassword');
-                    } else {
-                        p.accessPassword = createHash(req.param('accessPassword'));
-                    }
-                    p.phoneNumber = req.param('phoneNumber');
-                    p.cpf = req.param('cpf');
-                    p.email = req.param('email');
-                    p.status = req.param('status');
-                    p.personType = req.param('personType');
-                    p.apartment = req.param('apartment');
-
-                    // atualizar um por um?
-                    p.save(function (err) {
-                        if (err) {
-                            console.log('Erro ao alterar pessoa: ' + err);
-                            throw err;
-                        }
-                        console.log('Pessoa alterada com sucesso!');
-                        res.json({ status: 200 });
-                    });
+                    p.accessPassword = Crypto.createHash(req.param('accessPassword'));
                 }
-            });
-        });
+                p.phoneNumber = req.param('phoneNumber');
+                p.cpf = req.param('cpf');
+                p.email = req.param('email');
+                p.status = req.param('status');
+                p.personType = req.param('personType');
+                p.apartment = req.param('apartment');
 
-    // delete pessoa
-    app.post('/person/delete', function (req, res) {
-        Person.remove({
-            _id: req.body._id
-        }, function (err, p) {
-            if (err)
-                res.send(err);
-
-            Person.find(function (err, p) {
-                if (err)
-                    res.send(err)
-                res.json(p);
-            });
-        });
+                daoPerson.savePerson(p).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+            }
+        }).catch(err => {
+            console.log('Erro ao cadastrar pessoa: ' + err);
+            return next(err);
+        });;
     });
-}
 
-// Generates hash using bCrypt
-var createHash = function (password) {
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-}
+    router.post('/delete', (req, res) => {
+        daoPerson.deletePerson(req.body._id).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+    });
+});
+
+module.exports = router;
+

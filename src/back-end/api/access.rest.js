@@ -1,31 +1,40 @@
-module.exports = function (app) {
+'use strict';
 
-    var Person = require('../models/person.vo');
-    var User = require('../models/user.vo');
-    var Visitor = require('../models/visitor.vo');
-    var Vehicle = require('../models/vehicle.vo');
-    var Access = require('../models/access.vo');
-    var Apartment = require('../models/apartment.vo');
-    var bCrypt = require('bcrypt-nodejs');
+const router = require('express').Router();
+const mongoose = require('mongoose');
+require('promise');
 
-    var filteredData = new Array();
+let conn = mongoose.connection;
 
-    app.post(('/access/validate-pass'), function (req, res, next) {
+var daoAccess = require('../daos/access.dao'),
+    daoImg = require('../daos/image.dao'),
+    daoUser = require('../daos/user.dao'),
+    daoPerson = require('../daos/person.dao'),
+    daoVehicle = require('../daos/vehicle.dao'),
+    daoVisitor = require('../daos/visitor.dao'),
+    daoApartment = require('../daos/apartment.dao');
+
+var Person = require('../models/person.vo'),
+    User = require('../models/user.vo'),
+    Visitor = require('../models/visitor.vo'),
+    Vehicle = require('../models/vehicle.vo'),
+    Access = require('../models/access.vo'),
+    Apartment = require('../models/apartment.vo');
+
+var Crypto = require('../config/crypto');
+
+conn.once('open', () => {
+
+    router.post('/validate-pass', function (req, res, next) {
         let pass = req.param('password');
 
-        User.findOne({ 'username': req.param('username') }, function (err, user) {
-            if (err)
-                return next(err);
-
+        daoUser.getByUsername(req.param('username')).then(user => {
             if (!user) {
                 console.log('Usuário ' + req.param('username') + ' não encontrado!');
                 var err = new Error('Usuário não existente!');
                 err.status = 500;
                 return next(err);
-            }
-
-            // Usuário existe mas a senha está errada
-            if (!isValidPassword(user, pass)) {
+            } else if (!Crypto.isValidPassword(user, pass)) {
                 console.log('Senha Inválida');
                 var err = new Error('Senha inválida!');
                 err.status = 401;
@@ -33,135 +42,162 @@ module.exports = function (app) {
             } else {
                 return res.json(true);
             }
-        });
+        }).catch(err => next(err));
     });
 
-    // app.get(('/access/:filter'), function (req, res, next) {
-
-    // })
-
-    app.post(('/access/'), function (req, res, next) {
+    router.post('/', function (req, res, next) {
         var access = new Access(req.body);
-        User.findOne({ 'username': access.user.username }, function (err, user) {
-            if (err)
-                return next(err);
-
+        daoUser.getByUsername(req.body.user.username).then(user => {
             if (!user) {
-                console.log('Usuário ' + access.user.username + ' não encontrado!');
+                console.log('Usuário ' + req.body.user.username + ' não encontrado!');
                 var err = new Error('Usuário não existente!');
                 err.status = 500;
                 return next(err);
             } else {
                 access.user = user;
-                access.save(function (err) {
-                    if (err) {
-                        console.log('Erro ao registrar acesso: ' + err);
-                        res.send(err);
-                    } else {
-                        console.log('Acesso registrado com sucesso!');
-                        res.json(true);
-                    }
-                });
+                daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
             }
-        });
+        }).catch(err => next(err));
     });
 
-
-    app.get(('/access/filter/:filter'), function (req, res, next) {
+    router.get('/filter/:filter', function (req, res, next) {
+        var filteredData = new Array();
+        var promises = new Array();
 
         if (isNaN(req.params.filter)) {
 
             console.log('isNan');
-            Visitor.find({ 'name': new RegExp(req.params.filter, "i") }, function (err, v) {
-                if (err)
-                    res.send(err)
-                v.forEach(item => {
-                    filteredData.push(item);
-                })
 
-                Person.find({ 'name': new RegExp(req.params.filter, "i") }, function (err, p) {
-                    if (err)
-                        res.send(err)
-                    console.log(p);
-                    p.forEach(item => {
-                        filteredData.push(item);
-                    })
+            var visitors = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoVisitor.getFilteredName(req.params.filter).then(v => {
+                    if (v.length) {
+                        v.forEach((item, index, array) => {
+                            filteredData.push(item);
+                            itemsProcessed++;
+                            if (itemsProcessed === array.length) {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        resolve();
+                    }
+                }).catch(err => reject(err));
+            });
 
-                    Vehicle.find({ 'brand': new RegExp(req.params.filter, "i") }, function (err, v) {
-                        if (err)
-                            res.send(err)
-                        v.forEach(item => {
-                            Apartment.findOne({
-                                'vehicles': { $elemMatch: { '_id': item._id } }
-                            }, function (err, apt) {
-                                if (err)
-                                    res.send(err)
+            var persons = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoPerson.getFilteredName(req.params.filter).then(p => {
+                    if (p.length) {
+                        p.forEach((item, index, array) => {
+                            filteredData.push(item);
+                            itemsProcessed++;
+                            if (itemsProcessed === array.length) {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        resolve();
+                    }
+                }).catch(err => reject(err));
+            });
+
+            var vehicleBrand = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoVehicle.getFilteredBrand(req.params.filter).then(v => {
+                    if (v.length) {
+                        v.forEach((item, index, array) => {
+                            daoApartment.getByVehicle(item._id).then(apt => {
                                 if (apt) {
+                                    item.apartment = new Apartment();
                                     item.apartment.complex = apt.complex;
                                     item.apartment.number = apt.number;
                                 }
-                            });
-                            filteredData.push(item);
-                        })
-
-                        Vehicle.find({ 'plate': new RegExp(req.params.filter, "i") }, function (err, v) {
-                            if (err)
-                                res.send(err)
-                            v.forEach(item => {
-                                Apartment.findOne({
-                                    'vehicles': {
-                                        $elemMatch: { '_id': item._id }
-                                    }
-                                }, function (err, apt) {
-                                    console.log('APT', apt)
-                                    if (err)
-                                        res.send(err)
-                                    if (apt) {
-                                        item.apartment.complex = apt.complex;
-                                        item.apartment.number = apt.number;
-                                    }
-                                });
                                 filteredData.push(item);
-                            });
-
-                            console.log(filteredData);
-                            res.json(filteredData);
-                            filteredData = new Array();
+                                itemsProcessed++;
+                                if (itemsProcessed === array.length) {
+                                    resolve();
+                                }
+                            }).catch(err => reject(err));
                         });
-                    });
-
-                });
+                    } else {
+                        resolve();
+                    }
+                }).catch(err => reject(err));
             });
 
+
+            var vehiclePlate = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoVehicle.getFilteredPlate(req.params.filter).then(v => {
+                    if (v.length) {
+                        v.forEach((item, index, array) => {
+                            daoApartment.getByVehicle(item._id).then(apt => {
+                                if (apt) {
+                                    item.apartment = new Apartment();
+                                    item.apartment.complex = apt.complex;
+                                    item.apartment.number = apt.number;
+                                }
+                                filteredData.push(item);
+                                itemsProcessed++;
+                                if (itemsProcessed === array.length) {
+                                    resolve();
+                                }
+                            }).catch(err => reject(err));
+                        });
+                    } else {
+                        resolve();
+                    }
+                }).catch(err => reject(err));
+            });
+
+            promises = [visitors, persons, vehicleBrand, vehiclePlate];
         } else {
             console.log('!isNan');
 
-            Visitor.find({ 'document': req.params.filter }, function (err, v) {
-                if (err)
-                    res.send(err)
-                v.forEach(item => {
-                    filteredData.push(item);
-                })
-
-                Person.find({ 'cpf': req.params.filter }, function (err, p) {
-                    if (err)
-                        res.send(err)
-                    console.log(p);
-                    p.forEach(item => {
-                        filteredData.push(item);
-                    })
-                    console.log(filteredData);
-                    res.json(filteredData);
-                    filteredData = new Array();
-                });
+            var visitors = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoVisitor.getFilteredDocument(req.params.filter).then(v => {
+                    if (v.length) {
+                        v.forEach((item, index, array) => {
+                            filteredData.push(item);
+                            itemsProcessed++;
+                            if (itemsProcessed === array.length) {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        resolve();
+                    }
+                }).catch(err => reject(err));
             });
+
+            var persons = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoPerson.getFilteredDocument(req.params.filter).then(p => {
+                    if (p.length) {
+                        p.forEach((item, index, array) => {
+                            filteredData.push(item);
+                            itemsProcessed++;
+                            if (itemsProcessed === array.length) {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        resolve();
+                    }
+                }).catch(err => reject(err));
+            });
+
+            promises = [visitors, persons];
         }
-
+        Promise.all(promises).then(data => {
+            res.json(filteredData);
+        }).catch(err => res.send(err));
     });
+});
 
-    var isValidPassword = function (user, password) {
-        return bCrypt.compareSync(password, user.password)
-    }
-}
+module.exports = router;
+
 
 

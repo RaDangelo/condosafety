@@ -42,7 +42,9 @@
                     Veículos:
                     <select [disabled]="disableAptFields" class="w-120" [(ngModel)]="selectedVehicle">
                 <option value="null" selected disabled>Selecione...</option>
-                <option *ngFor="let v of vehicles" [ngValue]="v"> {{v.brand}} - {{v.plate}}</option>
+                <ng-container *ngFor="let v of vehicles">
+                    <option *ngIf="v.status" [ngValue]="v"> {{v.brand}} - {{v.plate}}</option>
+                </ng-container>
                 </select>
                     <button [disabled]="!selectedVehicle || !selectedVehicle._id" class="btn-md" (click)="setApartmentVehicle()"> + </button>
                 </div>

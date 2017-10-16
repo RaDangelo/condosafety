@@ -50,12 +50,6 @@ app.use('/', loginRoute);
 
 
 // apis
-require('../api/person.rest')(app);
-require('../api/apartment.rest')(app);
-require('../api/access.rest')(app);
-require('../api/person-type.rest')(app);
-require('../api/afk-time.rest')(app);
-// require('../api/vehicle.rest')(app, gfs);
 require('../api/visitor.rest')(app);
 
 // catch 404 and forward to error handler

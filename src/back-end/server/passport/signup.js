@@ -1,6 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../../models/user.vo');
-var bCrypt = require('bcrypt-nodejs');
+var Crypto = require('../../config/crypto');
 
 module.exports = function (passport) {
 
@@ -35,7 +35,7 @@ module.exports = function (passport) {
                             // se usuario nao existe, cria um novo
                             var newUser = new User();
                             newUser.username = username;
-                            newUser.password = createHash(password);
+                            newUser.password = Crypto.createHash(password);
                             newUser.accessLevel = req.param('accessLevel');
 
                             // salva usuario
@@ -74,10 +74,4 @@ module.exports = function (passport) {
             process.nextTick(findOrCreateUser);
         })
     );
-
-    // Generates hash using bCrypt
-    var createHash = function (password) {
-        return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-    }
-
 }

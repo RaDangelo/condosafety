@@ -1,88 +1,57 @@
-module.exports = function (app) {
+'use strict';
 
-    var Apartment = require('../models/apartment.vo');
+const router = require('express').Router();
+const mongoose = require('mongoose');
 
-    app.route('/apartment')
+let conn = mongoose.connection;
 
-        .get(function (req, res) {
+var Apartment = require('../models/apartment.vo');
+var daoApartment = require('../daos/apartment.dao');
 
-            Apartment.find(function (err, apartments) {
-                if (err)
-                    res.send(err)
-                res.json(apartments);
-            });
-        })
+conn.once('open', () => {
 
-        .post(function (req, res, next) {
+    router.get('/', (req, res) => {
+        daoApartment.getApartments().then(ap => res.json(ap)).catch(err => res.send(err));
+    });
 
-            Apartment.findById(req.param('_id'), function (err, apt) {
+    router.post('/', (req, res, next) => {
 
-                if (err) {
+        daoApartment.getById(req.param('_id')).then(apt => {
+            if (!apt) {
+                daoApartment.checkExistent(req.param('complex'), req.param('number')).then(existentApartment => {
+                    if (existentApartment) {
+                        console.log('Apartamento no complexo: ' + req.param('complex') + ' de número:' + req.param('number') + ' já cadastrado!');
+                        var err = new Error('Apartamento já cadastrado!');
+                        err.status = 500;
+                        return next(err);
+                    } else {
+                        console.log('AQUI');
+                        daoApartment.saveApartment(new Apartment(req.body)).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+                    }
+                }).catch(err => {
                     console.log('Erro ao cadastrar apartamento: ' + err);
                     return next(err);
-                }
+                });
+            } else {
+                // atualiza apt
+                apt.floor = req.param('floor');
+                apt.number = req.param('number');
+                apt.complex = req.param('complex');
+                apt.type = req.param('type');
+                apt.vehicles = req.param('vehicles');
+                apt.status = req.param('status');
 
-                if (!apt) {
-                    Apartment.findOne({ 'complex': req.param('complex'), 'floor': req.param('floor') }, function (err, apt) {
-
-                        if (err) {
-                            console.log('Erro ao cadastrar apartamento: ' + err);
-                            return next(err);
-                        }
-
-                        if (apt) {
-                            console.log('Apartamento no compelexo: ' + apt.complex + ' de número:' + apt.number + ' já cadastrado!');
-                            var err = new Error('Apartamento já cadastrado!');
-                            err.status = 500;
-                            return next(err);
-                        }
-
-                        var apartment = new Apartment(req.body);
-
-                        apartment.save(function (err) {
-                            if (err) {
-                                console.log('Erro ao cadastrar apartamento: ' + err);
-                                res.send(err);
-                            } else {
-                                console.log('Apartamento cadastrado com sucesso!');
-                                res.json({ status: 200 });
-                            }
-                        });
-                    });
-                } else {
-                    // atualiza apt
-                    apt.floor = req.param('floor');
-                    apt.number = req.param('number');
-                    apt.complex = req.param('complex');
-                    apt.type = req.param('type');
-                    apt.vehicles = req.param('vehicles');
-                    apt.status = req.param('status');
-
-                    // atualizar um por um?
-                    apt.save(function (err) {
-                        if (err) {
-                            console.log('Erro ao alterar apartamento: ' + err);
-                            throw err;
-                        }
-                        console.log('Apartamento alterado com sucesso!');
-                        res.json({ status: 200 });
-                    });
-                }
-            });
-        });
-
-    app.post('/apartment/delete', function (req, res) {
-        Apartment.remove({
-            _id: req.body._id
-        }, function (err, apartment) {
-            if (err)
-                res.send(err);
-
-            Apartment.find(function (err, apartment) {
-                if (err)
-                    res.send(err)
-                res.json(apartment);
-            });
+                daoApartment.saveApartment(apt).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+            }
+        }).catch(err => {
+            console.log('Erro ao cadastrar apartamento: ' + err);
+            return next(err);
         });
     });
-}
+
+    router.post('/delete', (req, res) => {
+        daoApartment.deleteApartment(req.body._id).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+    });
+});
+
+module.exports = router;

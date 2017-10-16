@@ -1,51 +1,32 @@
-module.exports = function (app) {
+'use strict';
 
-    var AfkTime = require('../models/afk-time.vo');
+const router = require('express').Router();
+const mongoose = require('mongoose');
 
-    app.route('/afk-time')
+let conn = mongoose.connection;
 
-        .get(function (req, res) {
+var AfkTime = require('../models/afk-time.vo');
+var daoAfk = require('../daos/afk-time.dao');
 
-            AfkTime.findOne(function (err, afk) {
-                if (err)
-                    res.send(err)
-                res.json(afk);
-            });
-        })
+conn.once('open', () => {
 
-        .post(function (req, res, next) {
+    router.get('/', (req, res) => {
+        daoAfk.getTime().then(time => res.json(time)).catch(err => res.send(err));
+    });
 
-            AfkTime.findOne(function (err, afk) {
-
-                if (err) {
-                    console.log('Erro ao cadastrar tempo de ociosidade: ' + err);
-                    return next(err);
-                }
-
-                if (!afk) {
-                    var afkTime = new AfkTime(req.body);
-                    console.log(afkTime);
-                    
-                    afkTime.time = req.param('time');
-                    afkTime.save(function (err) {
-                        if (err) {
-                            res.send(err);
-                        } else {
-                            res.json({ status: 200 });
-                        }
-                    });
-                } else {
-                    afk.time = req.param('time');
-                    afk.save(function (err) {
-                        if (err) {
-                            console.log('Erro ao alterar tempo de ociosidade: ' + err);
-                            throw err;
-                        }
-                        console.log('Tempo de ociosidade alterado com sucesso!');
-                        res.json({ status: 200 });
-                    });
-                }
-            });
+    router.post('/', (req, res, next) => {
+        daoAfk.getTime().then(time => {
+            if (!time) {
+                daoAfk.saveTime(new AfkTime(req.body)).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+            } else {
+                time.time = req.param('time');
+                daoAfk.saveTime(time).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+            }
+        }).catch(err => {
+            console.log('Erro ao cadastrar tempo de ociosidade: ' + err);
+            return next(err);
         });
+    });
+});
 
-}
+module.exports = router;

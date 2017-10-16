@@ -1,12 +1,13 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 module.exports = mongoose.model('Access', {
     date: Date,
-    user: { type: Object, ref: 'User' },
-    apartment: { type: Object, ref: 'Apartment' },
-    vehicle: { type: Object, ref: 'Vehicle' },
-    person: { type: Object, ref: 'Person' },
-    visitor: { type: Object, ref: 'Visitor' },
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    apartment: { type: Schema.Types.ObjectId, ref: 'Apartment' },
+    vehicle: { type: Schema.Types.ObjectId, ref: 'Vehicle' },
+    person: { type: Schema.Types.ObjectId, ref: 'Person' },
+    visitor: { type: Schema.Types.ObjectId, ref: 'Visitor' },
     type: { type: String },
     action: { type: String }
 }, 'access'

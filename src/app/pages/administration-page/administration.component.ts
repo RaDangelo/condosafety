@@ -86,11 +86,7 @@ export class AdministrationComponent {
   }
 
   eraseAptVehicle(vehic: VehicleModel) {
-    console.log(this.apartment.vehicles);
-    console.log(vehic);
-    console.log(this.apartment.vehicles.indexOf(vehic));
-    this.apartment.vehicles.splice(this.apartment.vehicles.indexOf(vehic));
-    console.log(this.apartment.vehicles);
+    this.apartment.vehicles.splice(this.apartment.vehicles.indexOf(vehic), 1);
   }
 
   private getApartments() {
@@ -135,6 +131,9 @@ export class AdministrationComponent {
   }
 
   saveApartment() {
+    if (this.apartment.vehicles.length) {
+      this.apartment.vehicles.forEach(x => x.picture = null);
+    }
     this.apartmentService.save(this.apartment)
       .subscribe(() => { },
       (error: MessagesModel) => {
@@ -195,6 +194,7 @@ export class AdministrationComponent {
   }
 
   saveVehicle() {
+    this.vehicle.picture = null;
     this.vehicleService.save(this.vehicle)
       .subscribe(() => { },
       (error: MessagesModel) => {

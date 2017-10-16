@@ -1,60 +1,41 @@
-module.exports = function (app) {
+'use strict';
 
-    var PersonType = require('../models/person-type.vo');
+const router = require('express').Router();
+const mongoose = require('mongoose');
 
-    app.route('/person-type')
+let conn = mongoose.connection;
 
-        .get(function (req, res) {
+var PersonType = require('../models/person-type.vo');
+var daoType = require('../daos/person-type.dao');
 
-            PersonType.find(function (err, types) {
-                if (err)
-                    res.send(err)
-                res.json(types);
-            });
-        })
+conn.once('open', () => {
 
-        .post(function (req, res, next) {
+    router.get('/', (req, res) => {
+        daoType.getTypes().then(t => res.json(t)).catch(err => res.send(err));
+    });
 
-            PersonType.findOne({ 'type': req.param('type') }, function (err, type) {
-
-                if (err) {
-                    console.log('Erro ao cadastrar tipo de pessoa: ' + err);
-                    return next(err);
-                }
-
-                if (type) {
-                    console.log('Tipo de pessoa: ' + type.type + ' já cadastrado!');
-                    var err = new Error('Tipo de pessoa já cadastrado!');
-                    err.status = 500;
-                    return next(next);
-                }
-
-                var type = new PersonType(req.body);
-
-                type.save(function (err) {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        console.log('Tipo de pessoa cadastrado com sucesso!');
-                        res.json({ status: 200 });
-                    }
-                });
-            });
-        });
-
-
-    app.post('/person-type/delete', function (req, res) {
-        PersonType.remove({
-            _id: req.body._id
-        }, function (err, type) {
-            if (err)
-                res.send(err);
-
-            PersonType.find(function (err, type) {
-                if (err)
-                    res.send(err)
-                res.json(type);
-            });
+    router.post('/', (req, res, next) => {
+        daoType.getByType(req.param('type')).then(type => {
+            if (type) {
+                console.log('Tipo de pessoa: ' + type.type + ' já cadastrado!');
+                var err = new Error('Tipo de pessoa já cadastrado!');
+                err.status = 500;
+                return next(next);
+            } else {
+                daoType.saveType(new PersonType(req.body)).then(data => {
+                    console.log('Tipo de pessoa cadastrado com sucesso!');
+                    res.json({ status: 200 });
+                }).catch(err => res.send(err));
+            }
+        }).catch(err => {
+            console.log('Erro ao cadastrar tipo de pessoa: ' + err);
+            return next(err);
         });
     });
-}
+
+    router.post('/delete', (req, res) => {
+        daoType.deleteType(req.body._id).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+    });
+});
+
+module.exports = router;
