@@ -22,17 +22,6 @@ app.listen(config.dev.port, () => {
     console.log("Listening ..");
 });
 
-
-// var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
-// app.use(methodOverride());
-
-
-// config
-// var conn = mongoose.connections;
-// var Grid = require('gridfs-stream');
-// Grid.mongo = mongoose.mongo;
-// var gfs = Grid(conn[0].db);
-
 // Using the flash middleware provided by connect-flash to store messages in session
 // and displaying in templates
 var flash = require('connect-flash');
@@ -44,13 +33,6 @@ initPassport(passport);
 
 var loginRoute = require('../api/login.rest')(passport);
 app.use('/', loginRoute);
-
-
-// headers cors
-
-
-// apis
-require('../api/visitor.rest')(app);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -69,5 +51,3 @@ if (app.get('env') === 'development') {
         });
     });
 }
-
-// module.exports = app;

@@ -1,85 +1,48 @@
-module.exports = function (app) {
+'use strict';
 
-    var Visitor = require('../models/visitor.vo');
+const router = require('express').Router();
+const mongoose = require('mongoose');
 
-    app.route('/visitante')
+let conn = mongoose.connection;
 
-        .get(function (req, res) {
-            Visitor.find(function (err, visitor) {
-                if (err)
-                    res.send(err)
-                res.json(visitor);
-            });
-        })
+var Visitor = require('../models/visitor.vo');
+var daoVisitor = require('../daos/visitor.dao');
 
-        .post(function (req, res, next) {
+conn.once('open', () => {
 
-            Visitor.findById(req.param('_id'), function (err, v) {
-                if (err) {
-                    console.log('Erro ao cadastrar visitante: ' + err);
-                    return next(err);
-                }
-
-                if (!v) {
-                    Visitor.findOne({ 'document': req.param('document') }, function (err, visitor) {
-
-                        if (err) {
-                            console.log('Erro ao cadastrar visitante: ' + err);
-                            return next(err);
-                        }
-
-                        if (visitor) {
-                            console.log('Visitante com o documento: ' + visitor.document + ' já cadastrado!');
-                            var err = new Error('Visitante já cadastrado!');
-                            err.status = 500;
-                            return next(err);
-                        }
-
-                        var visitor = new Visitor(req.body);
-
-                        visitor.save(function (err) {
-                            if (err) {
-                                console.log('Erro ao cadastrar visitante: ' + err);
-                                res.send(err);
-                            } else {
-                                console.log('Visitante cadastrado com sucesso!');
-                                res.json({ status: 200 });
-                            }
-                        });
-                    });
-                } else {
-                    // atualiza visitante
-                    v.name = req.param('name');
-                    v.document = req.param('document');
-                    v.documentType = req.param('documentType');
-                    v.obs = req.param('obs');
-
-                    // atualizar um por um?
-                    v.save(function (err) {
-                        if (err) {
-                            console.log('Erro ao alterar visitante: ' + err);
-                            throw err;
-                        }
-                        console.log('Visitante alterado com sucesso!');
-                        res.json({ status: 200 });
-                    });
-                }
-            });
-        });
-
-    // delete pessoa
-    app.post('/visitor/delete', function (req, res) {
-        Visitor.remove({
-            _id: req.body._id
-        }, function (err, v) {
-            if (err)
-                res.send(err);
-
-            Visitor.find(function (err, v) {
-                if (err)
-                    res.send(err)
-                res.json(v);
-            });
-        });
+    router.get('/', (req, res) => {
+        daoVisitor.getVisitors().then(v => res.json(v)).catch(err => res.send(err));
     });
-}
+
+    router.post('/', (req, res, next) => {
+        daoVisitor.getById(req.param('_id')).then(v => {
+            if (!v) {
+                daoVisitor.getByDocument(req.param('document')).then(visitorByDoc => {
+                    if (visitorByDoc) {
+                        console.log('Visitante com o documento: ' + visitorByDoc.document + ' já cadastrado!');
+                        var err = new Error('Visitante já cadastrado!');
+                        err.status = 500;
+                        return next(err);
+                    } else {
+                        daoVisitor.saveVisitor(new Visitor(req.body)).then(res.json({ status: 200 })).catch(err => res.send(err));
+                    }
+                }).catch(err => next(err));
+            } else {
+                // atualiza visitante
+                v.name = req.param('name');
+                v.document = req.param('document');
+                v.documentType = req.param('documentType');
+                v.obs = req.param('obs');
+
+                daoVisitor.saveVisitor(v).then(res.json({ status: 200 })).catch(err => res.send(err));
+            }
+        }).catch(err => next(err));
+    });
+
+    // delete visitor
+    router.post('/delete', (req, res) => {
+        daoVisitor.deleteVisitor(req.body._id).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+    });
+});
+
+module.exports = router;

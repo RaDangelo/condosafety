@@ -46,6 +46,6 @@ module.exports = (app) => {
     app.use('/afk-time', afk);
     app.use('/vehicle', vehicle);
     app.use('/image', image);
-    // app.use('/visitor', visitor);
+    app.use('/visitor', visitor);
 
 };
