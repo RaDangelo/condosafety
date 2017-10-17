@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable()
-export class UploadBehavior {
+export class ImageBehavior {
 
     public openModal$: EventEmitter<any>;
 

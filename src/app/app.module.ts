@@ -28,9 +28,9 @@ import {
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
-  ReportsComponent, NavbarComponent, PersonTypeModalComponent, UploadComponent
+  ReportsComponent, NavbarComponent, PersonTypeModalComponent, UploadComponent, ImageComponent
 } from './pages/';
-import { MessageDialogBehavior, UploadBehavior } from './behaviors';
+import { MessageDialogBehavior, ImageBehavior } from './behaviors';
 
 import { FileUploadModule } from 'ng2-file-upload';
 
@@ -46,7 +46,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     ReportsComponent,
     NavbarComponent,
     PersonTypeModalComponent,
-    UploadComponent
+    UploadComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +62,7 @@ import { FileUploadModule } from 'ng2-file-upload';
   providers: [
     ConfigService,
     MessageDialogBehavior,
-    UploadBehavior,
+    ImageBehavior,
     { provide: PersonServiceInterface, useClass: PersonService },
     { provide: LoginServiceInterface, useClass: LoginService },
     { provide: AccessServiceInterface, useClass: AccessService },

@@ -10,7 +10,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class RESTService extends BaseRequestOptions {
 
-    protected baseUrl: String;
+    protected baseUrl: string;
 
     public static handleError(error: Response) {
         return Observable.throw(error.json().error || 'Server error');
@@ -66,10 +66,7 @@ export class RESTService extends BaseRequestOptions {
         return this.http.delete(serviceUrl, options).timeout(10000, new Error('TimeOut!'));
     }
 
-    getBaseUrl() {
+    getBaseUrl(): string {
         return this.baseUrl;
     }
-
-
-
 }

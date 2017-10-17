@@ -1,2 +1,2 @@
 export * from './msg-dialog.behavior';
-export * from './upload.behavior';
+export * from './image.behavior';

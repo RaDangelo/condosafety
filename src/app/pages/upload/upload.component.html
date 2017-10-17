@@ -1,0 +1,6 @@
+<div class="filename">
+    {{uploader && uploader.queue.length > 0 ? uploader.queue[uploader.queue.length - 1].file.name : "Escolha uma imagem!"}}</div>
+
+<input id="fileChooser" type="file" accept=".jpg, .png" class="inputfile" ng2FileSelect multiple [uploader]="uploader" (click)="resetQueue()"
+/>
+<label for="fileChooser"> <span class="glyphicon glyphicon-open-file"></span>Selecionar arquivos</label>

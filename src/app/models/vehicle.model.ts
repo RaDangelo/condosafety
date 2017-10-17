@@ -18,7 +18,6 @@ export class VehicleModel {
             this.brand = vehicle.brand;
             this.status = vehicle.status;
             this.picture = vehicle.picture;
-            console.log('IMAGEM', this.picture);
             if (vehicle.apartment) {
                 this.apartment = vehicle.apartment;
             }

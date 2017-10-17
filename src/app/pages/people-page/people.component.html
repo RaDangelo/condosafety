@@ -52,6 +52,8 @@
                 </select>
         </div>
 
+        <upload [id]="person._id"> </upload>
+
         <div class="btns-person">
             <button class="btn-new" class="btn-md" (click)="newPerson()">+</button>
             <button [disabled]="!person || !person._id" class="btn-delete" class="btn-md" (click)="deletePerson()">Excluir</button>

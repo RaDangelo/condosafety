@@ -63,6 +63,7 @@
                 <button [disabled]="!apartment" class="btn-save" class="btn-md" (click)="saveApartment()">Salvar</button>
             </div>
         </div>
+
     </div>
 
     <div id="vehicle-register">
@@ -75,6 +76,7 @@
             </ul>
         </div>
         <div class="cont-edit">
+            <img *ngIf="vehicle.picture" (click)="openImage()" class="vehicle-image" [src]="vehicle.picture" />
             <div style="padding-left: 4px;">
                 Placa:
                 <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.plate" />
@@ -92,12 +94,11 @@
                 <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active-bg' : vehicle.status === false ? 'btn-status inactive-bg' : 'btn-status'"
                     (click)="changeVehicleStatus()"></button>
             </div>
-            <!--<div style="padding-left: 1px;" (click)="resetQueue()" class="cont-btn-inputfile">
-                Foto:
-                <md-icon class="material-icons">file</md-icon>
-                <input id="fileChooser" type="file" class="inputfile" [(ngModel)]="vehicle.picture" />
-                <label for="fileChooser"> <span class="glyphicon glyphicon-open-file" style="margin-right:3px"></span>Selecionar...</label>
-            </div>-->
+
+            <div [style.display]="!disableVehicleFields ? 'block' : 'none'" class="upload">
+                <upload [id]="vehicle._id" [upload]="vehicleImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
+            </div>
+
             <div class="btns-vehicle">
                 <button class="btn-new" class="btn-md" (click)="newVehicle()">+</button>
                 <button [disabled]="!vehicle || !vehicle._id" class="btn-delete" class="btn-md" (click)="deleteVehicle()">Excluir</button>
@@ -144,7 +145,4 @@
             <button class="btn-save" class="btn-md" (click)="saveAfk()">Salvar</button>
         </div>
     </div>
-
-    <button style="width: 50px; height: 50px; " (click)="uploadFile()">Upload</button>
-
 </div>

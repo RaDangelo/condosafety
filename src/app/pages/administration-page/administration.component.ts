@@ -1,7 +1,7 @@
 import { LoginServiceInterface, ApartmentServiceInterface, VehicleServiceInterface, AFKTimeServiceInterface } from '../../interfaces';
 import { Component } from '@angular/core';
 import { AfkTimeModel, ApartmentModel, MessagesModel, UserModel, VehicleModel, AccessType } from '../../models';
-import { MessageDialogBehavior, UploadBehavior } from '../../behaviors';
+import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 
 declare var $: any;
 
@@ -23,10 +23,11 @@ export class AdministrationComponent {
   disableUserFields = true;
   disableAptFields = true;
   disableVehicleFields = true;
+  vehicleImageUpload = false;
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
     private vehicleService: VehicleServiceInterface, private afkService: AFKTimeServiceInterface,
-    private dialogBehavior: MessageDialogBehavior, private uploadBehavior: UploadBehavior) {
+    private dialogBehavior: MessageDialogBehavior, private imageBehavior: ImageBehavior) {
     this.user = new UserModel();
     this.vehicle = new VehicleModel();
     this.apartment = new ApartmentModel();
@@ -37,7 +38,6 @@ export class AdministrationComponent {
     this.getVehicles();
     this.getAfkTime();
     // $('body').css('background-color', 'transparent');
-
   }
 
   get apartments() {
@@ -158,6 +158,7 @@ export class AdministrationComponent {
       .subscribe((data) => {
         this._vehicles = data;
         this.vehicle = new VehicleModel();
+        this.vehicleImageUpload = false;
         this.disableVehicleFields = true;
       },
       (error: MessagesModel) => {
@@ -179,6 +180,7 @@ export class AdministrationComponent {
   }
 
   deleteVehicle() {
+    this.vehicle.picture = null;
     this.vehicleService.delete(this.vehicle)
       .subscribe(() => { },
       (error: MessagesModel) => {
@@ -196,7 +198,9 @@ export class AdministrationComponent {
   saveVehicle() {
     this.vehicle.picture = null;
     this.vehicleService.save(this.vehicle)
-      .subscribe(() => { },
+      .subscribe(() => {
+        this.vehicleImageUpload = true;
+      },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
         error.severity = MessagesModel.SEVERITIES.ERROR;
@@ -214,6 +218,13 @@ export class AdministrationComponent {
       });
   }
 
+  uploadFinished() {
+    this.getVehicles();
+  }
+
+  openImage() {
+    this.imageBehavior.openModal$.next(this.vehicle.picture);
+  }
 
   private getUsers() {
     this.userService.getList()
@@ -308,9 +319,5 @@ export class AdministrationComponent {
           alert('Tempo de ociosidade permitido cadastrado com sucesso! ');
         }
       });
-  }
-
-  uploadFile() {
-    this.uploadBehavior.openModal$.next({ type: AccessType.VEHICLE.toString(), id: this.vehicle._id });
   }
 }

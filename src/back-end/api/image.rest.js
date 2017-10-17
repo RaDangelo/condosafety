@@ -16,6 +16,9 @@ conn.once('open', () => {
 
     router.post('/:id', (req, res) => {
         let id = req.params.id;
+        gfs.remove({ filename: id }, (err) => {
+            if (err) console.log(err)
+        });
         let part = req.files.file;
         let writeStream = gfs.createWriteStream({
             filename: id,
