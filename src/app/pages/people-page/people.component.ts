@@ -112,6 +112,7 @@ export class PeopleComponent {
   }
 
   deletePerson() {
+    this.person.picture = null;
     this.personService.delete(this.person)
       .subscribe(() => { },
       (error: MessagesModel) => {

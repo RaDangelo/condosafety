@@ -38,7 +38,12 @@ conn.once('open', () => {
                 apt.number = req.param('number');
                 apt.complex = req.param('complex');
                 apt.type = req.param('type');
-                apt.vehicles = req.param('vehicles');
+                console.log(req.param('vehicles'));
+                if (req.param('vehicles')) {
+                    apt.vehicles = req.param('vehicles');
+                } else {
+                    apt.vehicles = [];
+                }
                 apt.status = req.param('status');
 
                 daoApartment.saveApartment(apt).then(data => res.json({ status: 200 })).catch(err => res.send(err));

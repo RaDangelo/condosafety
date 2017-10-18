@@ -3,7 +3,10 @@ import * as path from 'path';
 import { Stream } from 'stream';
 import { Component, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@angular/core';
 
-import { PersonModel, UserModel, VisitorModel, MessagesModel, VideoInputModel, AccessModel, AccessType, AccessAction } from '../../models';
+import {
+  PersonModel, UserModel, VisitorModel, VehicleModel, MessagesModel, VideoInputModel,
+  AccessModel, AccessType, AccessAction
+} from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 
 declare var $: any;
@@ -194,10 +197,12 @@ export class MonitoringComponent implements AfterViewInit {
     this.access.date = new Date();
     this.access.user.username = localStorage.getItem('username');
     if (this.selected.cpf) {
-      this.access.person = this.selected;
+      this.access.person = new PersonModel(this.selected);
+      this.access.person.picture = null;
       this.access.type = AccessType.PERSON;
     } else if (this.selected.plate) {
-      this.access.vehicle = this.selected;
+      this.access.vehicle = new VehicleModel(this.selected);
+      this.access.vehicle.picture = null;
       this.access.type = AccessType.VEHICLE;
     }
   }

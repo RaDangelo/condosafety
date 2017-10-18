@@ -56,6 +56,7 @@ export class UploadComponent implements OnInit {
         this.uploader = new FileUploader(fileUploaderOptions);
         this.uploader.onCompleteItem = ((item: any, response: any, status: any, headers: any): any => {
             console.log('Imagem inserida na base com sucesso!');
+            this.resetQueue();
             this.uploadFinished.emit();
         });
     }

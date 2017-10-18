@@ -60,7 +60,7 @@ conn.once('open', () => {
                 p.personType = req.param('personType');
                 p.apartment = req.param('apartment');
 
-                daoPerson.savePerson(p).then(data => res.json(person._id)).catch(err => res.send(err));
+                daoPerson.savePerson(p).then(data => res.json(p._id)).catch(err => res.send(err));
             }
         }).catch(err => {
             console.log('Erro ao cadastrar pessoa: ' + err);

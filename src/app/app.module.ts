@@ -28,7 +28,7 @@ import {
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
-  ReportsComponent, NavbarComponent, PersonTypeModalComponent, UploadComponent, ImageComponent
+  ReportsComponent, NavbarComponent, PersonTypeModalComponent, UploadComponent, ImageComponent, VisitorComponent
 } from './pages/';
 import { MessageDialogBehavior, ImageBehavior } from './behaviors';
 
@@ -47,7 +47,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     NavbarComponent,
     PersonTypeModalComponent,
     UploadComponent,
-    ImageComponent
+    ImageComponent,
+    VisitorComponent
   ],
   imports: [
     BrowserModule,

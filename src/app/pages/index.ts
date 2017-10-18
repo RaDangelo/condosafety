@@ -6,5 +6,5 @@ export * from './login-page/login-page.component';
 export * from './navbar/navbar.component';
 export * from './people-page/person-type-modal/person-type-modal.component';
 export * from './upload/upload.component';
-export * from './modals/image-modal/image-modal.component';
+export * from './modals/';
 
