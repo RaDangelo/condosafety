@@ -17,20 +17,9 @@ export class UploadComponent implements OnInit {
 
     uploader: FileUploader;
 
-    _owner: string;
-    @Input() set id(owner: string) {
-        if (owner) {
-            this._owner = owner;
-            this.setUploader();
-        }
-    }
-
-    get imageOwner() {
-        return this._owner;
-    }
-
-    @Input() set upload(execute: boolean) {
-        if (execute) {
+    @Input() set upload(upload: any) {
+        if (upload && upload.execute && this.uploader && this.uploader.queue && this.uploader.queue.length) {
+            this.uploader.queue[0].url = this.restService.getBaseUrl() + '/image/' + upload.id;
             this.uploadFile();
         }
     }
@@ -38,6 +27,7 @@ export class UploadComponent implements OnInit {
     @Output() uploadFinished = new EventEmitter();
 
     constructor(private restService: RESTService) {
+        this.setUploader();
     }
 
     ngOnInit() {
@@ -61,7 +51,6 @@ export class UploadComponent implements OnInit {
 
     private setUploader() {
         const fileUploaderOptions: FileUploaderOptions = {
-            url: this.restService.getBaseUrl() + '/image/' + this.imageOwner,
             disableMultipart: false, queueLimit: 1
         };
         this.uploader = new FileUploader(fileUploaderOptions);

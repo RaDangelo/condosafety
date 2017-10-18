@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PersonModel, MessagesModel, ApartmentModel, PersonTypeModel } from '../../models';
-import { MessageDialogBehavior } from '../../behaviors';
+import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 import { ApartmentServiceInterface, PersonServiceInterface, PersonTypeServiceInterface } from '../../interfaces';
 
 declare var $: any;
@@ -17,6 +17,7 @@ export class PeopleComponent {
   _persons: PersonModel[];
   _apartments: ApartmentModel[];
   _types: PersonTypeModel[];
+  personImageUpload: any;
 
   get types() {
     if (this._types) {
@@ -46,7 +47,7 @@ export class PeopleComponent {
   }
 
   constructor(private personService: PersonServiceInterface, private apartmentService: ApartmentServiceInterface,
-    private typesService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior) {
+    private typesService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior, private imageBehavior: ImageBehavior) {
     this.person = new PersonModel();
     this.getApartments();
     this.getTypes();
@@ -93,7 +94,6 @@ export class PeopleComponent {
   }
 
   private getTypes() {
-    console.log('enrtei');
     this.typesService.getList()
       .subscribe((data) => {
         this._types = data;
@@ -127,8 +127,11 @@ export class PeopleComponent {
   }
 
   savePerson() {
+    this.person.picture = null;
     this.personService.save(this.person)
-      .subscribe(() => { },
+      .subscribe((id) => {
+        this.personImageUpload = { execute: true, id: id };
+      },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
         error.severity = MessagesModel.SEVERITIES.ERROR;
@@ -148,6 +151,15 @@ export class PeopleComponent {
 
   registerPersonType() {
     $('#person-type-modal').modal('show');
+  }
+
+  uploadFinished() {
+    this.personImageUpload = { execute: false, id: '' };
+    this.getPersons();
+  }
+
+  openImage() {
+    this.imageBehavior.openModal$.next(this.person.picture);
   }
 
 }

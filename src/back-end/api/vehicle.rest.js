@@ -35,7 +35,8 @@ conn.once('open', () => {
                         err.status = 500;
                         return next(err);
                     } else {
-                        daoVehicle.saveVehicle(new Vehicle(req.body)).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+                        let vehicle = new Vehicle(req.body);
+                        daoVehicle.saveVehicle(vehicle).then(data => res.json(vehicle._id)).catch(err => res.send(err));
                     }
                 }).catch(err => {
                     console.log('Erro ao cadastrar veículo: ' + err);
@@ -47,7 +48,7 @@ conn.once('open', () => {
                 v.brand = req.param('brand');
                 v.color = req.param('color');
                 v.status = req.param('status');
-                daoVehicle.saveVehicle(v).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+                daoVehicle.saveVehicle(v).then(data => res.json(v._id)).catch(err => res.send(err));
             }
         }).catch(err => {
             console.log('Erro ao cadastrar veículo: ' + err);

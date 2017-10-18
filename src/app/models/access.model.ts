@@ -2,7 +2,7 @@ import { UserModel, VehicleModel, ApartmentModel, PersonModel, VisitorModel } fr
 
 export class AccessModel {
 
-    _id: number;
+    _id: string;
     date: Date;
     user: UserModel;
 

@@ -28,9 +28,9 @@ export class VehicleService extends VehicleServiceInterface {
     //         .catch(RESTService.handleErrorMessage);
     // }
 
-    save(v: VehicleModel): Observable<any> {
+    save(v: VehicleModel): Observable<string> {
         return this.restService.post(this.url, v)
-            .map((res: Response) => <any>res.json())
+            .map((res: Response) => <string>res.json())
             .catch(RESTService.handleErrorMessage);
     }
 

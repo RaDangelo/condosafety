@@ -5,7 +5,7 @@ import { VehicleModel } from '../models';
 @Injectable()
 export abstract class VehicleServiceInterface {
 
-    abstract save(v: VehicleModel): Observable<any>;
+    abstract save(v: VehicleModel): Observable<string>;
 
     abstract getList(): Observable<Array<VehicleModel>>;
 

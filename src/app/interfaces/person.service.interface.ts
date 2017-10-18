@@ -6,7 +6,7 @@ import {PersonModel} from '../models';
 @Injectable()
 export abstract class PersonServiceInterface {
 
-    abstract save(person: PersonModel): Observable<any>;
+    abstract save(person: PersonModel): Observable<string>;
 
     abstract getList(): Observable<Array<PersonModel>>;
 

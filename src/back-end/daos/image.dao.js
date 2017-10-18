@@ -15,26 +15,30 @@ const ImageDao = {
     getImages(items) {
         return new Promise(function getImg(resolve, reject) {
             var itemsProcessed = 0;
-            items.forEach((i, index, array) => {
-                gfs.files.find({
-                    filename: i._id.toString()
-                }).toArray((err, files) => {
-                    setImage(files).then((data) => {
-                        i.picture = data;
-                        if (!i.picture) {
-                            console.log('Imagem não encontrada para: ' + i.brand);
-                        }
-                        itemsProcessed++;
-                        if (itemsProcessed === array.length) {
-                            console.log("Itens processados com sucesso!");
-                            resolve(items);
-                        }
-                    }).catch((err) => {
-                        console.log('Erro ao processar imagens!');
-                        reject(err);
+            if (items && items.length) {
+                items.forEach((i, index, array) => {
+                    gfs.files.find({
+                        filename: i._id.toString()
+                    }).toArray((err, files) => {
+                        setImage(files).then((data) => {
+                            i.picture = data;
+                            if (!i.picture) {
+                                console.log('Imagem não encontrada para: ' + i.brand);
+                            }
+                            itemsProcessed++;
+                            if (itemsProcessed === array.length) {
+                                console.log("Itens processados com sucesso!");
+                                resolve(items);
+                            }
+                        }).catch((err) => {
+                            console.log('Erro ao processar imagens!');
+                            reject(err);
+                        });
                     });
                 });
-            });
+            } else {
+                resolve(items);
+            }
         });
     }
 }

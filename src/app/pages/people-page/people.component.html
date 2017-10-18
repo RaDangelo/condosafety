@@ -1,7 +1,6 @@
 <div class="page-template">
 
     <div style="float: left;">
-
         <div style="padding-left: 4px;">
             Nome:
             <input [disabled]="disableFields" class="w-150" type="text" [(ngModel)]="person.name" />
@@ -45,14 +44,18 @@
             Apartamento:
             <select [disabled]="disableFields" class="w-120" [(ngModel)]="person.apartment">
                 <option value="undefined" selected disabled>Selecione...</option>
-                <option *ngFor="let ap of apartments" [ngValue]="ap"> 
-                <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
+                <ng-container *ngFor="let ap of apartments">
+                <option *ngIf="ap.status" [ngValue]="ap"> 
+                    <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
                     {{ap.number}}
                 </option>
+                </ng-container>
                 </select>
         </div>
 
-        <upload [id]="person._id"> </upload>
+        <div [style.display]="!disableFields ? 'block' : 'none'" class="upload">
+            <upload [upload]="personImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
+        </div>
 
         <div class="btns-person">
             <button class="btn-new" class="btn-md" (click)="newPerson()">+</button>
@@ -64,7 +67,8 @@
     </div>
 
     <div id="person-register">
-        Pessoas:
+        <label>Pessoas:</label>
+        <img *ngIf="person.picture" (click)="openImage()" class="person-image" [src]="person.picture" />
         <div id="person-list" style="float: left;">
             <ul>
                 <li *ngFor="let p of persons; let i = index" (click)="editPerson(p, i)">

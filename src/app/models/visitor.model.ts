@@ -1,6 +1,6 @@
 export class VisitorModel {
 
-    _id: number;
+    _id: string;
     name: string;
     document: string;
     documentType: string;

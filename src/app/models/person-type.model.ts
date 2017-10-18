@@ -1,6 +1,6 @@
 export class PersonTypeModel {
 
-    _id: number;
+    _id: string;
     type: string;
 
     constructor(type: PersonTypeModel = null) {

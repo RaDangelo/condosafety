@@ -17,7 +17,6 @@ export class MonitoringComponent implements AfterViewInit {
 
   filterResult: Array<Object>;
   videos: Array<ElementRef> = new Array<ElementRef>();
-  img: string;
   selected: any;
   filter = '';
   access: AccessModel = new AccessModel();
@@ -35,7 +34,6 @@ export class MonitoringComponent implements AfterViewInit {
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
     this.filterResult = new Array<Object>();
     this.user = new UserModel();
-    this.img = '../../../../dist/assets/img-test.png';
   }
 
   ngAfterViewInit() {

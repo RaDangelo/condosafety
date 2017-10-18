@@ -28,9 +28,9 @@ export class PersonService extends PersonServiceInterface {
             .catch(RESTService.handleErrorMessage);
     }
 
-    save(person: PersonModel): Observable<any> {
+    save(person: PersonModel): Observable<string> {
         return this.restService.post(this.url, person)
-            .map((res: Response) => <any>res.json())
+            .map((res: Response) => <string>res.json())
             .catch(RESTService.handleErrorMessage);
     }
 

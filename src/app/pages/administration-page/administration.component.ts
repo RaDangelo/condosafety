@@ -23,7 +23,7 @@ export class AdministrationComponent {
   disableUserFields = true;
   disableAptFields = true;
   disableVehicleFields = true;
-  vehicleImageUpload = false;
+  vehicleImageUpload: any;
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
     private vehicleService: VehicleServiceInterface, private afkService: AFKTimeServiceInterface,
@@ -74,14 +74,14 @@ export class AdministrationComponent {
     }
     if (this.selectedVehicle) {
       for (let v of this.apartment.vehicles) {
-        if (v === this.selectedVehicle) {
+        if (v._id === this.selectedVehicle._id) {
           this.warning.severity = MessagesModel.SEVERITIES.WARNING;
           this.warning.message = 'Veículo já inserido!';
           this.dialogBehavior.showErrorMessage(this.warning);
           return false;
         }
       }
-      this.apartment.vehicles.push(this.selectedVehicle);
+      this.apartment.vehicles.push(new VehicleModel(this.selectedVehicle));
     }
   }
 
@@ -158,7 +158,6 @@ export class AdministrationComponent {
       .subscribe((data) => {
         this._vehicles = data;
         this.vehicle = new VehicleModel();
-        this.vehicleImageUpload = false;
         this.disableVehicleFields = true;
       },
       (error: MessagesModel) => {
@@ -198,8 +197,8 @@ export class AdministrationComponent {
   saveVehicle() {
     this.vehicle.picture = null;
     this.vehicleService.save(this.vehicle)
-      .subscribe(() => {
-        this.vehicleImageUpload = true;
+      .subscribe((id) => {
+        this.vehicleImageUpload = { execute: true, id: id };
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);
@@ -219,6 +218,7 @@ export class AdministrationComponent {
   }
 
   uploadFinished() {
+    this.vehicleImageUpload = { execute: false, id: '' };
     this.getVehicles();
   }
 

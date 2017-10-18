@@ -1,5 +1,5 @@
 export class AfkTimeModel {
-    _id: number;
+    _id: string;
     time: number;
 
     constructor(afk: AfkTimeModel = null) {

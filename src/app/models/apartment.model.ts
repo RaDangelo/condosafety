@@ -2,7 +2,7 @@ import { VehicleModel } from './';
 
 export class ApartmentModel {
 
-    _id: number;
+    _id: string;
     floor: number;
     number: number;
     status: boolean;

@@ -70,84 +70,92 @@ conn.once('open', () => {
 
             var visitors = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVisitor.getFilteredName(req.params.filter).then(v => {
-                    if (v.length) {
-                        v.forEach((item, index, array) => {
-                            filteredData.push(item);
-                            itemsProcessed++;
-                            if (itemsProcessed === array.length) {
-                                resolve();
-                            }
-                        });
-                    } else {
-                        resolve();
-                    }
-                }).catch(err => reject(err));
-            });
-
-            var persons = new Promise((resolve, reject) => {
-                let itemsProcessed = 0;
-                daoPerson.getFilteredName(req.params.filter).then(p => {
-                    if (p.length) {
-                        p.forEach((item, index, array) => {
-                            filteredData.push(item);
-                            itemsProcessed++;
-                            if (itemsProcessed === array.length) {
-                                resolve();
-                            }
-                        });
-                    } else {
-                        resolve();
-                    }
-                }).catch(err => reject(err));
-            });
-
-            var vehicleBrand = new Promise((resolve, reject) => {
-                let itemsProcessed = 0;
-                daoVehicle.getFilteredBrand(req.params.filter).then(v => {
-                    if (v.length) {
-                        v.forEach((item, index, array) => {
-                            daoApartment.getByVehicle(item._id).then(apt => {
-                                if (apt) {
-                                    item.apartment = new Apartment();
-                                    item.apartment.complex = apt.complex;
-                                    item.apartment.number = apt.number;
-                                }
+                daoVisitor.getFilteredName(req.params.filter).then(result => {
+                    daoImg.getImages(result).then(v => {
+                        if (v.length) {
+                            v.forEach((item, index, array) => {
                                 filteredData.push(item);
                                 itemsProcessed++;
                                 if (itemsProcessed === array.length) {
                                     resolve();
                                 }
-                            }).catch(err => reject(err));
-                        });
-                    } else {
-                        resolve();
-                    }
+                            });
+                        } else {
+                            resolve();
+                        }
+                    }).catch(err => reject(err));
+                }).catch(err => reject(err));
+            });
+
+            var persons = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoPerson.getFilteredName(req.params.filter).then(result => {
+                    daoImg.getImages(result).then(p => {
+                        if (p.length) {
+                            p.forEach((item, index, array) => {
+                                filteredData.push(item);
+                                itemsProcessed++;
+                                if (itemsProcessed === array.length) {
+                                    resolve();
+                                }
+                            });
+                        } else {
+                            resolve();
+                        }
+                    }).catch(err => reject(err));
+                }).catch(err => reject(err));
+            });
+
+            var vehicleBrand = new Promise((resolve, reject) => {
+                let itemsProcessed = 0;
+                daoVehicle.getFilteredBrand(req.params.filter).then(result => {
+                    daoImg.getImages(result).then(v => {
+                        if (v.length) {
+                            v.forEach((item, index, array) => {
+                                daoApartment.getByVehicle(item._id).then(apt => {
+                                    if (apt) {
+                                        item.apartment = new Apartment();
+                                        item.apartment.complex = apt.complex;
+                                        item.apartment.number = apt.number;
+                                    }
+                                    filteredData.push(item);
+                                    itemsProcessed++;
+                                    if (itemsProcessed === array.length) {
+                                        resolve();
+                                    }
+                                }).catch(err => reject(err));
+                            });
+                        } else {
+                            resolve();
+                        }
+                    }).catch(err => reject(err));
                 }).catch(err => reject(err));
             });
 
 
             var vehiclePlate = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVehicle.getFilteredPlate(req.params.filter).then(v => {
-                    if (v.length) {
-                        v.forEach((item, index, array) => {
-                            daoApartment.getByVehicle(item._id).then(apt => {
-                                if (apt) {
-                                    item.apartment = new Apartment();
-                                    item.apartment.complex = apt.complex;
-                                    item.apartment.number = apt.number;
-                                }
-                                filteredData.push(item);
-                                itemsProcessed++;
-                                if (itemsProcessed === array.length) {
-                                    resolve();
-                                }
-                            }).catch(err => reject(err));
-                        });
-                    } else {
-                        resolve();
-                    }
+                daoVehicle.getFilteredPlate(req.params.filter).then(result => {
+                    daoImg.getImages(result).then(v => {
+                        if (v.length) {
+                            v.forEach((item, index, array) => {
+                                daoApartment.getByVehicle(item._id).then(apt => {
+                                    if (apt) {
+                                        item.apartment = new Apartment();
+                                        item.apartment.complex = apt.complex;
+                                        item.apartment.number = apt.number;
+                                    }
+                                    filteredData.push(item);
+                                    itemsProcessed++;
+                                    if (itemsProcessed === array.length) {
+                                        resolve();
+                                    }
+                                }).catch(err => reject(err));
+                            });
+                        } else {
+                            resolve();
+                        }
+                    }).catch(err => reject(err));
                 }).catch(err => reject(err));
             });
 
@@ -157,35 +165,46 @@ conn.once('open', () => {
 
             var visitors = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVisitor.getFilteredDocument(req.params.filter).then(v => {
-                    if (v.length) {
-                        v.forEach((item, index, array) => {
-                            filteredData.push(item);
-                            itemsProcessed++;
-                            if (itemsProcessed === array.length) {
-                                resolve();
-                            }
-                        });
-                    } else {
-                        resolve();
-                    }
+                daoVisitor.getFilteredDocument(req.params.filter).then(result => {
+                    daoImg.getImages(result).then(v => {
+                        console.log('1');
+                        if (v.length) {
+                            v.forEach((item, index, array) => {
+                                filteredData.push(item);
+                                itemsProcessed++;
+                                if (itemsProcessed === array.length) {
+                                    console.log('2');
+                                    resolve();
+                                }
+                            });
+                        } else {
+                            console.log('3');
+                            resolve();
+                        }
+                    }).catch(err => reject(err));
                 }).catch(err => reject(err));
             });
 
+
             var persons = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoPerson.getFilteredDocument(req.params.filter).then(p => {
-                    if (p.length) {
-                        p.forEach((item, index, array) => {
-                            filteredData.push(item);
-                            itemsProcessed++;
-                            if (itemsProcessed === array.length) {
-                                resolve();
-                            }
-                        });
-                    } else {
-                        resolve();
-                    }
+                daoPerson.getFilteredDocument(req.params.filter).then(result => {
+                    daoImg.getImages(result).then(p => {
+                        console.log('4');
+                        if (p.length) {
+                            p.forEach((item, index, array) => {
+                                filteredData.push(item);
+                                itemsProcessed++;
+                                if (itemsProcessed === array.length) {
+                                    console.log('5');
+                                    resolve();
+                                }
+                            });
+                        } else {
+                            console.log('6');
+                            resolve();
+                        }
+                    }).catch(err => reject(err));
                 }).catch(err => reject(err));
             });
 

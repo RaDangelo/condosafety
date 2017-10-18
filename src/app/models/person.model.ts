@@ -2,7 +2,7 @@ import { ApartmentModel, PersonTypeModel } from './';
 
 export class PersonModel {
 
-    _id: number;
+    _id: string;
     name: string;
     nickname: string;
     accessPassword: string;

@@ -6,8 +6,8 @@
         <div class="left-body">
 
             <div class="person-img">
-                <img *ngIf="img" [src]="img" />
-                <!-- <video *nfIg="!img" #frontCamera width="160" height="200" autoplay></video> -->
+                <img *ngIf="selected && selected.picture" [src]="selected.picture" />
+                <!-- <input id="front-camera" type="file" accept="image/*;capture=camera"> -->
             </div>
 
             <div class="person-search">

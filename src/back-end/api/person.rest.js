@@ -31,14 +31,14 @@ conn.once('open', () => {
             if (!p) {
                 daoPerson.getByDocument(req.param('cpf')).then(personByDocument => {
                     if (personByDocument) {
-                        console.log('Pessoa com o documento: ' + p.cpf + ' já cadastrada!');
+                        console.log('Pessoa com o documento: ' + req.param('cpf') + ' já cadastrada!');
                         var err = new Error('Pessoa já cadastrada!');
                         err.status = 500;
                         return next(err);
                     } else {
                         let person = new Person(req.body);
                         person.accessPassword = Crypto.createHash(person.accessPassword);
-                        daoPerson.savePerson(person).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+                        daoPerson.savePerson(person).then(data => res.json(person._id)).catch(err => res.send(err));
                     }
                 }).catch(err => {
                     console.log('Erro ao cadastrar pessoa: ' + err);
@@ -60,7 +60,7 @@ conn.once('open', () => {
                 p.personType = req.param('personType');
                 p.apartment = req.param('apartment');
 
-                daoPerson.savePerson(p).then(data => res.json({ status: 200 })).catch(err => res.send(err));
+                daoPerson.savePerson(p).then(data => res.json(person._id)).catch(err => res.send(err));
             }
         }).catch(err => {
             console.log('Erro ao cadastrar pessoa: ' + err);

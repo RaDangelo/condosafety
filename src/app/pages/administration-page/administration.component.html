@@ -96,7 +96,7 @@
             </div>
 
             <div [style.display]="!disableVehicleFields ? 'block' : 'none'" class="upload">
-                <upload [id]="vehicle._id" [upload]="vehicleImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
+                <upload [upload]="vehicleImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
             </div>
 
             <div class="btns-vehicle">

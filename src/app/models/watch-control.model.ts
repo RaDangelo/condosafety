@@ -2,7 +2,7 @@ import { UserModel } from './';
 
 export class WatchControlModel {
 
-    _id: number;
+    _id: string;
     user: UserModel;
     date: Date;
     action: Action;
