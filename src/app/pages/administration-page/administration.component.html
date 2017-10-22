@@ -1,148 +1,148 @@
-<div class="page-template">
+    <div class="page-template">
 
-    <div id="apartment-register">
-        <label>Apartamentos</label>
-        <div id="apt-list">
-            <ul>
-                <li *ngFor="let apt of apartments; let i = index" (click)="editApartment(apt, i)">
-                    <span [class]="apt.status ? 'active-c' : 'inactive-c'">•</span>
-                    <ng-container *ngIf="apt.complex">{{apt.complex}} - </ng-container>
-                    {{apt.number}}
-                </li>
-            </ul>
-        </div>
-        <div class="cont-edit">
-            <div style="width: 100%; height: 38px;">
-                <div class="floor">
-                    Andar:
-                    <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.floor" />
-                </div>
-                <div style="width: 160px; float: left;">
-                    Número:
-                    <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.number" />
-                </div>
+        <div id="apartment-register">
+            <label>Apartamentos</label>
+            <div id="apt-list">
+                <ul>
+                    <li *ngFor="let apt of apartments; let i = index" (click)="editApartment(apt, i)">
+                        <span [class]="apt.status ? 'active-c' : 'inactive-c'">•</span>
+                        <ng-container *ngIf="apt.complex">{{apt.complex}} - </ng-container>
+                        {{apt.number}}
+                    </li>
+                </ul>
             </div>
-            <div style="width: 100%; height: 38px;">
-                <div style="padding-left: 17px; width: 160px; float: left">
-                    Bloco:
-                    <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.complex" />
+            <div class="cont-edit">
+                <div style="width: 100%; height: 38px;">
+                    <div class="floor">
+                        Andar:
+                        <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.floor" />
+                    </div>
+                    <div style="width: 160px; float: left;">
+                        Número:
+                        <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.number" />
+                    </div>
                 </div>
-                <div style="width: 160px; float: left">
-                    Tipo:
-                    <input [disabled]="disableAptFields" class="w-114" type="text" [(ngModel)]="apartment.type" />
+                <div style="width: 100%; height: 38px;">
+                    <div style="padding-left: 17px; width: 160px; float: left">
+                        Bloco:
+                        <input [disabled]="disableAptFields" class="w-100" type="text" [(ngModel)]="apartment.complex" />
+                    </div>
+                    <div style="width: 160px; float: left">
+                        Tipo:
+                        <input [disabled]="disableAptFields" class="w-114" type="text" [(ngModel)]="apartment.type" />
+                    </div>
                 </div>
-            </div>
-            <div style="width: 100%; height: 38px;">
-                <div style="padding-left: 12px; float: left;">
-                    Status:
-                    <button [disabled]="disableAptFields" [class]="apartment.status === true ? 'btn-status active-bg' : apartment.status === false ? 'btn-status inactive-bg' : 'btn-status'"
-                        (click)="changeAptStatus()"></button>
-                </div>
-                <div style="float: left; position: relative; left: 10px;">
-                    Veículos:
-                    <select [disabled]="disableAptFields" class="w-120" [(ngModel)]="selectedVehicle">
+                <div style="width: 100%; height: 38px;">
+                    <div style="padding-left: 12px; float: left;">
+                        Status:
+                        <button [disabled]="disableAptFields" [class]="apartment.status === true ? 'btn-status active-bg' : apartment.status === false ? 'btn-status inactive-bg' : 'btn-status'"
+                            (click)="changeAptStatus()"></button>
+                    </div>
+                    <div style="float: left; position: relative; left: 10px;">
+                        Veículos:
+                        <select [disabled]="disableAptFields" class="w-120" [(ngModel)]="selectedVehicle">
                 <option value="null" selected disabled>Selecione...</option>
                 <ng-container *ngFor="let v of vehicles">
                     <option *ngIf="v.status" [ngValue]="v"> {{v.brand}} - {{v.plate}}</option>
                 </ng-container>
                 </select>
-                    <button [disabled]="!selectedVehicle || !selectedVehicle._id" class="btn-md" (click)="setApartmentVehicle()"> + </button>
+                        <button [disabled]="!selectedVehicle || !selectedVehicle._id" class="btn-md" (click)="setApartmentVehicle()"> + </button>
+                    </div>
+                </div>
+
+                <div *ngIf="apartment.vehicles.length > 0" style="padding-left: 30px; height: 20px;">
+                    <ng-container *ngFor="let vehic of apartment.vehicles">
+                        <button class="close" (click)="eraseAptVehicle(vehic)">&times;</button>
+                        <div style="float: left; min-width: 104px; margin: 0px; margin-right: 2px;"> {{vehic.brand}} - {{vehic.plate}};</div>
+                    </ng-container>
+                </div>
+
+                <div class="btns-apartment">
+                    <button class="btn-new" class="btn-md" (click)="newApartment()">+</button>
+                    <button [disabled]="!apartment || !apartment._id" class="btn-delete" class="btn-md" (click)="deleteApartment()">Excluir</button>
+                    <button [disabled]="!apartment" class="btn-save" class="btn-md" (click)="saveApartment()">Salvar</button>
                 </div>
             </div>
 
-            <div *ngIf="apartment.vehicles.length > 0" style="padding-left: 30px; height: 20px;">
-                <ng-container *ngFor="let vehic of apartment.vehicles">
-                    <button class="close" (click)="eraseAptVehicle(vehic)">&times;</button>
-                    <div style="float: left; min-width: 104px; margin: 0px; margin-right: 2px;"> {{vehic.brand}} - {{vehic.plate}};</div>
-                </ng-container>
-            </div>
+        </div>
 
-            <div class="btns-apartment">
-                <button class="btn-new" class="btn-md" (click)="newApartment()">+</button>
-                <button [disabled]="!apartment || !apartment._id" class="btn-delete" class="btn-md" (click)="deleteApartment()">Excluir</button>
-                <button [disabled]="!apartment" class="btn-save" class="btn-md" (click)="saveApartment()">Salvar</button>
+        <div id="vehicle-register">
+            <label>Veículos</label>
+            <div id="vehicle-list">
+                <ul>
+                    <li *ngFor="let v of vehicles; let i = index" (click)="editVehicle(v, i)">
+                        <span [class]="v.status ? 'active-c' : 'inactive-c'">•</span> {{v.brand}} - {{v.plate}}
+                    </li>
+                </ul>
+            </div>
+            <div class="cont-edit">
+                <img *ngIf="vehicle.picture" (click)="openImage()" class="vehicle-image" [src]="vehicle.picture" />
+                <div style="padding-left: 4px;">
+                    Placa:
+                    <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.plate" />
+                </div>
+                <div>
+                    Marca:
+                    <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.brand" />
+                </div>
+                <div style="padding-left: 17px;">
+                    Cor:
+                    <input [disabled]="disableVehicleFields" class="w-120" type="text" [(ngModel)]="vehicle.color" />
+                </div>
+                <div style="padding-left: 1px;">
+                    Status:
+                    <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active-bg' : vehicle.status === false ? 'btn-status inactive-bg' : 'btn-status'"
+                        (click)="changeVehicleStatus()"></button>
+                </div>
+
+                <div [style.display]="!disableVehicleFields ? 'block' : 'none'" class="upload">
+                    <upload [upload]="vehicleImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
+                </div>
+
+                <div class="btns-vehicle">
+                    <button class="btn-new" class="btn-md" (click)="newVehicle()">+</button>
+                    <button [disabled]="!vehicle || !vehicle._id" class="btn-delete" class="btn-md" (click)="deleteVehicle()">Excluir</button>
+                    <button [disabled]="!vehicle" class="btn-save" class="btn-md" (click)="saveVehicle()">Salvar</button>
+                </div>
             </div>
         </div>
 
-    </div>
-
-    <div id="vehicle-register">
-        <label>Veículos</label>
-        <div id="vehicle-list">
-            <ul>
-                <li *ngFor="let v of vehicles; let i = index" (click)="editVehicle(v, i)">
-                    <span [class]="v.status ? 'active-c' : 'inactive-c'">•</span> {{v.brand}} - {{v.plate}}
-                </li>
-            </ul>
-        </div>
-        <div class="cont-edit">
-            <img *ngIf="vehicle.picture" (click)="openImage()" class="vehicle-image" [src]="vehicle.picture" />
-            <div style="padding-left: 4px;">
-                Placa:
-                <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.plate" />
+        <div id="user-register">
+            <label>Usuários</label>
+            <div id="user-list">
+                <ul>
+                    <li *ngFor="let us of users; let i = index" (click)="editUser(us, i)">
+                        • {{us.username}}
+                    </li>
+                </ul>
             </div>
-            <div>
-                Marca:
-                <input [disabled]="disableVehicleFields" class="w-150" type="text" [(ngModel)]="vehicle.brand" />
-            </div>
-            <div style="padding-left: 17px;">
-                Cor:
-                <input [disabled]="disableVehicleFields" class="w-120" type="text" [(ngModel)]="vehicle.color" />
-            </div>
-            <div style="padding-left: 1px;">
-                Status:
-                <button [disabled]="disableVehicleFields" [class]="vehicle.status === true ? 'btn-status active-bg' : vehicle.status === false ? 'btn-status inactive-bg' : 'btn-status'"
-                    (click)="changeVehicleStatus()"></button>
-            </div>
-
-            <div [style.display]="!disableVehicleFields ? 'block' : 'none'" class="upload">
-                <upload [upload]="vehicleImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
-            </div>
-
-            <div class="btns-vehicle">
-                <button class="btn-new" class="btn-md" (click)="newVehicle()">+</button>
-                <button [disabled]="!vehicle || !vehicle._id" class="btn-delete" class="btn-md" (click)="deleteVehicle()">Excluir</button>
-                <button [disabled]="!vehicle" class="btn-save" class="btn-md" (click)="saveVehicle()">Salvar</button>
+            <div class="cont-edit">
+                <div>
+                    Usuário:
+                    <input [disabled]="disableUserFields" class="username w-150" type="text" [(ngModel)]="user.username" />
+                </div>
+                <div style="padding-left: 8px;">
+                    Senha:
+                    <input [disabled]="disableUserFields" class="password  w-150" type="password" [(ngModel)]="user.password" />
+                </div>
+                <div style="padding-left: 17px;">
+                    Nível:
+                    <input [disabled]="disableUserFields" class="access-lvl w-50" type="text" [(ngModel)]="user.accessLevel" />
+                </div>
+                <div class="btns-user">
+                    <button class="btn-new" class="btn-md" (click)="newUser()">+</button>
+                    <button [disabled]="!user || !user._id" class="btn-delete" class="btn-md" (click)="deleteUser()">Excluir</button>
+                    <button [disabled]="!user" class="btn-save" class="btn-md" (click)="saveUser()">Salvar</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="user-register">
-        <label>Usuários</label>
-        <div id="user-list">
-            <ul>
-                <li *ngFor="let us of users; let i = index" (click)="editUser(us, i)">
-                    • {{us.username}}
-                </li>
-            </ul>
-        </div>
-        <div class="cont-edit">
-            <div>
-                Usuário:
-                <input [disabled]="disableUserFields" class="username w-150" type="text" [(ngModel)]="user.username" />
-            </div>
-            <div style="padding-left: 8px;">
-                Senha:
-                <input [disabled]="disableUserFields" class="password  w-150" type="password" [(ngModel)]="user.password" />
-            </div>
-            <div style="padding-left: 17px;">
-                Nível:
-                <input [disabled]="disableUserFields" class="access-lvl w-50" type="text" [(ngModel)]="user.accessLevel" />
-            </div>
-            <div class="btns-user">
-                <button class="btn-new" class="btn-md" (click)="newUser()">+</button>
-                <button [disabled]="!user || !user._id" class="btn-delete" class="btn-md" (click)="deleteUser()">Excluir</button>
-                <button [disabled]="!user" class="btn-save" class="btn-md" (click)="saveUser()">Salvar</button>
+        <div id="ot-register">
+            <label>Tempo de Ociosidade Permitido</label>
+            <div class="cont-edit">
+                Tempo permitido em minutos:
+                <input class="w-60" type="number" [(ngModel)]="afk.time" />
+                <button class="btn-save" class="btn-md" (click)="saveAfk()">Salvar</button>
             </div>
         </div>
     </div>
-
-    <div id="ot-register">
-        <label>Tempo de Ociosidade Permitido</label>
-        <div class="cont-edit">
-            Tempo permitido em minutos:
-            <input class="w-60" type="number" [(ngModel)]="afk.time" />
-            <button class="btn-save" class="btn-md" (click)="saveAfk()">Salvar</button>
-        </div>
-    </div>
-</div>

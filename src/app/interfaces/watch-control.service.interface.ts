@@ -8,10 +8,6 @@ export abstract class WatchControlServiceInterface {
 
     // abstract getList(): Observable<Array<PersonModel>>;
 
-    // abstract getSingle (person: PersonModel): Observable<PersonModel>;    
-
-    // abstract update(person: PersonModel): Observable<any>;
-
     // abstract delete(person: PersonModel): Observable<any>;
     
 }

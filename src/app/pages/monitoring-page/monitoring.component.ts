@@ -8,8 +8,10 @@ import {
   AccessModel, AccessType, AccessAction
 } from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
+import { ElectronService } from 'ngx-electron';
 
 declare var $: any;
+declare var document: any;
 
 @Component({
   selector: 'monitoring',
@@ -27,24 +29,47 @@ export class MonitoringComponent implements AfterViewInit {
   user: UserModel;
   videoInputs: Array<VideoInputModel> = new Array<VideoInputModel>();
   selectedVideos: Array<VideoInputModel> = new Array<VideoInputModel>();
+  frontCamera: any;
 
   @ViewChild('video0') video0: ElementRef;
   @ViewChild('video1') video1: ElementRef;
   @ViewChild('video2') video2: ElementRef;
   @ViewChild('video3') video3: ElementRef;
-  @ViewChild('frontCamera') frontCamera: ElementRef;
+  // @ViewChild('canvas') canvas: ElementRef;
 
-  constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior) {
+  constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior,
+    private electron: ElectronService) {
     this.filterResult = new Array<Object>();
     this.user = new UserModel();
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   ngAfterViewInit() {
     this.videos = [this.video0, this.video1, this.video2, this.video3];
     navigator.mediaDevices.enumerateDevices()
       .then(this.getDevices.bind(this));
+    this.frontCamera = document.getElementById('frontCamera');
+    this.setPictureCamera();
+  }
 
-    console.log(navigator.mediaDevices.enumerateDevices());
+  private setPictureCamera() {
+    // const nv = this.frontCamera.nativeElement;
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        this.frontCamera.src = window.URL.createObjectURL(stream);
+        this.frontCamera.play();
+      });
+  }
+
+  private takePicture() {
+    let context;
+    context = document.getElementById('canvas').getContext('2d');
+    context.drawImage(this.frontCamera, 0, 0, 160, 200);
+    this.convertCanvasToImage(context);
+  }
+
+  private convertCanvasToImage(context: any) {
+    this.selected.picture = context.canvas.toDataURL('image/png');
   }
 
   private getDevices(infos) {
@@ -205,6 +230,10 @@ export class MonitoringComponent implements AfterViewInit {
       this.access.vehicle.picture = null;
       this.access.type = AccessType.VEHICLE;
     }
+  }
+
+  openVisitorModal() {
+    $('#visitor-modal').modal('show');
   }
 
 }

@@ -1,14 +1,15 @@
-<div style="width: 1500px;" *ngIf="!route.isActive('/', true)">
-    <navbar></navbar>
-</div>
-<div>
-    <router-outlet></router-outlet>
-</div>
-<div [style.display]="!route.isActive('/', true) ? 'block' : 'none'" style="background-color: #c2c2c2; width: 1500px; padding-left: 40px; height: 36px; padding-top: 2px;">
-    <div style="border-top: 1px solid black; margin: 0px 200px 0px 0px; padding-top: 2px;">
-        <label style="float: left; margin: 0px 4px;">  Olá, {{getUser()}} </label>
-        <span style="float: left; width: 200px; height: 30px; position: relative;" id="clock"> </span>
+<div [class.fullScreenBg]="!route.isActive('/', true)">
+    <div style="width: 100%;" *ngIf="!route.isActive('/', true)">
+        <navbar></navbar>
+    </div>
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+    <div [style.display]="!route.isActive('/', true) ? 'block' : 'none'" style="background-color: #c2c2c2; width: 100%; padding-left: 40px; height: 36px; padding-top: 2px;">
+        <div style="border-top: 1px solid black; margin: 0px 200px 0px 0px; padding-top: 2px;">
+            <label style="float: left; margin: 0px 4px;">  Olá, {{getUser()}} </label>
+            <span style="float: left; width: 200px; height: 30px; position: relative;" id="clock"> </span>
+        </div>
     </div>
 </div>
-
 <image-modal [image]="image"></image-modal>

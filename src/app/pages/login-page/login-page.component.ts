@@ -5,6 +5,7 @@ import { userInfo } from 'os';
 import { Component } from '@angular/core';
 import { UserModel } from '../../models';
 import { MessageDialogBehavior } from '../../behaviors';
+import { ElectronService } from 'ngx-electron';
 
 declare var $: any;
 
@@ -20,11 +21,12 @@ export class LoginPageComponent {
   alertUsername: boolean;
 
   constructor(private loginService: LoginServiceInterface, private route: Router,
-    private dialogBehavior: MessageDialogBehavior) {
+    private dialogBehavior: MessageDialogBehavior, private electron: ElectronService) {
     $('body').css('background-color', 'transparent');
     this.user = new UserModel();
     this.alertPassword = false;
     this.alertUsername = false;
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
   }
 
   login() {

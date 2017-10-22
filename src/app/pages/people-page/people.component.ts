@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PersonModel, MessagesModel, ApartmentModel, PersonTypeModel } from '../../models';
 import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 import { ApartmentServiceInterface, PersonServiceInterface, PersonTypeServiceInterface } from '../../interfaces';
+import { ElectronService } from 'ngx-electron';
 
 declare var $: any;
 
@@ -47,11 +48,13 @@ export class PeopleComponent {
   }
 
   constructor(private personService: PersonServiceInterface, private apartmentService: ApartmentServiceInterface,
-    private typesService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior, private imageBehavior: ImageBehavior) {
+    private typesService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior,
+    private electron: ElectronService, private imageBehavior: ImageBehavior) {
     this.person = new PersonModel();
     this.getApartments();
     this.getTypes();
     this.getPersons();
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   changePersonStatus() {

@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { RESTService } from '../rest.service';
+import { VisitorModel } from '../models';
 
 @Injectable()
 export class VisitorService extends VisitorServiceInterface {
@@ -15,34 +16,22 @@ export class VisitorService extends VisitorServiceInterface {
         super();
     }
 
-    // getList(): Observable<Array<PersonModel>> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel[]>res.json().map(p => new PersonModel(p)))
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    getList(): Observable<Array<VisitorModel>> {
+        return this.restService.get(this.url)
+            .map((res: Response) => <VisitorModel[]>res.json().map(v => new VisitorModel(v)))
+            .catch(RESTService.handleErrorMessage);
+    }
 
-    // getSingle(person: PersonModel): Observable<PersonModel> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    save(visitor: VisitorModel): Observable<string> {
+        return this.restService.post(this.url, visitor)
+            .map((res: Response) => <string>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
-    // save(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // update(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // delete(person: PersonModel): Observable<any> {
-    //     return this.restService.delete(this.url + person.id)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    delete(v: VisitorModel): Observable<any> {
+        return this.restService.post(this.url + 'delete', v)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 
 }

@@ -22,23 +22,11 @@ export class ApartmentService extends ApartmentServiceInterface {
             .catch(RESTService.handleErrorMessage);
     }
 
-    // getSingle(ap: ApartmentModel): Observable<ApartmentModel> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <ApartmentModel>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
     save(ap: ApartmentModel): Observable<any> {
         return this.restService.post(this.url, ap)
             .map((res: Response) => <any>res.json())
             .catch(RESTService.handleErrorMessage);
     }
-
-    // update(ap: ApartmentModel): Observable<any> {
-    //     return this.restService.post(this.url, ap)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
 
     delete(ap: ApartmentModel): Observable<any> {
         return this.restService.post(this.url + 'delete', ap)

@@ -9,10 +9,6 @@ export abstract class ApartmentServiceInterface {
 
     abstract getList(): Observable<Array<ApartmentModel>>;
 
-    // abstract getSingle (ap: ApartmentModel): Observable<ApartmentModel>;    
-
-    // abstract update(ap: ApartmentModel): Observable<any>;
-
     abstract delete(ap: ApartmentModel): Observable<any>;
 
 }

@@ -19,11 +19,11 @@ import 'hammerjs';
 
 import {
   PersonServiceInterface, LoginServiceInterface, PersonTypeServiceInterface, AccessServiceInterface, AFKTimeServiceInterface,
-  ApartmentServiceInterface, VehicleServiceInterface, WatchControlServiceInterface
+  ApartmentServiceInterface, VehicleServiceInterface, WatchControlServiceInterface, VisitorServiceInterface
 } from './interfaces';
 import {
   PersonService, LoginService, PersonTypeService, AccessService, AFKTimeService,
-  ApartmentService, VehicleService, WatchControlService
+  ApartmentService, VehicleService, WatchControlService, VisitorService
 } from './services';
 
 import {
@@ -72,6 +72,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     { provide: ApartmentServiceInterface, useClass: ApartmentService },
     { provide: VehicleServiceInterface, useClass: VehicleService },
     { provide: WatchControlServiceInterface, useClass: WatchControlService },
+    { provide: VisitorServiceInterface, useClass: VisitorService },
     { provide: RESTService, useClass: RESTService },
     { provide: LOCALE_ID, useValue: `pt-BR` },
 

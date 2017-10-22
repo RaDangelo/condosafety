@@ -21,19 +21,7 @@ export class WatchControlService extends WatchControlServiceInterface {
     //         .catch(RESTService.handleErrorMessage);
     // }
 
-    // getSingle(person: PersonModel): Observable<PersonModel> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
     // save(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // update(person: PersonModel): Observable<any> {
     //     return this.restService.post(this.url, person)
     //         .map((res: Response) => <any>res.json())
     //         .catch(RESTService.handleErrorMessage);

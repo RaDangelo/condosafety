@@ -7,8 +7,10 @@
 
             <div class="person-img">
                 <img *ngIf="selected && selected.picture" [src]="selected.picture" />
-                <!-- <input id="front-camera" type="file" accept="image/*;capture=camera"> -->
+                <video id="frontCamera" width="160" height="200" autoplay class="video"></video>
+                <canvas id="canvas" width="160" height="200"></canvas>
             </div>
+            <button (click)="takePicture()" id="snap">Take photo</button>
 
             <div class="person-search">
                 <input type="text" [(ngModel)]="filter" />
@@ -39,7 +41,7 @@
                 </md-input-container>
             </div>
 
-            <button class="btn-visitor-register"> Cadastrar Visitante </button>
+            <button class="btn-visitor-register" (click)="openVisitorModal()"> Cadastrar Visitante </button>
 
             <div class="access-permission">
                 <md-input-container id="input-access-pass" class="md-block" flex-gt-sm>
@@ -85,3 +87,4 @@
         </div>
     </div>
 </div>
+<visitor-modal> </visitor-modal>
