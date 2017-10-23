@@ -64,6 +64,8 @@ export class VisitorComponent {
         this.visitorService.save(this.visitor)
             .subscribe((id) => {
                 this.visitorImageUpload = { execute: true, id: id };
+                console.log('Visitante cadastrado com sucesso! ');
+                alert('Visitante cadastrado com sucesso! ');
             },
             (error: MessagesModel) => {
                 console.log('Ocorreu um erro: ' + error.message);
@@ -71,14 +73,6 @@ export class VisitorComponent {
                 this.dialogBehavior.showErrorMessage(error);
             },
             () => {
-                // this.getVisitors();
-                // if (this.visitor._id) {
-                //     console.log('Visitante alterado com sucesso! ');
-                //     alert('Visitante alterado com sucesso! ');
-                // } else {
-                console.log('Visitante cadastrado com sucesso! ');
-                alert('Visitante cadastrado com sucesso! ');
-                // }
             });
     }
 

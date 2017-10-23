@@ -54,7 +54,7 @@ export class PeopleComponent {
     this.getApartments();
     this.getTypes();
     this.getPersons();
-    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   changePersonStatus() {

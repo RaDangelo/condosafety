@@ -41,19 +41,18 @@ export class MonitoringComponent implements AfterViewInit {
     private electron: ElectronService) {
     this.filterResult = new Array<Object>();
     this.user = new UserModel();
-    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   ngAfterViewInit() {
     this.videos = [this.video0, this.video1, this.video2, this.video3];
     navigator.mediaDevices.enumerateDevices()
       .then(this.getDevices.bind(this));
-    this.frontCamera = document.getElementById('frontCamera');
-    this.setPictureCamera();
+    // this.frontCamera = document.getElementById('frontCamera');
+    // this.setPictureCamera();
   }
 
   private setPictureCamera() {
-    // const nv = this.frontCamera.nativeElement;
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         this.frontCamera.src = window.URL.createObjectURL(stream);
@@ -234,6 +233,12 @@ export class MonitoringComponent implements AfterViewInit {
 
   openVisitorModal() {
     $('#visitor-modal').modal('show');
+  }
+
+  onEnterPress(e: KeyboardEvent) {
+    if (e.keyCode === 13) {
+      this.filterData();
+    }
   }
 
 }

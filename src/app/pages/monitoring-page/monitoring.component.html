@@ -7,13 +7,13 @@
 
             <div class="person-img">
                 <img *ngIf="selected && selected.picture" [src]="selected.picture" />
-                <video id="frontCamera" width="160" height="200" autoplay class="video"></video>
-                <canvas id="canvas" width="160" height="200"></canvas>
+                <!-- <video id="frontCamera" width="160" height="200" autoplay class="video"></video>
+                <canvas id="canvas" width="160" height="200"></canvas> -->
             </div>
             <button (click)="takePicture()" id="snap">Take photo</button>
 
             <div class="person-search">
-                <input type="text" [(ngModel)]="filter" />
+                <input type="text" [(ngModel)]="filter" (keypress)="onEnterPress($event)"/>
                 <button (click)="filterData()">Buscar </button>
                 <div class="person-search-list">
                     <ul>
