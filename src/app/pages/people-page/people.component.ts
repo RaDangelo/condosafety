@@ -3,6 +3,7 @@ import { PersonModel, MessagesModel, ApartmentModel, PersonTypeModel } from '../
 import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 import { ApartmentServiceInterface, PersonServiceInterface, PersonTypeServiceInterface } from '../../interfaces';
 import { ElectronService } from 'ngx-electron';
+import { ComboUtils } from '../../utils';
 
 declare var $: any;
 
@@ -19,6 +20,7 @@ export class PeopleComponent {
   _apartments: ApartmentModel[];
   _types: PersonTypeModel[];
   personImageUpload: any;
+  comboUtils: ComboUtils = new ComboUtils();
 
   get types() {
     if (this._types) {
@@ -54,7 +56,7 @@ export class PeopleComponent {
     this.getApartments();
     this.getTypes();
     this.getPersons();
-    this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   changePersonStatus() {
@@ -64,6 +66,7 @@ export class PeopleComponent {
   newPerson() {
     this.person = new PersonModel();
     this.disableFields = false;
+    $('md-input-container').addClass('mat-focused');
   }
 
 
@@ -112,6 +115,8 @@ export class PeopleComponent {
   editPerson(p: PersonModel, i: number) {
     this.person = p;
     this.disableFields = false;
+    this.updatePersonType();
+    this.updateApartments();
   }
 
   deletePerson() {
@@ -164,6 +169,14 @@ export class PeopleComponent {
 
   openImage() {
     this.imageBehavior.openModal$.next(this.person.picture);
+  }
+
+  private updatePersonType() {
+    this.person.personType = this.comboUtils.localizaItemId(this.person.personType._id, this.types);
+  }
+
+  private updateApartments() {
+    this.person.apartment = this.comboUtils.localizaItemId(this.person.apartment._id, this.apartments);
   }
 
 }

@@ -41,7 +41,7 @@ export class MonitoringComponent implements AfterViewInit {
     private electron: ElectronService) {
     this.filterResult = new Array<Object>();
     this.user = new UserModel();
-    this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   ngAfterViewInit() {

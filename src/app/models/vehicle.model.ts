@@ -9,6 +9,7 @@ export class VehicleModel {
     status: boolean;
     apartment: ApartmentModel;
     picture?: string;
+    type: VehicleTypeEnum;
 
     constructor(vehicle: VehicleModel = null) {
         if (vehicle) {
@@ -18,11 +19,16 @@ export class VehicleModel {
             this.brand = vehicle.brand;
             this.status = vehicle.status;
             this.picture = vehicle.picture;
+            this.type = vehicle.type;
             if (vehicle.apartment) {
                 this.apartment = vehicle.apartment;
             }
         }
 
     }
+}
 
+export enum VehicleTypeEnum {
+    CARRO = 1,
+    MOTO = 2
 }

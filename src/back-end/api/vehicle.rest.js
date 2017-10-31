@@ -48,6 +48,7 @@ conn.once('open', () => {
                 v.brand = req.param('brand');
                 v.color = req.param('color');
                 v.status = req.param('status');
+                v.type = req.param('type');                
                 daoVehicle.saveVehicle(v).then(data => res.json(v._id)).catch(err => res.send(err));
             }
         }).catch(err => {

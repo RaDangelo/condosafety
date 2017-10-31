@@ -1,82 +1,91 @@
-    <div class="page-template">
+<div class="page-template">
 
-        <div style="float: left;">
-            <div style="padding-left: 4px;">
-                Nome:
-                <input [disabled]="disableFields" class="w-150" type="text" [(ngModel)]="person.name" />
-            </div>
-            <div>
-                Apelido:
-                <input [disabled]="disableFields" class="w-150" type="text" [(ngModel)]="person.nickname" />
-            </div>
-            <div>
-                Senha de acesso:
-                <input [disabled]="disableFields" class="w-150" type="password" [(ngModel)]="person.accessPassword" />
-            </div>
-            <div>
-                Telefone:
-                <input [disabled]="disableFields" class="w-150" type="text" [(ngModel)]="person.phoneNumber" />
-            </div>
-            <div>
-                CPF:
-                <input [disabled]="disableFields" class="w-150" type="text" [(ngModel)]="person.cpf" />
-            </div>
-            <div>
-                Email:
-                <input [disabled]="disableFields" class="w-150" type="email" [(ngModel)]="person.email" />
+    <div style="float: left; width: 35%;">
+        <div class="input-container" style="padding-left: 4px;">
+            <md-input-container id="person-name" class="md-block" flex-gt-sm>
+                <input type="text" [disabled]="disableFields" [(ngModel)]="person.name" mdInput placeholder="Nome" />
+            </md-input-container>
+        </div>
+        <div class="input-container">
+            <md-input-container class="md-block" flex-gt-sm>
+                <input type="text" [disabled]="disableFields" [(ngModel)]="person.cpf" mdInput placeholder="CPF" />
+            </md-input-container>
+        </div>
+        <div class="input-container">
+            <md-input-container class="md-block" flex-gt-sm>
+                <input type="text" [disabled]="disableFields" [(ngModel)]="person.nickname" mdInput placeholder="Apelido" />
+            </md-input-container>
+        </div>
+        <div class="input-container">
+            <md-input-container class="md-block" flex-gt-sm>
+                <input type="text" [disabled]="disableFields" [(ngModel)]="person.phoneNumber" mdInput placeholder="Telefone" />
+            </md-input-container>
+        </div>
+        <div class="input-container">
+            <md-input-container class="md-block" flex-gt-sm>
+                <input type="email" [disabled]="disableFields" [(ngModel)]="person.email" mdInput placeholder="Email" />
+            </md-input-container>
+        </div>
+        <div class="input-container">
+            <md-input-container class="md-block" flex-gt-sm>
+                <input type="password" [disabled]="disableFields" [(ngModel)]="person.accessPassword" mdInput placeholder="Senha de acesso"
+                />
+            </md-input-container>
+        </div>
+
+        <div class="row-container">
+            <div class="input-container">
+                <md-select [disabled]="disableFields" [(ngModel)]="person.personType" placeholder="Tipo de Pessoa">
+                    <md-option *ngFor="let t of types" [value]="t">{{t?.type}}</md-option>
+                </md-select>
             </div>
 
-            <div style="padding-left: 1px;">
+            <div class="input-container">
+                <md-select [disabled]="disableFields" [(ngModel)]="person.apartment" placeholder="Apartamento">
+                    <ng-container *ngFor="let ap of apartments">
+                        <md-option *ngIf="ap.status" [value]="ap">
+                            <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
+                            {{ap.number}}
+                        </md-option>
+                    </ng-container>
+                </md-select>
+            </div>
+        </div>
+
+        <div class="row-container" style="margin-top: 10px;">
+            <div style="width: 40%; float: left; margin: 8px;">
                 Status:
                 <button [disabled]="disableFields" [class]="person.status === true ? 'btn-status active-bg' : person.status === false ? 'btn-status inactive-bg' : 'btn-status'"
                     (click)="changePersonStatus()"></button>
             </div>
 
-            <div style="float: left; position: relative; left: 10px;">
-                Tipo de pessoa:
-                <select [disabled]="disableFields" class="w-120" [(ngModel)]="person.personType">
-                <option value="undefined" selected disabled>Selecione...</option>
-                <option *ngFor="let t of types" [ngValue]="t"> {{t?.type}}</option>
-                </select>
-            </div>
-
-            <div style="float: left; position: relative; left: 10px;">
-                Apartamento:
-                <select [disabled]="disableFields" class="w-120" [(ngModel)]="person.apartment">
-                <option value="undefined" selected disabled>Selecione...</option>
-                <ng-container *ngFor="let ap of apartments">
-                <option *ngIf="ap.status" [ngValue]="ap"> 
-                    <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
-                    {{ap.number}}
-                </option>
-                </ng-container>
-                </select>
-            </div>
-
             <div [style.display]="!disableFields ? 'block' : 'none'" class="upload">
                 <upload [upload]="personImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
             </div>
-
-            <div class="btns-person">
-                <button class="btn-new" class="btn-md" (click)="newPerson()">+</button>
-                <button [disabled]="!person || !person._id" class="btn-delete" class="btn-md" (click)="deletePerson()">Excluir</button>
-                <button [disabled]="!person" class="btn-save" class="btn-md" (click)="savePerson()">Salvar</button>
-            </div>
-
-            <button (click)="registerPersonType()">Open Person-type modal</button>
         </div>
 
-        <div id="person-register">
-            <label>Pessoas:</label>
+        <div class="btns-person">
+            <button class="btn-pattern" (click)="newPerson()">+</button>
+            <button [disabled]="!person || !person._id" class="btn-delete btn-pattern" (click)="deletePerson()">Excluir</button>
+            <button [disabled]="!person" class="btn-save" class="btn-pattern" (click)="savePerson()">Salvar</button>
+        </div>
+
+        <div id="open-modal-types" (click)="registerPersonType()"> <span class="glyphicon glyphicon-edit"></span>Tipos de Pessoa</div>
+    </div>
+
+    <div id="person-register">
+        <label>Pessoas:</label>
+        <div id="person-list">
+            <ul>
+                <li *ngFor="let p of persons; let i = index" (click)="editPerson(p, i)">
+                    <span [class]="p.status ? 'active-c' : 'inactive-c'">•</span> {{p.name}} - {{p.personType?.type}}
+                </li>
+            </ul>
+        </div>
+        <div class="image-container" [style.border]="!person.picture ? '1px solid #000' : 'none'">
             <img *ngIf="person.picture" (click)="openImage()" class="person-image" [src]="person.picture" />
-            <div id="person-list" style="float: left;">
-                <ul>
-                    <li *ngFor="let p of persons; let i = index" (click)="editPerson(p, i)">
-                        <span [class]="p.status ? 'active-c' : 'inactive-c'">•</span> {{p.name}} - {{p.personType?.type}}
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
+</div>
 
 <person-type-modal [types]="types" (getTypes)="getTypes($event)"> </person-type-modal>

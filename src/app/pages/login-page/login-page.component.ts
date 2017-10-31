@@ -26,7 +26,7 @@ export class LoginPageComponent {
     this.user = new UserModel();
     this.alertPassword = false;
     this.alertUsername = false;
-    this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
   }
 
   login() {

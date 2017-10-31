@@ -38,7 +38,7 @@ export class AdministrationComponent {
     this.getApartments();
     this.getVehicles();
     this.getAfkTime();
-    this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
   }
 
   get apartments() {
@@ -190,6 +190,7 @@ export class AdministrationComponent {
       },
       () => {
         this.getVehicles();
+        this.getApartments();
         console.log('Veículo excluído com sucesso! ');
         alert('Veículo excluído com sucesso! ');
       });

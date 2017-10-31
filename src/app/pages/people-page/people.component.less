@@ -1,13 +1,20 @@
 @import "../administration-page/administration.component.less";
 
 .upload {
+  float: left;
   padding-left: 30px;
 }
 
 .person-image {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.image-container {
     width: 150px;
     height: 150px;
-    cursor: pointer;
+    float: left;
     margin: 8px;
 }
 
@@ -15,4 +22,59 @@
     float: left;
     padding: 0px 10px 0px 10px;
     margin: 0px;
+}
+
+#person-register {
+    width: 32%;
+}
+
+#person-list {
+    width: 50%;
+    float: left;
+}
+
+md-input-container, md-select {
+    width: 80%;
+    float: left;
+}
+
+input:disabled {
+    background-color: transparent;
+}
+
+.input-container {
+    width: 45%;
+    float: left;
+    margin: 8px;
+}
+
+.row-container {
+    margin-top: 4px; 
+}
+
+.btns-person {
+    margin: 14px;
+    width: 100%;
+    float: left;
+}
+
+.glyphicon-edit {
+    margin-right: 4px;
+    font-size: 16px;
+}
+
+#open-modal-types {
+    border-radius: 6px;
+    width: 160px;
+    height: 30px;
+    float: left;
+    background-color: darken(@base-color, 10%);
+    text-align: center;
+    padding: 4px;
+    cursor: pointer;
+    margin: 8px;
+}
+
+#open-modal-types:hover {
+    background-color: lighten(@base-color, 5%);
 }

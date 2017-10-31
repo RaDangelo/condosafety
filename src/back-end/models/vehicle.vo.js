@@ -6,6 +6,7 @@ module.exports = mongoose.model('Vehicle', {
     brand: String,
     status: Boolean,
     apartment: { type: Object, ref: 'Apartment' },
+    type: { type: String },
     picture: String
 }, 'vehicle'
 );
