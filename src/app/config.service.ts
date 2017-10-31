@@ -12,4 +12,8 @@ export class ConfigService {
     get showServiceUrl(): boolean {
         return environment.showServiceUrl === true;
     }
+
+    get isElectron(): boolean {
+        return false;
+    }
 }

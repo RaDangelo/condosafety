@@ -7,7 +7,7 @@ export class WatchControlModel {
     date: Date;
     action: Action;
     obs?: string;
-    duration: Date;
+    duration: number;
 
     constructor(watch: WatchControlModel = null) {
         if (watch) {
@@ -20,6 +20,8 @@ export class WatchControlModel {
             if (watch.user) {
                 this.user = watch.user;
             }
+        } else {
+            this.user = new UserModel();
         }
     }
 }

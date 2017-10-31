@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { RESTService } from '../rest.service';
+import { WatchControlModel } from '../models';
 
 @Injectable()
 export class WatchControlService extends WatchControlServiceInterface {
@@ -15,22 +16,15 @@ export class WatchControlService extends WatchControlServiceInterface {
         super();
     }
 
-    // getList(): Observable<Array<PersonModel>> {
-    //     return this.restService.get(this.url)
-    //         .map((res: Response) => <PersonModel[]>res.json().map(p => new PersonModel(p)))
-    //         .catch(RESTService.handleErrorMessage);
-    // }
+    getList(): Observable<Array<WatchControlModel>> {
+        return this.restService.get(this.url)
+            .map((res: Response) => <WatchControlModel[]>res.json().map(p => new WatchControlModel(p)))
+            .catch(RESTService.handleErrorMessage);
+    }
 
-    // save(person: PersonModel): Observable<any> {
-    //     return this.restService.post(this.url, person)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
-    // delete(person: PersonModel): Observable<any> {
-    //     return this.restService.delete(this.url + person.id)
-    //         .map((res: Response) => <any>res.json())
-    //         .catch(RESTService.handleErrorMessage);
-    // }
-
+    save(watch: WatchControlModel): Observable<any> {
+        return this.restService.post(this.url, watch)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 }

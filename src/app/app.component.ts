@@ -4,6 +4,7 @@ import { ImageBehavior } from '../app/behaviors';
 import { ElectronService } from 'ngx-electron';
 import { IdleHandler } from './utils';
 import * as globalVars from './globals';
+import { ConfigService } from './config.service';
 
 declare var $: any;
 
@@ -19,8 +20,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   afkRoutine: any;
   afkTimer = 0;
 
+  get startWarningTimer() {
+    return globalVars.GlobalVars.isWarningTimer;
+  }
+
   constructor(rootNode: ElementRef, private route: Router, private imageBehavior: ImageBehavior,
-    private electron: ElectronService) {
+    private electron: ElectronService, private config: ConfigService) {
     this.rootNode = rootNode;
 
     this.imageBehavior.init();
@@ -28,9 +33,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       this.image = x;
       $('#image-modal').modal('show');
     });
-    IdleHandler.handleIdle();
-    this.afkTimer = electron.remote.getGlobal('sharedObj').afk;
-    this.setAfkRoutine();
+
+    this.initElectronServices();
   }
 
   ngAfterViewInit() {
@@ -44,9 +48,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   private startTime() {
     const today = new Date();
-    let h = today.getHours().toString();
-    let m = today.getMinutes().toString();
-    let s = today.getSeconds().toString();
+    const h = today.getHours().toString();
+    const m = today.getMinutes().toString();
+    const s = today.getSeconds().toString();
     document.getElementById('clock').innerHTML =
       ' - ' + this.checkTime(today.getDate().toString()) + '/' + this.checkTime(today.getMonth().toString()) +
       '/' + today.getFullYear() + ' - ' + this.checkTime(h) + ':' + this.checkTime(m) + ':' + this.checkTime(s);
@@ -64,6 +68,15 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     return localStorage.getItem('username');
   }
 
+  private initElectronServices() {
+    if (this.config.isElectron) {
+      IdleHandler.handleIdle();
+      this.afkTimer = this.electron.remote.getGlobal('sharedObj').afk;
+      globalVars.GlobalVars.afkTimer = this.afkTimer;
+      this.setAfkRoutine();
+    }
+  }
+
   private setAfkRoutine() {
     this.afkRoutine = setInterval(this.manageAfkTimer.bind(this), 60000);
   }
@@ -75,6 +88,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     if (globalVars.GlobalVars.isIdle &&
       (dtAtual - idleDate) >= this.afkTimer * 60000) {
       $('#modal-afk').modal('show');
+      globalVars.GlobalVars.isWarningTimer = true;
     }
   }
 }

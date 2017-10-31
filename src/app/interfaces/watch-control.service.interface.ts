@@ -1,13 +1,12 @@
-import {Observable} from 'rxjs/Observable';
-import {Injectable} from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { WatchControlModel } from '../models';
 
 @Injectable()
 export abstract class WatchControlServiceInterface {
 
-    // abstract save(person: PersonModel): Observable<any>;
+    abstract save(watch: WatchControlModel): Observable<any>;
 
-    // abstract getList(): Observable<Array<PersonModel>>;
+    abstract getList(): Observable<Array<WatchControlModel>>;
 
-    // abstract delete(person: PersonModel): Observable<any>;
-    
 }

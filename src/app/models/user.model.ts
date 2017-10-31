@@ -9,7 +9,7 @@ export class UserModel {
         if (user) {
             this._id = user._id;
             this.username = user.username;
-            this.password = user.password
+            this.password = user.password;
             this.accessLevel = user.accessLevel;
         }
     }

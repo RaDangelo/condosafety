@@ -4,6 +4,7 @@ import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 import { ApartmentServiceInterface, PersonServiceInterface, PersonTypeServiceInterface } from '../../interfaces';
 import { ElectronService } from 'ngx-electron';
 import { ComboUtils } from '../../utils';
+import { ConfigService } from '../../config.service';
 
 declare var $: any;
 
@@ -51,12 +52,14 @@ export class PeopleComponent {
 
   constructor(private personService: PersonServiceInterface, private apartmentService: ApartmentServiceInterface,
     private typesService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior,
-    private electron: ElectronService, private imageBehavior: ImageBehavior) {
+    private electron: ElectronService, private imageBehavior: ImageBehavior, private config: ConfigService) {
     this.person = new PersonModel();
     this.getApartments();
     this.getTypes();
     this.getPersons();
-    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    if (this.config.isElectron) {
+      this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    }
   }
 
   changePersonStatus() {

@@ -6,6 +6,6 @@ module.exports = mongoose.model('Watch_Control', {
     date: Date,
     // action: Action, ENUM
     obs: String,
-    duration: Date
+    duration: Number
 }, 'watch-control'
 );

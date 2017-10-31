@@ -9,6 +9,7 @@ import {
 } from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 import { ElectronService } from 'ngx-electron';
+import { ConfigService } from '../../config.service';
 
 declare var $: any;
 declare var document: any;
@@ -38,10 +39,12 @@ export class MonitoringComponent implements AfterViewInit {
   // @ViewChild('canvas') canvas: ElementRef;
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior,
-    private electron: ElectronService) {
+    private electron: ElectronService, private config: ConfigService) {
     this.filterResult = new Array<Object>();
     this.user = new UserModel();
-    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    if (this.config.isElectron) {
+      this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    }
   }
 
   ngAfterViewInit() {

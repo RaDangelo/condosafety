@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AfkTimeModel, ApartmentModel, MessagesModel, UserModel, VehicleModel, AccessType } from '../../models';
 import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 import { ElectronService } from 'ngx-electron';
+import { ConfigService } from '../../config.service';
 
 declare var $: any;
 
@@ -28,7 +29,8 @@ export class AdministrationComponent {
 
   constructor(private userService: LoginServiceInterface, private apartmentService: ApartmentServiceInterface,
     private vehicleService: VehicleServiceInterface, private afkService: AFKTimeServiceInterface,
-    private dialogBehavior: MessageDialogBehavior, private imageBehavior: ImageBehavior, private electron: ElectronService) {
+    private dialogBehavior: MessageDialogBehavior, private imageBehavior: ImageBehavior, private electron: ElectronService,
+    private config: ConfigService) {
     this.user = new UserModel();
     this.vehicle = new VehicleModel();
     this.apartment = new ApartmentModel();
@@ -38,7 +40,9 @@ export class AdministrationComponent {
     this.getApartments();
     this.getVehicles();
     this.getAfkTime();
-    // this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    if (this.config.isElectron) {
+      this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    }
   }
 
   get apartments() {
