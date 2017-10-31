@@ -8,6 +8,8 @@ const path = require('path')
 const url = require('url')
 const http = require('http');
 
+global.sharedObj = {afk: 0};
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -34,9 +36,8 @@ function createWindow() {
 
   http.request(optionsCallAfkTime, function (res) {
     res.on('data', function (afkTime) {
-      if (afkTime && afkTime.time) {
-        var afk = JSON.parse(afkTime).time;
-        console.log(JSON.parse(afkTime).time);
+      if (afkTime) {
+        global.sharedObj.afk = JSON.parse(afkTime).time;
       }
     });
   }).end();

@@ -1,0 +1,17 @@
+<div id="afk-modal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title modal-titulo"><b>ALERTA DE AUSÊNCIA!</span>
+        <label>Ausência acima dos {{}} minutos permitidos! Insira senha 
+            <ng-container *ngIf="3 MINUTOS ALÉM DO PARAMETRIZADO">e justificativa</ng-container> para desbloqueio.</label>
+      </div>
+      <div class="modal-body">
+        Senha:<input [(ngModel)]="watch.user.password" />
+        <ng-container *ngIf="3 MINUTOS ALÉM DO PARAMETRIZADO">
+          Justificativa:<input [(ngModel)]="watch.obs" />
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

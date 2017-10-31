@@ -1,6 +1,9 @@
 import { Router } from '@angular/router/';
-import { ElementRef, Component, AfterViewInit } from '@angular/core/';
+import { ElementRef, Component, AfterViewInit, OnDestroy } from '@angular/core/';
 import { ImageBehavior } from '../app/behaviors';
+import { ElectronService } from 'ngx-electron';
+import { IdleHandler } from './utils';
+import * as globalVars from './globals';
 
 declare var $: any;
 
@@ -9,22 +12,34 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.less']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnDestroy {
 
   rootNode: any;
   image: String;
+  afkRoutine: any;
+  afkTimer = 0;
 
-  constructor(rootNode: ElementRef, private route: Router, private imageBehavior: ImageBehavior) {
+  constructor(rootNode: ElementRef, private route: Router, private imageBehavior: ImageBehavior,
+    private electron: ElectronService) {
+    this.rootNode = rootNode;
+
     this.imageBehavior.init();
     this.imageBehavior.openModal$.subscribe(x => {
       this.image = x;
       $('#image-modal').modal('show');
     });
-    this.rootNode = rootNode;
+    IdleHandler.handleIdle();
+    this.afkTimer = electron.remote.getGlobal('sharedObj').afk;
+    this.setAfkRoutine();
   }
 
   ngAfterViewInit() {
     this.startTime();
+  }
+
+  ngOnDestroy() {
+    this.afkTimer = 0;
+    clearInterval(this.afkRoutine);
   }
 
   private startTime() {
@@ -47,5 +62,19 @@ export class AppComponent implements AfterViewInit {
 
   getUser() {
     return localStorage.getItem('username');
+  }
+
+  private setAfkRoutine() {
+    this.afkRoutine = setInterval(this.manageAfkTimer.bind(this), 60000);
+  }
+
+  private manageAfkTimer() {
+    const idleDate = new Date(globalVars.GlobalVars.idleTimer).getTime();
+    const dtAtual = new Date().getTime();
+    console.log('idleDate', globalVars.GlobalVars.isIdle, idleDate);
+    if (globalVars.GlobalVars.isIdle &&
+      (dtAtual - idleDate) >= this.afkTimer * 60000) {
+      $('#modal-afk').modal('show');
+    }
   }
 }
