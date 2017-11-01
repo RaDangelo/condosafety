@@ -10,6 +10,7 @@ import {
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 import { ElectronService } from 'ngx-electron';
 import { ConfigService } from '../../config.service';
+import { resemble } from 'resemblejs';
 
 declare var $: any;
 declare var document: any;
@@ -20,6 +21,8 @@ declare var document: any;
   styleUrls: ['./monitoring.component.less']
 })
 export class MonitoringComponent implements AfterViewInit {
+  pictureTemp: string;
+  private resemble: resemble;
 
   filterResult: Array<Object>;
   videos: Array<ElementRef> = new Array<ElementRef>();
@@ -36,7 +39,6 @@ export class MonitoringComponent implements AfterViewInit {
   @ViewChild('video1') video1: ElementRef;
   @ViewChild('video2') video2: ElementRef;
   @ViewChild('video3') video3: ElementRef;
-  // @ViewChild('canvas') canvas: ElementRef;
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior,
     private electron: ElectronService, private config: ConfigService) {
@@ -45,14 +47,15 @@ export class MonitoringComponent implements AfterViewInit {
     if (this.config.isElectron) {
       this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
     }
+    resemble.compareTo('test');
   }
 
   ngAfterViewInit() {
     this.videos = [this.video0, this.video1, this.video2, this.video3];
     navigator.mediaDevices.enumerateDevices()
       .then(this.getDevices.bind(this));
-    // this.frontCamera = document.getElementById('frontCamera');
-    // this.setPictureCamera();
+    this.frontCamera = document.getElementById('frontCamera');
+    this.setPictureCamera();
   }
 
   private setPictureCamera() {
@@ -71,7 +74,9 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   private convertCanvasToImage(context: any) {
-    this.selected.picture = context.canvas.toDataURL('image/png');
+    // this.selected.picture = context.canvas.toDataURL('image/png');
+    this.pictureTemp = context.canvas.toDataURL('image/png');
+    console.log(this.pictureTemp);
   }
 
   private getDevices(infos) {
