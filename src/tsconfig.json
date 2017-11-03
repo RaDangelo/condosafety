@@ -17,6 +17,14 @@
     "typeRoots": [
       "../node_modules/@types"
     ],
-    "types": ["hammerjs", "jasmine", "node"]
-  }
+    "types": [
+      "hammerjs",
+      "jasmine",
+      "node"
+    ]
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
 }
