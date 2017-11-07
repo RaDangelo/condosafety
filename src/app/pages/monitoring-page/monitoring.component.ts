@@ -10,7 +10,7 @@ import {
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 import { ElectronService } from 'ngx-electron';
 import { ConfigService } from '../../config.service';
-import { resemble } from 'resemblejs';
+import * as resemble from '../../utils/resemblejs/resemble';
 
 declare var $: any;
 declare var document: any;
@@ -22,7 +22,7 @@ declare var document: any;
 })
 export class MonitoringComponent implements AfterViewInit {
   pictureTemp: string;
-  private resemble: resemble;
+  picture2: string;
 
   filterResult: Array<Object>;
   videos: Array<ElementRef> = new Array<ElementRef>();
@@ -47,7 +47,6 @@ export class MonitoringComponent implements AfterViewInit {
     if (this.config.isElectron) {
       this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
     }
-    resemble.compareTo('test');
   }
 
   ngAfterViewInit() {
@@ -73,10 +72,36 @@ export class MonitoringComponent implements AfterViewInit {
     this.convertCanvasToImage(context);
   }
 
+
+  // to class
   private convertCanvasToImage(context: any) {
     // this.selected.picture = context.canvas.toDataURL('image/png');
     this.pictureTemp = context.canvas.toDataURL('image/png');
-    console.log(this.pictureTemp);
+    // console.log('base64', this.picture2);
+    const file = this.dataURLtoFile(this.picture2, 'img-test.png');
+    // console.log(this.selected.picture);
+    const file2 = this.dataURLtoFile(this.selected.picture, 'img2-test.png');
+
+    console.log('file', file);
+
+    resemble(file).compareTo(file2).scaleToSameSize().dynamicIgnore()
+      .onComplete((data) => {
+        console.log('comparison', data);
+      });
+  }
+
+
+  // to class
+  private dataURLtoFile(dataurl, filename) {
+    const arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
   }
 
   private getDevices(infos) {
@@ -101,7 +126,11 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   selectedItem(data: any, i: number) {
-    this.selected = data;
+    if (this.selected) {
+      this.picture2 = data.picture;
+    } else {
+      this.selected = data;
+    }
   }
 
   filterData() {

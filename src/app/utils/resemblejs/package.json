@@ -1,0 +1,103 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "resemblejs",
+        "scope": null,
+        "escapedName": "resemblejs",
+        "name": "resemblejs",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "C:\\condosafety"
+    ]
+  ],
+  "_from": "resemblejs@latest",
+  "_id": "resemblejs@2.2.6",
+  "_inCache": true,
+  "_location": "/resemblejs",
+  "_nodeVersion": "8.1.2",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/resemblejs-2.2.6.tgz_1504101132295_0.31215959996916354"
+  },
+  "_npmUser": {
+    "name": "jamescryer",
+    "email": "james.cryer@huddle.com"
+  },
+  "_npmVersion": "5.0.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "resemblejs",
+    "scope": null,
+    "escapedName": "resemblejs",
+    "name": "resemblejs",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/resemblejs/-/resemblejs-2.2.6.tgz",
+  "_shasum": "0f9c4da20a787883ec7ddf28f14e57994d1e06bb",
+  "_shrinkwrap": null,
+  "_spec": "resemblejs",
+  "_where": "C:\\condosafety",
+  "author": {
+    "name": "James Cryer"
+  },
+  "bugs": {
+    "url": "https://github.com/Huddle/Resemble.js/issues"
+  },
+  "dependencies": {},
+  "description": "Image analysis and comparison with HTML5",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "jest": "^20.0.4",
+    "jest-cli": "^20.0.4"
+  },
+  "directories": {},
+  "dist": {
+    "integrity": "sha512-o4sxCTSwTxx5hBFXYn5rsgMuLQT8kufJ5vzKYcRwWhCWERKN4dqZwiMx7+nRrcXouWmiFGD9A486yS4Z1a2PQQ==",
+    "shasum": "0f9c4da20a787883ec7ddf28f14e57994d1e06bb",
+    "tarball": "https://registry.npmjs.org/resemblejs/-/resemblejs-2.2.6.tgz"
+  },
+  "gitHead": "97cd894e4b99b3690e5d8aaf7e2772c6eb64087e",
+  "homepage": "https://github.com/Huddle/Resemble.js",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [
+    "comparison",
+    "visual",
+    "image",
+    "diff",
+    "compare",
+    "html5"
+  ],
+  "license": "MIT",
+  "main": "resemble.js",
+  "maintainers": [
+    {
+      "name": "jamescryer",
+      "email": "james.cryer@huddle.com"
+    }
+  ],
+  "name": "resemblejs",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "canvas": "^1.6.5"
+  },
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Huddle/Resemble.js.git"
+  },
+  "scripts": {
+    "test": "jest ./nodejs-tests",
+    "test-watch": "jest --watch ./nodejs-tests"
+  },
+  "version": "2.2.6"
+}

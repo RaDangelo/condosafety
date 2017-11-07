@@ -34,7 +34,6 @@ import { MessageDialogBehavior, ImageBehavior } from './behaviors';
 
 import { FileUploadModule } from 'ng2-file-upload';
 
-
 @NgModule({
   declarations: [
     AppComponent,

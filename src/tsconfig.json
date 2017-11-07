@@ -4,6 +4,7 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "allowJs": true,
     "lib": [
       "es2016",
       "dom"
@@ -19,12 +20,12 @@
     ],
     "types": [
       "hammerjs",
-      "jasmine",
       "node"
     ]
   },
   "exclude": [
     "test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "node_modules/@types/jasmine"
   ]
 }
