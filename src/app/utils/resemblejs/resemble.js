@@ -652,14 +652,14 @@ URL: https://github.com/Huddle/Resemble.js
 				},
 				dynamicIgnore: function(){
 
-					tolerance.red = 72;
-					tolerance.green = 72;
-					tolerance.blue = 72;
-					tolerance.alpha = 0;
-					tolerance.minBrightness = 64;
-					tolerance.maxBrightness = 96;
+					tolerance.red = 32;
+					tolerance.green = 32;
+					tolerance.blue = 32;
+					tolerance.alpha = 32;
+					tolerance.minBrightness = 16;
+					tolerance.maxBrightness = 80;
 
-					ignoreAntialiasing = true;
+					ignoreAntialiasing = false;
 					ignoreColors = false;
 
 					if(hasMethod) { param(); }

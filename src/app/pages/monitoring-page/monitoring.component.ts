@@ -2,6 +2,7 @@ import { MessageDialogBehavior } from '../../behaviors';
 import * as path from 'path';
 import { Stream } from 'stream';
 import { Component, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
 
 import {
   PersonModel, UserModel, VisitorModel, VehicleModel, MessagesModel, VideoInputModel,
@@ -11,9 +12,13 @@ import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces
 import { ElectronService } from 'ngx-electron';
 import { ConfigService } from '../../config.service';
 import * as resemble from '../../utils/resemblejs/resemble';
+import { ImageManipulation } from '../../utils/image-manipulation';
+import * as dat from 'dat-gui';
+import * as globals from '../../globals';
 
 declare var $: any;
 declare var document: any;
+declare var tracking: any;
 
 @Component({
   selector: 'monitoring',
@@ -21,19 +26,22 @@ declare var document: any;
   styleUrls: ['./monitoring.component.less']
 })
 export class MonitoringComponent implements AfterViewInit {
-  pictureTemp: string;
-  picture2: string;
-
-  filterResult: Array<Object>;
-  videos: Array<ElementRef> = new Array<ElementRef>();
-  selected: any;
+  filterResult: Array<Object> = new Array<Object>();;
   filter = '';
+  selected: any;
+
   access: AccessModel = new AccessModel();
   accessPassword: string;
-  user: UserModel;
+  user: UserModel = new UserModel();;
+
+  videos: Array<ElementRef> = new Array<ElementRef>();
   videoInputs: Array<VideoInputModel> = new Array<VideoInputModel>();
   selectedVideos: Array<VideoInputModel> = new Array<VideoInputModel>();
   frontCamera: any;
+  displayFrontCamera = false;
+  displayComparison = false;
+  pictureTimer = 10;
+  picture: any;
 
   @ViewChild('video0') video0: ElementRef;
   @ViewChild('video1') video1: ElementRef;
@@ -42,22 +50,22 @@ export class MonitoringComponent implements AfterViewInit {
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior,
     private electron: ElectronService, private config: ConfigService) {
-    this.filterResult = new Array<Object>();
-    this.user = new UserModel();
     if (this.config.isElectron) {
       this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
     }
   }
 
   ngAfterViewInit() {
-    this.videos = [this.video0, this.video1, this.video2, this.video3];
-    navigator.mediaDevices.enumerateDevices()
-      .then(this.getDevices.bind(this));
-    this.frontCamera = document.getElementById('frontCamera');
-    this.setPictureCamera();
+    this.lookForDevices();
+    this.getFrontCamera();
   }
 
-  private setPictureCamera() {
+  private getFrontCamera() {
+    this.frontCamera = document.getElementById('frontCamera');
+    this.setFrontCamera();
+  }
+
+  private setFrontCamera() {
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         this.frontCamera.src = window.URL.createObjectURL(stream);
@@ -65,43 +73,10 @@ export class MonitoringComponent implements AfterViewInit {
       });
   }
 
-  private takePicture() {
-    let context;
-    context = document.getElementById('canvas').getContext('2d');
-    context.drawImage(this.frontCamera, 0, 0, 160, 200);
-    this.convertCanvasToImage(context);
-  }
-
-
-  // to class
-  private convertCanvasToImage(context: any) {
-    // this.selected.picture = context.canvas.toDataURL('image/png');
-    this.pictureTemp = context.canvas.toDataURL('image/png');
-    // console.log('base64', this.picture2);
-    const file = this.dataURLtoFile(this.picture2, 'img-test.png');
-    // console.log(this.selected.picture);
-    const file2 = this.dataURLtoFile(this.selected.picture, 'img2-test.png');
-
-    console.log('file', file);
-
-    resemble(file).compareTo(file2).scaleToSameSize().dynamicIgnore()
-      .onComplete((data) => {
-        console.log('comparison', data);
-      });
-  }
-
-
-  // to class
-  private dataURLtoFile(dataurl, filename) {
-    const arr = dataurl.split(','),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
+  private lookForDevices() {
+    this.videos = [this.video0, this.video1, this.video2, this.video3];
+    navigator.mediaDevices.enumerateDevices()
+      .then(this.getDevices.bind(this))
   }
 
   private getDevices(infos) {
@@ -125,12 +100,29 @@ export class MonitoringComponent implements AfterViewInit {
       });
   }
 
+  private takePicture() {
+    return ImageManipulation.drawCameraImage(this.frontCamera, true);
+  }
+
+  private getImageFromPicture(context: any) {
+    return ImageManipulation.fromImageToFile(ImageManipulation.fromCanvasToImage(context), 'image-to-compare.png');
+  }
+
+  private compareImages(picture: any): Observable<any> {
+    return new Observable<any>(
+      (observer: any) => {
+        resemble(picture).compareTo(this.selected.picture).scaleToSameSize().dynamicIgnore()
+          .onComplete((data) => {
+            console.log('comparison', data);
+            observer.next(data);
+            observer.complete();
+          });
+      });
+  }
+
+  // ???????? mexer
   selectedItem(data: any, i: number) {
-    if (this.selected) {
-      this.picture2 = data.picture;
-    } else {
-      this.selected = data;
-    }
+    this.selected = data;
   }
 
   filterData() {
@@ -146,41 +138,25 @@ export class MonitoringComponent implements AfterViewInit {
       });
   }
 
-  showFrontCamera() {
-    const nv = this.frontCamera.nativeElement;
-    // const media: MediaTrackConstraints = { deviceId: id };
-    // navigator.mediaDevices.getUserMedia()
-    //   .then(stream => {
-    //     nv.src = window.URL.createObjectURL(stream);
-    //     nv.play();
-    //   });
-  }
-
-  allowAccess() {
+  setAccess(action: number) {
     if (this.selected) {
       this.user.password = this.accessPassword;
       this.user.username = localStorage.getItem('username');
       this.accessService.validatePassword(this.user)
         .subscribe((data) => {
           this.accessPassword = '';
-
           if (data) {
-            // take picture
-            // validate facial recognition
-
+            this.access.action = action;
             this.getAccess();
-            this.access.action = AccessAction.ALLOW;
-            this.accessService.insertAccess(this.access)
-              .subscribe((data) => {
-                console.log(data);
-                alert('Entrada permitida! ');
-              },
-              (error: MessagesModel) => {
-                console.log('Ocorreu um erro: ' + error.message);
-                error.severity = MessagesModel.SEVERITIES.ERROR;
-                this.dialogBehavior.showErrorMessage(error);
-              });
-
+            if (action === AccessAction.ALLOW) {
+              if (this.access.type === AccessType.PERSON) {
+                this.recognizePerson();
+              } else {
+                this.allowAccess();
+              }
+            } else {
+              this.denyAccess();
+            }
           } else {
             console.log('Senha incorreta');
             const error = new MessagesModel();
@@ -201,50 +177,74 @@ export class MonitoringComponent implements AfterViewInit {
     }
   }
 
-  denyAccess() {
-    if (this.selected) {
-      this.user.password = this.accessPassword;
-      this.user.username = localStorage.getItem('username');
-      this.accessService.validatePassword(this.user)
-        .subscribe((data) => {
-          this.accessPassword = '';
-          if (data) {
-            // take picture
-            // validate facial recognition
+  private recognizePerson() {
+    this.displayFrontCamera = true;
 
-            this.getAccess();
-            this.access.action = AccessAction.DENY;
-            this.accessService.insertAccess(this.access)
-              .subscribe((data) => {
-                console.log(data);
-                alert('Entrada negada! ');
-              },
-              (error: MessagesModel) => {
-                console.log('Ocorreu um erro: ' + error.message);
-                error.severity = MessagesModel.SEVERITIES.ERROR;
-                this.dialogBehavior.showErrorMessage(error);
-              });
-          } else {
-            console.log('Senha incorreta');
-            const error = new MessagesModel();
-            error.severity = MessagesModel.SEVERITIES.ERROR;
-            this.dialogBehavior.showErrorMessage(error);
-          }
-        },
-        (error: MessagesModel) => {
-          console.log('Ocorreu um erro: ' + error.message);
-          error.severity = MessagesModel.SEVERITIES.ERROR;
-          this.dialogBehavior.showErrorMessage(error);
-        });
-    } else {
-      const error = new MessagesModel();
-      error.severity = MessagesModel.SEVERITIES.WARNING;
-      error.message = 'Busque e selecione uma pessoa ou veículo!';
-      this.dialogBehavior.showErrorMessage(error);
+    this.startTimer(10);
+
+    setTimeout(this.callTracker, 1000);
+
+    setTimeout(() => {
+      this.picture = this.getImageFromPicture(this.takePicture());
+      this.displayFrontCamera = false;
+      // this.beginComparison();
+
+      // show 2 divs side by side on html
+
+      // set 2 divs opacity 
+
+      this.compareImages(this.picture).subscribe((data) => {
+        if (data.misMatchPercentage > 20) {
+          this.denyAccess();
+        } else {
+          this.allowAccess();
+        }
+      });
+    }, 10000);
+  }
+
+  private beginComparison() {
+    this.displayComparison = true;
+    // set side by side
+    $('#imageTwo').css('opacity', '0.5');
+
+  }
+
+  private allowAccess() {
+    this.access.action = AccessAction.ALLOW;
+    this.callAccessService();
+  }
+
+  private denyAccess() {
+    this.access.action = AccessAction.DENY;
+    this.callAccessService();
+  }
+
+  private startTimer(timer: number) {
+    this.pictureTimer = timer;
+    if (timer > 0) {
+      setTimeout(() => {
+        this.startTimer(timer--);
+      }, 1000);
     }
+  }
+
+  callAccessService() {
+    this.accessService.insertAccess(this.access)
+      .subscribe((data) => {
+        console.log(data);
+        this.access.action === AccessAction.ALLOW ? alert('Entrada permitida! ') : alert('Entrada negada! ');
+      },
+      (error: MessagesModel) => {
+        console.log('Ocorreu um erro: ' + error.message);
+        error.severity = MessagesModel.SEVERITIES.ERROR;
+        this.dialogBehavior.showErrorMessage(error);
+      });
   }
 
   private getAccess() {
+    // set access obervation (motivo de deny)
+
     // if (this.selected.personType) {
     // access.person = this.selected;
     // access.type = AccessType.PERSON;
@@ -278,4 +278,36 @@ export class MonitoringComponent implements AfterViewInit {
     }
   }
 
+  private callTracker() {
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    const tracker = new tracking.ObjectTracker('face');
+    tracker.setInitialScale(4);
+    tracker.setStepSize(2);
+    tracker.setEdgesDensity(0.1);
+
+
+    tracking.track('#frontCamera', tracker, { camera: true });
+    tracker.on('track', function (event) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      event.data.forEach(function (rect) {
+        context.strokeStyle = '#a64ceb';
+        context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        context.font = '11px Helvetica';
+        context.fillStyle = '#fff';
+        context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+        context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        globals.GlobalVars.imgX = rect.x;
+        globals.GlobalVars.imgY = rect.y;
+        globals.GlobalVars.imgWidth = rect.width;
+        globals.GlobalVars.imgHeight = rect.height;
+
+      });
+    });
+    // const gui = new dat.GUI();
+    // gui.add(tracker, 'edgesDensity', 0.1, 0.5).step(0.01);
+    // gui.add(tracker, 'initialScale', 1.0, 10.0).step(0.1);
+    // gui.add(tracker, 'stepSize', 1, 5).step(0.1);
+  };
 }

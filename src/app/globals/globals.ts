@@ -3,4 +3,9 @@ export class GlobalVars {
     static isIdle = true;
     static afkTimer = 0;
     static isWarningTimer = false;
+    static imgX;
+    static imgY;
+    static imgWidth;
+    static imgHeight;
+    
 }

@@ -1,17 +1,19 @@
-<script src="facial-recognition.js"></script>
 <div class="page-template">
     <div class="left-container">
         <div class="left-header">
             <label class="title">Condosafety</label>
         </div>
         <div class="left-body">
-
+            <!-- <div [style.display]="displayFrontCamera ? 'inline-block' : 'none'" class="card-timer">{{pictureTimer}}</div> -->
+            <video [style.display]="displayFrontCamera ? 'inline-block' : 'none'" id="frontCamera" width="320" height="240" preload autoplay
+                loop muted class="video"></video>
+            <canvas [style.display]="displayFrontCamera ? '-webkit-box' : 'none'" id="canvas" width="320" height="240"></canvas>
             <div class="person-img">
-                <img *ngIf="selected && selected.picture" [src]="selected.picture" />
-                <video id="frontCamera" width="160" height="200" autoplay class="video"></video>
-                <canvas id="canvas" width="160" height="200"></canvas>
+                <img *ngIf="selected && selected.picture && !displayFrontCamera" [src]="selected.picture" />
             </div>
-            <button (click)="takePicture()" id="snap">Take photo</button>
+
+            <!-- <img *ngIf="selected && selected.picture && displayComparison" #imageOne width="320" height="240" [src]="selected.picture" />
+            <img *ngIf="picture && displayComparison" #imageTwo width="320" height="240"/> -->
 
             <div class="person-search">
                 <input type="text" [(ngModel)]="filter" (keypress)="onEnterPress($event)" />
@@ -49,8 +51,8 @@
                     <input type="password" mdInput placeholder="Senha de liberação" [(ngModel)]="accessPassword" />
                 </md-input-container>
 
-                <button [disabled]="!accessPassword" class="access-btn" id="allow-access-btn" (click)="allowAccess()">Permitir acesso</button>
-                <button [disabled]="!accessPassword" class="access-btn" id="deny-access-btn" (click)="denyAccess()">Impedir acesso</button>
+                <button [disabled]="!accessPassword" class="access-btn" id="allow-access-btn" (click)="setAccess(2)">Permitir acesso</button>
+                <button [disabled]="!accessPassword" class="access-btn" id="deny-access-btn" (click)="setAccess(1)">Impedir acesso</button>
             </div>
 
         </div>

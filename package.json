@@ -33,6 +33,7 @@
     "@angular/platform-server": "^4.0.3",
     "@angular/router": "^4.0.3",
     "@types/node": "^6.0.90",
+    "@types/tracking": "^1.1.27",
     "angular-material": "^1.1.4",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.4.3",
