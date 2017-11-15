@@ -9,6 +9,7 @@ module.exports = mongoose.model('Access', {
     person: { type: Schema.Types.ObjectId, ref: 'Person' },
     visitor: { type: Schema.Types.ObjectId, ref: 'Visitor' },
     type: { type: String },
-    action: { type: String }
+    action: { type: String },
+    observation: { type: String }
 }, 'access'
 );

@@ -33,6 +33,7 @@ import {
 import { MessageDialogBehavior, ImageBehavior } from './behaviors';
 
 import { FileUploadModule } from 'ng2-file-upload';
+import { PhonePipe, CpfPipe } from '../app/pipes';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     LoginPageComponent,
     AdministrationComponent,
     PeopleComponent,
+    PhonePipe,
+    CpfPipe,
     ReportsComponent,
     NavbarComponent,
     PersonTypeModalComponent,

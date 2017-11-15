@@ -8,7 +8,8 @@
         </div>
         <div class="input-container">
             <md-input-container class="md-block" flex-gt-sm>
-                <input type="text" [disabled]="disableFields" [(ngModel)]="person.cpf" mdInput placeholder="CPF" />
+                <input type="text" [disabled]="disableFields" maxlength="14" (ngModelChange)="person.cpf=$event" [ngModel]="person.cpf | cpf"
+                    mdInput placeholder="CPF" />
             </md-input-container>
         </div>
         <div class="input-container">
@@ -18,7 +19,8 @@
         </div>
         <div class="input-container">
             <md-input-container class="md-block" flex-gt-sm>
-                <input type="text" [disabled]="disableFields" [(ngModel)]="person.phoneNumber" mdInput placeholder="Telefone" />
+                <input type="text" [disabled]="disableFields" maxlength="15" (ngModelChange)="person.phoneNumber=$event" [ngModel]="person.phoneNumber | phone"
+                    mdInput placeholder="Telefone" />
             </md-input-container>
         </div>
         <div class="input-container">

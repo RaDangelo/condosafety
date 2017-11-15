@@ -1,4 +1,4 @@
-import { AfkTimeModel } from '../models/afk-time.model';
+import { AfkTimeModel, WatchControlModel } from '../models/';
 import { AFKTimeServiceInterface } from '../interfaces';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
@@ -18,6 +18,12 @@ export class AFKTimeService extends AFKTimeServiceInterface {
 
     save(afk: AfkTimeModel): Observable<any> {
         return this.restService.post(this.url, afk)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
+
+    unfreeze(watch: WatchControlModel): Observable<any> {
+        return this.restService.post(this.url + 'unfreeze-screen', watch)
             .map((res: Response) => <any>res.json())
             .catch(RESTService.handleErrorMessage);
     }

@@ -5,8 +5,6 @@ import { WatchControlModel } from '../models';
 @Injectable()
 export abstract class WatchControlServiceInterface {
 
-    abstract save(watch: WatchControlModel): Observable<any>;
-
-    abstract getList(): Observable<Array<WatchControlModel>>;
+    abstract getList(filter: WatchControlModel): Observable<Array<WatchControlModel>>;
 
 }

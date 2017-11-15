@@ -78,7 +78,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   }
 
   private setAfkRoutine() {
-    this.afkRoutine = setInterval(this.manageAfkTimer.bind(this), 60000);
+    this.afkRoutine = setInterval(this.manageAfkTimer.bind(this), 10000);
   }
 
   private manageAfkTimer() {
@@ -87,7 +87,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     console.log('idleDate', globalVars.GlobalVars.isIdle, idleDate);
     if (globalVars.GlobalVars.isIdle &&
       (dtAtual - idleDate) >= this.afkTimer * 60000) {
-      $('#modal-afk').modal('show');
+      $('#afk-modal').modal('show');
       globalVars.GlobalVars.isWarningTimer = true;
     }
   }

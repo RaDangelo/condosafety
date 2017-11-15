@@ -1,5 +1,5 @@
-import { WatchControlServiceInterface } from '../../../interfaces';
-import { UserModel, WatchControlModel, Action } from '../../../models';
+import { AFKTimeServiceInterface, AccessServiceInterface } from '../../../interfaces';
+import { UserModel, WatchControlModel, Action, MessagesModel } from '../../../models';
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { MessageDialogBehavior } from '../../../behaviors';
 import * as globalVars from '../../../globals';
@@ -15,6 +15,7 @@ export class AfkModalComponent {
 
   watch: WatchControlModel;
   warningStart: Date = null;
+  user: UserModel = new UserModel();
 
   @Input() set startWarningTimer(start: boolean) {
     if (start) {
@@ -24,7 +25,8 @@ export class AfkModalComponent {
     }
   }
 
-  constructor(private watchService: WatchControlServiceInterface, private dialogBehavior: MessageDialogBehavior) {
+  constructor(private afkService: AFKTimeServiceInterface, private dialogBehavior: MessageDialogBehavior,
+    private accessService: AccessServiceInterface) {
     this.watch = new WatchControlModel();
     this.watch.action = Action.AFK;
     this.watch.user.username = localStorage.getItem('username');
@@ -38,14 +40,28 @@ export class AfkModalComponent {
   }
 
   private callService() {
-    this.watchService.save(this.watch).subscribe((data) => {
-      // ok
-      globalVars.GlobalVars.isWarningTimer = false;
-    },
-      (err) => {
-        // err
-        // if err.status = 401 (usuario errado)
-      });
+    if (!this.validateExceedingTime() || this.validateExceedingTime() && this.watch.obs) {
+      this.accessService.validatePassword(this.watch.user)
+        .subscribe((data) => {
+          this.afkService.unfreeze(this.watch).subscribe(() => {
+            globalVars.GlobalVars.isWarningTimer = false;
+            $('#afk-modal').modal('hide');
+          },
+            (error: MessagesModel) => {
+              console.log('Ocorreu um erro: ' + error.message);
+              error.severity = MessagesModel.SEVERITIES.ERROR;
+              this.dialogBehavior.showErrorMessage(error);
+            });
+        },
+        (error: MessagesModel) => {
+          console.log('Ocorreu um erro: ' + error.message);
+          error.severity = MessagesModel.SEVERITIES.ERROR;
+          this.dialogBehavior.showErrorMessage(error);
+        });
+    } else {
+      console.log('Justificativa não inserida!');
+      this.dialogBehavior.showErrorMessage(new MessagesModel('Insira uma justificativa!'));
+    }
   }
 
   validateExceedingTime(): boolean {

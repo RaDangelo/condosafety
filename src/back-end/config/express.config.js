@@ -38,6 +38,7 @@ module.exports = (app) => {
     let vehicle = require('../api/vehicle.rest.js');
     let visitor = require('../api/visitor.rest.js');
     let image = require('../api/image.rest.js');
+    let watch = require('../api/watch-control.rest.js');    
 
     app.use('/person', person);
     app.use('/apartment', apartment);
@@ -47,5 +48,6 @@ module.exports = (app) => {
     app.use('/vehicle', vehicle);
     app.use('/image', image);
     app.use('/visitor', visitor);
+    app.use('/watch-control', visitor);
 
 };

@@ -32,7 +32,7 @@ export class MonitoringComponent implements AfterViewInit {
 
   access: AccessModel = new AccessModel();
   accessPassword: string;
-  user: UserModel = new UserModel();;
+  user: UserModel = new UserModel();
 
   videos: Array<ElementRef> = new Array<ElementRef>();
   videoInputs: Array<VideoInputModel> = new Array<VideoInputModel>();
@@ -155,7 +155,14 @@ export class MonitoringComponent implements AfterViewInit {
                 this.allowAccess();
               }
             } else {
-              this.denyAccess();
+              if (this.access.observation) {
+                this.denyAccess();
+              } else {
+                console.log('Insira um motivo!');
+                const error = new MessagesModel();
+                error.severity = MessagesModel.SEVERITIES.ERROR;
+                this.dialogBehavior.showErrorMessage(error);
+              }
             }
           } else {
             console.log('Senha incorreta');
@@ -243,18 +250,6 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   private getAccess() {
-    // set access obervation (motivo de deny)
-
-    // if (this.selected.personType) {
-    // access.person = this.selected;
-    // access.type = AccessType.PERSON;
-    // } else if (this.selected.plate) {
-    //   access.vehicle = this.selected;
-    // access.type = AccessType.VEHICLE;
-    // } else {
-    //   access.visitor = this.selected;    
-    // access.type = AccessType.VISITOR;
-    // }
     this.access.date = new Date();
     this.access.user.username = localStorage.getItem('username');
     if (this.selected.cpf) {
@@ -265,6 +260,10 @@ export class MonitoringComponent implements AfterViewInit {
       this.access.vehicle = new VehicleModel(this.selected);
       this.access.vehicle.picture = null;
       this.access.type = AccessType.VEHICLE;
+    } else {
+      this.access.visitor = new VisitorModel(this.selected);
+      this.access.visitor.picture = null;
+      this.access.type = AccessType.VISITOR;
     }
   }
 

@@ -8,7 +8,7 @@
 
       </div>
       <div class="modal-body">
-        Senha:<input [(ngModel)]="watch.user.password" />
+        Senha:<input type="password" [(ngModel)]="watch.user.password" />
         <ng-container *ngIf="validateExceedingTime()">
           Justificativa:<input [(ngModel)]="watch.obs" />
         </ng-container>

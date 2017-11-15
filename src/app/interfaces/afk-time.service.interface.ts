@@ -1,4 +1,4 @@
-import { AfkTimeModel } from '../models/afk-time.model';
+import { AfkTimeModel, WatchControlModel } from '../models/';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 
@@ -6,6 +6,8 @@ import { Injectable } from '@angular/core';
 export abstract class AFKTimeServiceInterface {
 
     abstract save(afk: AfkTimeModel): Observable<any>;
+
+    abstract unfreeze(watch: WatchControlModel): Observable<any>;
 
     abstract get(): Observable<AfkTimeModel>;
 

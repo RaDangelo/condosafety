@@ -12,6 +12,7 @@ export class AccessModel {
     visitor?: VisitorModel;
     type: AccessType; // ?
     action: AccessAction;
+    observation?: string;
 
     constructor(access: AccessModel = null) {
         if (access) {
@@ -19,6 +20,7 @@ export class AccessModel {
             this.date = access.date;
             this.type = access.type; // only front?
             this.action = access.action;
+            this.observation = access.observation;
 
             if (access.user) {
                 this.user = access.user;

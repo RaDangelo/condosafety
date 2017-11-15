@@ -1,6 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user.vo');
+var express = require('express'),
+	router = express.Router(),
+	User = require('../models/user.vo'),
+	Watch = require('../models/watch-control.vo'),
+	daoWatch = require('../daos/watch-control.dao');
+require('promise');
+
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -24,7 +28,11 @@ module.exports = function (passport) {
 				err.status = 401;
 				return next(err);
 			}
-			res.json(user);
+			var watch = new Watch();
+			watch.user = user;
+			watch.date = new Date();
+			watch.action = 0;
+			daoWatch.saveWatch(watch).then(data => res.json(user)).catch(err => next(err));
 		})(req, res, next)
 	});
 
@@ -51,20 +59,20 @@ module.exports = function (passport) {
 		});
 	});
 
-	 router.post('/user/delete', function (req, res) {
-        User.remove({
-            _id: req.body._id
-        }, function (err, user) {
-            if (err)
-                res.send(err);
+	router.post('/user/delete', function (req, res) {
+		User.remove({
+			_id: req.body._id
+		}, function (err, user) {
+			if (err)
+				res.send(err);
 
-            User.find(function (err, user) {
-                if (err)
-                    res.send(err)
-                res.json(user);
-            });
-        });
-    });
+			User.find(function (err, user) {
+				if (err)
+					res.send(err)
+				res.json(user);
+			});
+		});
+	});
 
 	return router;
 

@@ -16,15 +16,9 @@ export class WatchControlService extends WatchControlServiceInterface {
         super();
     }
 
-    getList(): Observable<Array<WatchControlModel>> {
-        return this.restService.get(this.url)
-            .map((res: Response) => <WatchControlModel[]>res.json().map(p => new WatchControlModel(p)))
-            .catch(RESTService.handleErrorMessage);
-    }
-
-    save(watch: WatchControlModel): Observable<any> {
-        return this.restService.post(this.url, watch)
-            .map((res: Response) => <any>res.json())
+    getList(filter: WatchControlModel): Observable<Array<WatchControlModel>> {
+        return this.restService.post(this.url, filter)
+            .map((res: Response) => <WatchControlModel[]>res.json().map(w => new WatchControlModel(w)))
             .catch(RESTService.handleErrorMessage);
     }
 }

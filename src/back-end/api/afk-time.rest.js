@@ -5,8 +5,11 @@ const mongoose = require('mongoose');
 
 let conn = mongoose.connection;
 
-var AfkTime = require('../models/afk-time.vo');
-var daoAfk = require('../daos/afk-time.dao');
+var AfkTime = require('../models/afk-time.vo'),
+    Watch = require('../models/watch-control.vo');
+var daoAfk = require('../daos/afk-time.dao'),
+    daoUser = require('../daos/user.dao'),
+    daoWatch = require('../daos/watch-control.dao');
 
 conn.once('open', () => {
 
@@ -27,6 +30,22 @@ conn.once('open', () => {
             return next(err);
         });
     });
+
+    router.post('/unfreeze-screen', (req, res, next) => {
+        var watch = new Watch(req.body);
+        daoUser.getByUsername(req.body.user.username).then(user => {
+            if (!user) {
+                console.log('Usuário ' + req.body.user.username + ' não encontrado!');
+                var err = new Error('Usuário não existente!');
+                err.status = 500;
+                return next(err);
+            } else {
+                watch.user = user;
+                daoWatch.saveWatch(watch).then(data => res.json(true)).catch(err => next(err));
+            }
+        });
+    });
+
 });
 
 module.exports = router;

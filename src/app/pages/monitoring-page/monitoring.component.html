@@ -47,6 +47,9 @@
             <button class="btn-visitor-register" (click)="openVisitorModal()"> Cadastrar Visitante </button>
 
             <div class="access-permission">
+                <md-input-container id="input-access-reason" class="md-block" flex-gt-sm>
+                    <input type="text" mdInput placeholder="Motivo" [(ngModel)]="access.observation" />
+                </md-input-container>
                 <md-input-container id="input-access-pass" class="md-block" flex-gt-sm>
                     <input type="password" mdInput placeholder="Senha de liberação" [(ngModel)]="accessPassword" />
                 </md-input-container>
