@@ -5,19 +5,19 @@
     </div>
     <div class="login-body">
       <div class="username">
-        <!-- <md-icon class="material-icons">person</md-icon> -->
+        <!-- <mat-icon class="material-icons">person</mat-icon> -->
         <span class="glyphicon glyphicon-user"></span>
-        <md-input-container class="md-block" flex-gt-sm>
-          <input type="text" [(ngModel)]="user.username" mdInput placeholder="Username" />
-        </md-input-container>
+        <mat-input-container class="mat-block" flex-gt-sm>
+          <input type="text" [(ngModel)]="user.username" matInput placeholder="Username" />
+        </mat-input-container>
       </div>
       <label class="error" *ngIf="alertUsername">* Informe um nome de usuário!</label>
       <div class="password">
-        <!-- <md-icon class="material-icons">lock</md-icon> -->
+        <!-- <mat-icon class="material-icons">lock</mat-icon> -->
         <span class="glyphicon glyphicon-lock"></span>
-        <md-input-container class="md-block md-icon-left" flex-gt-sm>
-          <input type="password" [(ngModel)]="user.password" mdInput placeholder="Password" />
-        </md-input-container>
+        <mat-input-container class="mat-block mat-icon-left" flex-gt-sm>
+          <input type="password" [(ngModel)]="user.password" matInput placeholder="Password" />
+        </mat-input-container>
       </div>
       <label class="error" *ngIf="alertPassword">* Informe uma senha!</label>
       <button (click)="login()" class="login-btn"> Login </button>

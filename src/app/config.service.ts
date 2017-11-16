@@ -14,6 +14,6 @@ export class ConfigService {
     }
 
     get isElectron(): boolean {
-        return true;
+        return false;
     }
 }

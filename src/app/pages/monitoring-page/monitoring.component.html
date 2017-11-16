@@ -28,31 +28,31 @@
             </div>
 
             <div class="cont-access-data">
-                <md-input-container id="input-name" class="md-block" flex-gt-sm>
-                    <input type="text" disabled [value]="selected?.brand || selected?.name" mdInput [placeholder]="selected && selected.brand ? 'Marca' : 'Nome'"
+                <mat-input-container id="input-name" class="mat-block" flex-gt-sm>
+                    <input type="text" disabled [value]="selected?.brand || selected?.name" matInput [placeholder]="selected && selected.brand ? 'Marca' : 'Nome'"
                     />
-                </md-input-container>
-                <md-input-container id="input-complex" class="md-block" flex-gt-sm>
-                    <input type="text" disabled [value]="selected?.apartment?.complex" mdInput placeholder="Bloco" />
-                </md-input-container>
-                <md-input-container id="input-cpf" class="md-block" flex-gt-sm>
-                    <input type="text" disabled [value]="selected?.plate || selected?.cpf || selected?.document" mdInput [placeholder]="selected && selected.plate ? 'Placa' : 'CPF'"
+                </mat-input-container>
+                <mat-input-container id="input-complex" class="mat-block" flex-gt-sm>
+                    <input type="text" disabled [value]="selected?.apartment?.complex" matInput placeholder="Bloco" />
+                </mat-input-container>
+                <mat-input-container id="input-cpf" class="mat-block" flex-gt-sm>
+                    <input type="text" disabled [value]="selected?.plate || selected?.cpf || selected?.document" matInput [placeholder]="selected && selected.plate ? 'Placa' : 'CPF'"
                     />
-                </md-input-container>
-                <md-input-container id="input-apt" class="md-block" flex-gt-sm>
-                    <input type="text" disabled [value]="selected?.apartment?.number" mdInput placeholder="Apto" />
-                </md-input-container>
+                </mat-input-container>
+                <mat-input-container id="input-apt" class="mat-block" flex-gt-sm>
+                    <input type="text" disabled [value]="selected?.apartment?.number" matInput placeholder="Apto" />
+                </mat-input-container>
             </div>
 
             <button class="btn-visitor-register" (click)="openVisitorModal()"> Cadastrar Visitante </button>
 
             <div class="access-permission">
-                <md-input-container id="input-access-reason" class="md-block" flex-gt-sm>
-                    <input type="text" mdInput placeholder="Motivo" [(ngModel)]="access.observation" />
-                </md-input-container>
-                <md-input-container id="input-access-pass" class="md-block" flex-gt-sm>
-                    <input type="password" mdInput placeholder="Senha de liberação" [(ngModel)]="accessPassword" />
-                </md-input-container>
+                <mat-input-container id="input-access-reason" class="mat-block" flex-gt-sm>
+                    <input type="text" matInput placeholder="Motivo" [(ngModel)]="access.observation" />
+                </mat-input-container>
+                <mat-input-container id="input-access-pass" class="mat-block" flex-gt-sm>
+                    <input type="password" matInput placeholder="Senha de liberação" [(ngModel)]="accessPassword" />
+                </mat-input-container>
 
                 <button [disabled]="!accessPassword" class="access-btn" id="allow-access-btn" (click)="setAccess(2)">Permitir acesso</button>
                 <button [disabled]="!accessPassword" class="access-btn" id="deny-access-btn" (click)="setAccess(1)">Impedir acesso</button>
@@ -66,30 +66,30 @@
 
         <div id="camera0" class="camera-container">
             <video #video0 width="346" height="260" autoplay class="video"></video>
-            <md-select [(ngModel)]="selectedVideos[0]" (change)="showCamera(0)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
-            </md-select>
+            <mat-select [(ngModel)]="selectedVideos[0]" (change)="showCamera(0)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+            </mat-select>
         </div>
 
         <div id="camera1" class="camera-container">
             <video #video1 width="346" height="260" autoplay class="video"></video>
-            <md-select [(ngModel)]="selectedVideos[1]" (change)="showCamera(1)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
-            </md-select>
+            <mat-select [(ngModel)]="selectedVideos[1]" (change)="showCamera(1)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+            </mat-select>
         </div>
 
         <div id="camera2" class="camera-container">
             <video #video2 width="346" height="260" autoplay class="video"></video>
-            <md-select [(ngModel)]="selectedVideos[2]" (change)="showCamera(2)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
-            </md-select>
+            <mat-select [(ngModel)]="selectedVideos[2]" (change)="showCamera(2)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+            </mat-select>
         </div>
 
         <div id="camera3" class="camera-container">
             <video #video3 width="346" height="260" autoplay class="video"></video>
-            <md-select [(ngModel)]="selectedVideos[3]" (change)="showCamera(3)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <md-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</md-option>
-            </md-select>
+            <mat-select [(ngModel)]="selectedVideos[3]" (change)="showCamera(3)" placeholder="Selecione uma câmera" floatPlaceholder="never">
+                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+            </mat-select>
         </div>
     </div>
 </div>

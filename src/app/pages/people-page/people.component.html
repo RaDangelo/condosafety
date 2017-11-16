@@ -2,55 +2,55 @@
 
     <div style="float: left; width: 35%;">
         <div class="input-container" style="padding-left: 4px;">
-            <md-input-container id="person-name" class="md-block" flex-gt-sm>
-                <input type="text" [disabled]="disableFields" [(ngModel)]="person.name" mdInput placeholder="Nome" />
-            </md-input-container>
+            <mat-input-container id="person-name" class="mat-block" flex-gt-sm>
+                <input type="text" [disabled]="disableFields" [(ngModel)]="person.name" matInput placeholder="Nome" />
+            </mat-input-container>
         </div>
         <div class="input-container">
-            <md-input-container class="md-block" flex-gt-sm>
+            <mat-input-container class="mat-block" flex-gt-sm>
                 <input type="text" [disabled]="disableFields" maxlength="14" (ngModelChange)="person.cpf=$event" [ngModel]="person.cpf | cpf"
-                    mdInput placeholder="CPF" />
-            </md-input-container>
+                    matInput placeholder="CPF" />
+            </mat-input-container>
         </div>
         <div class="input-container">
-            <md-input-container class="md-block" flex-gt-sm>
-                <input type="text" [disabled]="disableFields" [(ngModel)]="person.nickname" mdInput placeholder="Apelido" />
-            </md-input-container>
+            <mat-input-container class="mat-block" flex-gt-sm>
+                <input type="text" [disabled]="disableFields" [(ngModel)]="person.nickname" matInput placeholder="Apelido" />
+            </mat-input-container>
         </div>
         <div class="input-container">
-            <md-input-container class="md-block" flex-gt-sm>
+            <mat-input-container class="mat-block" flex-gt-sm>
                 <input type="text" [disabled]="disableFields" maxlength="15" (ngModelChange)="person.phoneNumber=$event" [ngModel]="person.phoneNumber | phone"
-                    mdInput placeholder="Telefone" />
-            </md-input-container>
+                    matInput placeholder="Telefone" />
+            </mat-input-container>
         </div>
         <div class="input-container">
-            <md-input-container class="md-block" flex-gt-sm>
-                <input type="email" [disabled]="disableFields" [(ngModel)]="person.email" mdInput placeholder="Email" />
-            </md-input-container>
+            <mat-input-container class="mat-block" flex-gt-sm>
+                <input type="email" [disabled]="disableFields" [(ngModel)]="person.email" matInput placeholder="Email" />
+            </mat-input-container>
         </div>
         <div class="input-container">
-            <md-input-container class="md-block" flex-gt-sm>
-                <input type="password" [disabled]="disableFields" [(ngModel)]="person.accessPassword" mdInput placeholder="Senha de acesso"
+            <mat-input-container class="mat-block" flex-gt-sm>
+                <input type="password" [disabled]="disableFields" [(ngModel)]="person.accessPassword" matInput placeholder="Senha de acesso"
                 />
-            </md-input-container>
+            </mat-input-container>
         </div>
 
         <div class="row-container">
             <div class="input-container">
-                <md-select [disabled]="disableFields" [(ngModel)]="person.personType" placeholder="Tipo de Pessoa">
-                    <md-option *ngFor="let t of types" [value]="t">{{t?.type}}</md-option>
-                </md-select>
+                <mat-select [disabled]="disableFields" [(ngModel)]="person.personType" placeholder="Tipo de Pessoa">
+                    <mat-option *ngFor="let t of types" [value]="t">{{t?.type}}</mat-option>
+                </mat-select>
             </div>
 
             <div class="input-container">
-                <md-select [disabled]="disableFields" [(ngModel)]="person.apartment" placeholder="Apartamento">
+                <mat-select [disabled]="disableFields" [(ngModel)]="person.apartment" placeholder="Apartamento">
                     <ng-container *ngFor="let ap of apartments">
-                        <md-option *ngIf="ap.status" [value]="ap">
+                        <mat-option *ngIf="ap.status" [value]="ap">
                             <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
                             {{ap.number}}
-                        </md-option>
+                        </mat-option>
                     </ng-container>
-                </md-select>
+                </mat-select>
             </div>
         </div>
 

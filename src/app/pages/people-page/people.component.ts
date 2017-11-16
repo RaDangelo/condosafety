@@ -69,7 +69,7 @@ export class PeopleComponent {
   newPerson() {
     this.person = new PersonModel();
     this.disableFields = false;
-    $('md-input-container').addClass('mat-focused');
+    $('mat-input-container').addClass('mat-focused');
   }
 
 

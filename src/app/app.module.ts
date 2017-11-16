@@ -14,7 +14,7 @@ import { AppComponent } from './app.component';
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
+import { MatSelectModule, MatInputModule, MatButtonModule, MatIconModule, MatOptionModule } from '@angular/material';
 import 'hammerjs';
 
 import {
@@ -60,7 +60,11 @@ import { PhonePipe, CpfPipe } from '../app/pipes';
     NgxElectronModule,
     HttpModule,
     BrowserAnimationsModule,
-    MaterialModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatOptionModule,
+    MatIconModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [
