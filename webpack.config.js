@@ -5,15 +5,18 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postcssUrl = require('postcss-url');
 
-const { NoEmitOnErrorsPlugin, LoaderOptionsPlugin } = require('webpack');
+const { NoEmitOnErrorsPlugin, LoaderOptionsPlugin, DefinePlugin } = require('webpack');
 const { GlobCopyWebpackPlugin, BaseHrefWebpackPlugin } = require('@angular/cli/plugins/webpack');
-const { CommonsChunkPlugin } = require('webpack').optimize;
+const { CommonsChunkPlugin, UglifyJsPlugin } = require('webpack').optimize;
 const { AotPlugin } = require('@ngtools/webpack');
 
 const nodeModules = path.join(process.cwd(), 'node_modules');
 const entryPoints = ["inline", "polyfills", "sw-register", "scripts", "styles", "vendor", "main"];
 const baseHref = "";
 const deployUrl = "";
+const ENV = process.env.NODE_ENV;
+
+console.log(ENV);
 
 module.exports = {
   "devtool": "source-map",
@@ -230,6 +233,12 @@ module.exports = {
     ]
   },
   "plugins": [
+    new DefinePlugin({
+      'ENV': JSON.stringify(ENV),
+    }),
+    new UglifyJsPlugin({
+      compress: ENV === 'production'
+    }),
     new NoEmitOnErrorsPlugin(),
     new GlobCopyWebpackPlugin({
       "patterns": [

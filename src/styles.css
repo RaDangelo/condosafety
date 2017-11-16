@@ -10,6 +10,10 @@
     color: rgba(0,0,0,.38);
 }
 
+.mat-form-field-infix {
+    border-top: none;
+}
+
 .mat-option {
     font-size: 14px;
     height: 44px;

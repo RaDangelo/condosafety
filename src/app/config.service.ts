@@ -14,6 +14,7 @@ export class ConfigService {
     }
 
     get isElectron(): boolean {
-        return false;
+        console.log(`${ENV}`);
+        return `${ENV}` === 'production';
     }
 }

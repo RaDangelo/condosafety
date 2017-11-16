@@ -66,30 +66,38 @@
 
         <div id="camera0" class="camera-container">
             <video #video0 width="346" height="260" autoplay class="video"></video>
-            <mat-select [(ngModel)]="selectedVideos[0]" (change)="showCamera(0)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
-            </mat-select>
+            <mat-form-field floatPlaceholder="never">
+                <mat-select [(ngModel)]="selectedVideos[0]" (change)="showCamera(0)" placeholder="Selecione uma câmera">
+                    <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
 
         <div id="camera1" class="camera-container">
             <video #video1 width="346" height="260" autoplay class="video"></video>
-            <mat-select [(ngModel)]="selectedVideos[1]" (change)="showCamera(1)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
-            </mat-select>
+            <mat-form-field floatPlaceholder="never">
+                <mat-select [(ngModel)]="selectedVideos[1]" (change)="showCamera(1)" placeholder="Selecione uma câmera">
+                    <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
 
         <div id="camera2" class="camera-container">
             <video #video2 width="346" height="260" autoplay class="video"></video>
-            <mat-select [(ngModel)]="selectedVideos[2]" (change)="showCamera(2)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
-            </mat-select>
+            <mat-form-field floatPlaceholder="never">
+                <mat-select [(ngModel)]="selectedVideos[2]" (change)="showCamera(2)" placeholder="Selecione uma câmera">
+                    <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
 
         <div id="camera3" class="camera-container">
             <video #video3 width="346" height="260" autoplay class="video"></video>
-            <mat-select [(ngModel)]="selectedVideos[3]" (change)="showCamera(3)" placeholder="Selecione uma câmera" floatPlaceholder="never">
-                <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
-            </mat-select>
+            <mat-form-field floatPlaceholder="never">
+                <mat-select [(ngModel)]="selectedVideos[3]" (change)="showCamera(3)" placeholder="Selecione uma câmera">
+                    <mat-option *ngFor="let input of videoInputs" [value]="input">{{input.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
     </div>
 </div>

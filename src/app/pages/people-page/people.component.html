@@ -37,20 +37,24 @@
 
         <div class="row-container">
             <div class="input-container">
-                <mat-select [disabled]="disableFields" [(ngModel)]="person.personType" placeholder="Tipo de Pessoa">
-                    <mat-option *ngFor="let t of types" [value]="t">{{t?.type}}</mat-option>
-                </mat-select>
+                <mat-form-field>
+                    <mat-select [disabled]="disableFields" [(ngModel)]="person.personType" placeholder="Tipo de Pessoa">
+                        <mat-option *ngFor="let t of types" [value]="t">{{t?.type}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
 
             <div class="input-container">
-                <mat-select [disabled]="disableFields" [(ngModel)]="person.apartment" placeholder="Apartamento">
-                    <ng-container *ngFor="let ap of apartments">
-                        <mat-option *ngIf="ap.status" [value]="ap">
-                            <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
-                            {{ap.number}}
-                        </mat-option>
-                    </ng-container>
-                </mat-select>
+                <mat-form-field>
+                    <mat-select [disabled]="disableFields" [(ngModel)]="person.apartment" placeholder="Apartamento">
+                        <ng-container *ngFor="let ap of apartments">
+                            <mat-option *ngIf="ap.status" [value]="ap">
+                                <ng-container *ngIf="ap.complex">{{ap.complex}} - </ng-container>
+                                {{ap.number}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
             </div>
         </div>
 
