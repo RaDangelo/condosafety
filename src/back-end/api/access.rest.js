@@ -46,6 +46,8 @@ conn.once('open', () => {
     });
 
     router.post('/', function (req, res, next) {
+        // CHECK: 
+        // enviando apto sem ID e username tmb possivelmente 
         var access = new Access(req.body);
         daoUser.getByUsername(req.body.user.username).then(user => {
             if (!user) {
@@ -255,15 +257,19 @@ conn.once('open', () => {
             daoUser.getFiltered(access.user.username).then(result => {
                 users = result;
                 resolve();
-            }).catch(err => res.send(err));
+            }).catch(err => reject(err));
         }
 
         if (access.apartment && (access.apartment.number || access.apartment.complex || access.apartment.floor)) {
-
+            promises.push($apartments);
+            daoApartment.getFiltered(access.apartment).then(result => {
+                apartments = result;
+                resolve();
+            }).catch(err => reject(err));
         }
 
         Promise.all(promises).then(data => {
-            daoAccess.getFiltered(access, ).then(a => res.json(a)).catch(err => res.send(err));
+            daoAccess.getFiltered(access, users, apartments, vehicles, people, visitors).then(a => res.json(a)).catch(err => res.send(err));
         }).catch(err => res.send(err));
 
     });
