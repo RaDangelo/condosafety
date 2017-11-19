@@ -8,6 +8,20 @@ const ApartmentDao = {
     checkExistent(complex, number) {
         return Apartment.findOne({ 'complex': complex, 'number': number }).exec();
     },
+    getFiltered(a) {
+        var query = {};
+        if (a.complex) {
+            query['complex'] = new RegExp(a.complex, "i");
+        }
+        if (a.number) {
+            query['number'] = new RegExp(a.number, "i");
+        }
+        if (a.floor) {
+            query['floor'] = new RegExp(a.floor, "i");
+        }
+
+        return Apartment.find(query).exec();
+    },
     getById(id) {
         return Apartment.findById(id).exec();
     },

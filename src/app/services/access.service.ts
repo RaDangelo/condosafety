@@ -33,4 +33,10 @@ export class AccessService extends AccessServiceInterface {
             .map((res: Response) => <boolean>res.json())
             .catch(RESTService.handleErrorMessage);
     }
+
+    getList(filter: AccessModel): Observable<AccessModel[]> {
+        return this.restService.post(this.url + 'report', filter)
+            .map((res: Response) => <AccessModel[]>res.json().map(data => new AccessModel(data)))
+            .catch(RESTService.handleErrorMessage);
+    }
 }

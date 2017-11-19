@@ -5,10 +5,10 @@ const WatchControlDao = {
     getWatches() {
         return Watch.find().exec();
     },
-    getFiltered(watch) {
+    getFiltered(watch, users) {
         var query = {};
-        if (watch.user && watch.user.username) {
-            query['user.username'] = watch.user.username;
+        if (users) {
+            query['user'] = { $in: users };
         }
         if (watch.date) {
             query['date'] = watch.date;
@@ -17,7 +17,7 @@ const WatchControlDao = {
             query['action'] = watch.action;
         }
         console.log(query);
-        return Watch.find(query).exec();
+        return Watch.find(query).populate('user').exec();
     },
     saveWatch(watch) {
         return new Promise((resolve, reject) => {

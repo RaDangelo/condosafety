@@ -48,6 +48,6 @@ module.exports = (app) => {
     app.use('/vehicle', vehicle);
     app.use('/image', image);
     app.use('/visitor', visitor);
-    app.use('/watch-control', visitor);
+    app.use('/watch-control', watch);
 
 };

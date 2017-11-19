@@ -13,31 +13,35 @@ const AccessDao = {
             });
         });
     },
-    getFiltered(access) {
+    getFiltered(access, users, apartments, vehicles, people, visitors) {
         var query = {};
-        if (access.user && access.user.username) {
-            query['user.username'] = access.user.username;
+        if (users && users.length) {
+            query['user'] = { $in: users };
         }
         if (access.date) {
             query['date'] = access.date;
         }
-        if (watch.apartment) {
-            query['apartment'] = watch.apartment;
+        if (apartments && apartments.length) {
+            query['apartment'] = { $in: apartments };
         }
-        if (watch.vehicle) {
-            query['vehicle'] = watch.vehicle;
+        if (vehicles && vehicles.length) {
+            query['vehicle'] = { $in: vehicles };
         }
-        if (watch.person) {
-            query['person'] = watch.person;
+        if (people && people.length) {
+            query['person'] = { $in: people };
         }
-        if (watch.visitor) {
-            query['visitor'] = watch.visitor;
+        if (visitors && visitors.length) {
+            query['visitor'] = { $in: visitors };
         }
-        if (watch.action) {
-            query['action'] = watch.action;
+        if (access.action) {
+            query['action'] = access.action;
+        }
+        if (access.type) {
+            query['type'] = access.type;
         }
         console.log(query);
-        return Watch.find(query).exec();
+        return Access.find(query).populate('user', vehicles ? 'vehicle' : visitors ? 'visitor' : 'person',
+            'apartment').exec();
     },
 }
 

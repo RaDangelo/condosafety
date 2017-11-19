@@ -1,0 +1,59 @@
+@import "../../variables.less";
+
+@containers: ~".rb-container, .filter-container, .table-container";
+
+@filters: ~"#date-filter, #username-filter, #action-filter, #btn-generate, #type-filter, #data-filter, #requester-filter, #apartment-filter, #complex-filter, #floor-filter, #action-filter";
+
+@{filters} {
+    margin: 8px;
+}
+
+@{containers} {
+  width: 100%;
+  position: relative;
+  float: left;
+}
+
+.rb-container, .filter-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  padding-right: 16px;
+}
+
+.rb-container {
+    height: 60px;
+}
+
+.filter-container {
+    height: 80px;
+}
+
+#date-filter , #action-filter, #data-filter {
+    width: 120px;
+}
+
+#apartment-filter {
+    width: 60px;
+}
+
+#complex-filter, #floor-filter {
+    width: 40px;
+}
+
+#access-filter, #username-filter {
+    width: 160px;
+}
+
+#btn-generate {
+    bottom: 6px;
+    background-color: #f0f0f0;
+    border-radius: 6px;
+}
+
+#btn-generate:hover {
+    background-color: darken(#ccc, 5%);
+    color: darkblue;
+}

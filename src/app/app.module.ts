@@ -14,7 +14,11 @@ import { AppComponent } from './app.component';
 import { ByteFormatPipe } from './pipes/byte-format.pipe';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule, MatInputModule, MatButtonModule, MatIconModule, MatOptionModule } from '@angular/material';
+import {
+  MatSelectModule, MatInputModule, MatButtonModule, MatIconModule, MatOptionModule,
+  MatRadioModule, MatDatepickerModule, MatNativeDateModule
+} from '@angular/material';
+
 import 'hammerjs';
 
 import {
@@ -27,7 +31,7 @@ import {
 } from './services';
 
 import {
-  MonitoringComponent, LoginPageComponent, PeopleComponent, AdministrationComponent,
+  MonitoringComponent, LoginPageComponent, PeopleComponent, ReportGridComponent, AdministrationComponent,
   ReportsComponent, NavbarComponent, PersonTypeModalComponent, AfkModalComponent, UploadComponent, ImageComponent, VisitorComponent
 } from './pages/';
 import { MessageDialogBehavior, ImageBehavior } from './behaviors';
@@ -51,7 +55,8 @@ import { PhonePipe, CpfPipe } from '../app/pipes';
     UploadComponent,
     AfkModalComponent,
     ImageComponent,
-    VisitorComponent
+    VisitorComponent,
+    ReportGridComponent
   ],
   imports: [
     BrowserModule,
@@ -64,6 +69,9 @@ import { PhonePipe, CpfPipe } from '../app/pipes';
     MatInputModule,
     MatButtonModule,
     MatOptionModule,
+    MatDatepickerModule,
+    MatRadioModule,
+    MatNativeDateModule,
     MatIconModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],

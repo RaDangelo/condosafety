@@ -1,0 +1,46 @@
+<ng-container *ngIf="report && report.length > 0">
+    <div class="table-responsive">
+        <div class="body-container scrollable">
+            <table class="table table-hover table-striped table-condensed table-scrollable">
+                <thead>
+                    <tr *ngIf="option == 0">
+                        <th> Data</th>
+                        <th> Usuário</th>
+                        <th> Ação</th>
+                        <th> Observação</th>
+                    </tr>
+                    <tr *ngIf="option == 1">
+                        <th> Data</th>
+                        <th> Ação</th>
+                        <th> Acesso</th>
+                        <th> Apto.</th>
+                        <th> Bloco</th>
+                        <th> Motivo</th>
+                        <th> Usuário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let r of report">
+                        <td> {{r.date | date:'dd/MM/yy HH:mm:ss'}} </td>
+                        <ng-container *ngIf="option == 0">
+                            <td> {{r.user?.username}} </td>
+                            <td> {{getAction(r.action)}} </td>
+                            <td>
+                                <ng-container *ngIf="r.duration">Tempo de ausência: {{r.duration | date:'HH:mm:ss'}} </ng-container>
+                                <ng-container *ngIf="r.obs"> - Obs: {{r.obs}} </ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngIf="option == 1">
+                            <td> {{getPermission(r.action)}}</td>
+                            <td> {{getRequester(r)}}</td>
+                            <td> {{r.apartment?.number}}</td>
+                            <td> {{r.apartment?.complex}}</td>
+                            <td> {{r.observation}}</td>
+                            <td> {{r.user?.username}}</td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-container>

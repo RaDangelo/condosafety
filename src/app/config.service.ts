@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 export class ConfigService {
 
     get apiUrl(): string {
-        let url = environment.apiUrl;
+        const url = environment.apiUrl;
         return url ? url : 'http://localhost:8082';
     }
 

@@ -43,6 +43,7 @@ export class AccessModel {
             }
         } else {
             this.user = new UserModel();
+            this.apartment = new ApartmentModel();
         }
     }
 }

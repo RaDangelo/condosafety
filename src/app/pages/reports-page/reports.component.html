@@ -1,3 +1,87 @@
-<p>
-  reports works!
-</p>
+<div class="page-template">
+
+  <div class="rb-container">
+    <mat-radio-group [(ngModel)]="option">
+      <mat-radio-button value="0">Acessos ao Sistema</mat-radio-button>
+      <mat-radio-button value="1">Acessos ao Condomínio</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="filter-container">
+    <ng-container *ngIf="option == 1">
+      <mat-form-field id="type-filter">
+        <mat-select placeholder="Tipo de Acesso" [(ngModel)]="accessFilter.type">
+          <mat-option selected [value]="null">Qualquer</mat-option>
+          <mat-option value="1">Regular</mat-option>
+          <mat-option value="2">Veículo</mat-option>
+          <mat-option value="3">Visitante</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field id="data-filter">
+        <mat-select [disabled]="!accessFilter.type" placeholder="Tipo de Dado" [(ngModel)]="dataType">
+          <ng-container *ngIf="accessFilter.type === null">
+            <mat-option value="null">Qualquer</mat-option>
+          </ng-container>
+          <ng-container *ngIf="accessFilter.type == 1">
+            <mat-option selected value="Nome">Nome</mat-option>
+            <mat-option value="Cpf">CPF</mat-option>
+          </ng-container>
+          <ng-container *ngIf="accessFilter.type == 2">
+            <mat-option selected value="Marca">Marca</mat-option>
+            <mat-option value="Placa">Placa</mat-option>
+          </ng-container>
+          <ng-container *ngIf="accessFilter.type == 3">
+            <mat-option selected value="Nome">Nome</mat-option>
+            <mat-option value="Documento">Documento</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      <mat-input-container id="requester-filter" class="mat-block" flex-gt-sm>
+        <input [disabled]="!accessFilter.type" [(ngModel)]="requester" type="text" matInput [placeholder]="!dataType ? 'Filtro' : dataType"
+        />
+      </mat-input-container>
+      <mat-input-container id="apartment-filter" class="mat-block" flex-gt-sm>
+        <input [(ngModel)]="accessFilter.apartment.number" type="text" matInput placeholder="Apto." />
+      </mat-input-container>
+      <mat-input-container id="complex-filter" class="mat-block" flex-gt-sm>
+        <input [(ngModel)]="accessFilter.apartment.complex" type="text" matInput placeholder="Bloco" />
+      </mat-input-container>
+      <mat-input-container id="floor-filter" class="mat-block" flex-gt-sm>
+        <input [(ngModel)]="accessFilter.apartment.floor" type="text" matInput placeholder="Andar" />
+      </mat-input-container>
+
+      <mat-form-field id="action-filter">
+        <mat-select placeholder="Ação" [(ngModel)]="accessFilter.action">
+          <mat-option [value]="2">Permissão</mat-option>
+          <mat-option [value]="1">Negação</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <mat-input-container id="username-filter" class="mat-block" flex-gt-sm>
+      <input [(ngModel)]="username" type="text" matInput placeholder="Nome do Usuário" />
+    </mat-input-container>
+    <mat-form-field id="date-filter">
+      <input [(ngModel)]="date" matInput [matDatepicker]="picker" placeholder="Data">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <ng-container *ngIf="option == 0">
+      <mat-form-field id="action-filter">
+        <mat-select placeholder="Ação" [(ngModel)]="watchFilter.action">
+          <mat-option selected value="0">Login</mat-option>
+          <mat-option value="1">Logout</mat-option>
+          <mat-option value="2">Ociosidade</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <button id="btn-generate" (click)="getReport()" mat-button>Gerar relatório!</button>
+  </div>
+  <div class="table-container">
+    <report-grid [report]="results" [option]="option"> </report-grid>
+  </div>
+
+</div>

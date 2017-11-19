@@ -236,10 +236,10 @@ module.exports = {
     new DefinePlugin({
       'ENV': JSON.stringify(ENV),
     }),
-    new UglifyJsPlugin({
-      compress: ENV === 'production'
-    }),
-    new NoEmitOnErrorsPlugin(),
+    // new UglifyJsPlugin({
+    //   compress: ENV === 'production'
+    // }),
+    // new NoEmitOnErrorsPlugin(),
     new GlobCopyWebpackPlugin({
       "patterns": [
         "assets",

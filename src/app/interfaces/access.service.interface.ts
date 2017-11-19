@@ -7,6 +7,8 @@ export abstract class AccessServiceInterface {
 
     abstract filterData(filter: string): Observable<Object[]>;
 
+    abstract getList(filter: AccessModel): Observable<AccessModel[]>;
+
     abstract validatePassword(user: UserModel): Observable<boolean>;
 
     abstract insertAccess(access: AccessModel): Observable<boolean>;

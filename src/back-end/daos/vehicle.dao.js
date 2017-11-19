@@ -8,11 +8,15 @@ const VehicleDao = {
     getByPlate(plate) {
         return Vehicle.findOne({ 'plate': plate }).exec();
     },
-    getFilteredPlate(plate) {
-        return Vehicle.find({ 'plate': new RegExp(plate, "i") }).exec();
-    },
-    getFilteredBrand(brand) {
-        return Vehicle.find({ 'brand': new RegExp(brand, "i") }).exec();
+    getFiltered(plate, brand) {
+        var query = {};
+        if (plate) {
+            query['plate'] = new RegExp(plate, "i");
+        }
+        if (brand) {
+            query['brand'] = new RegExp(brand, "i");
+        }
+        return Vehicle.find(query).exec();
     },
     getById(id) {
         return Vehicle.findById(id).exec();

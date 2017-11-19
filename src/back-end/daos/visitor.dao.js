@@ -11,11 +11,15 @@ const VisitorDao = {
     getByDocument(document) {
         return Visitor.findOne({ 'document': document }).exec();
     },
-    getFilteredName(name) {
-        return Visitor.find({ 'name': new RegExp(name, "i") }).exec();
-    },
-    getFilteredDocument(document) {
-        return Visitor.find({ 'document': new RegExp(document, "i") }).exec();
+    getFiltered(name, document) {
+        var query = {};
+        if (document) {
+            query['document'] = new RegExp(document, "i");
+        }
+        if (name) {
+            query['name'] = new RegExp(name, "i");
+        }
+        return Visitor.find(query).exec();
     },
     saveVisitor(visitor) {
         return new Promise((resolve, reject) => {

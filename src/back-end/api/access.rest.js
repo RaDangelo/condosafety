@@ -70,7 +70,7 @@ conn.once('open', () => {
 
             var visitors = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVisitor.getFilteredName(req.params.filter).then(result => {
+                daoVisitor.getFiltered(req.params.filter, null).then(result => {
                     daoImg.getImages(result).then(v => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
@@ -89,7 +89,7 @@ conn.once('open', () => {
 
             var persons = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoPerson.getFilteredName(req.params.filter).then(result => {
+                daoPerson.getFiltered(null, req.params.filter).then(result => {
                     daoImg.getImages(result).then(p => {
                         if (p.length) {
                             p.forEach((item, index, array) => {
@@ -108,7 +108,7 @@ conn.once('open', () => {
 
             var vehicleBrand = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVehicle.getFilteredBrand(req.params.filter).then(result => {
+                daoVehicle.getFiltered(null, req.params.filter).then(result => {
                     daoImg.getImages(result).then(v => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
@@ -135,7 +135,7 @@ conn.once('open', () => {
 
             var vehiclePlate = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVehicle.getFilteredPlate(req.params.filter).then(result => {
+                daoVehicle.getFiltered(req.params.filter, null).then(result => {
                     daoImg.getImages(result).then(v => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
@@ -165,7 +165,7 @@ conn.once('open', () => {
 
             var visitors = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoVisitor.getFilteredDocument(req.params.filter).then(result => {
+                daoVisitor.getFiltered(null, req.params.filter).then(result => {
                     daoImg.getImages(result).then(v => {
                         console.log('1');
                         if (v.length) {
@@ -188,7 +188,7 @@ conn.once('open', () => {
 
             var persons = new Promise((resolve, reject) => {
                 let itemsProcessed = 0;
-                daoPerson.getFilteredDocument(req.params.filter).then(result => {
+                daoPerson.getFiltered(req.params.filter, null).then(result => {
                     daoImg.getImages(result).then(p => {
                         console.log('4');
                         if (p.length) {
@@ -213,6 +213,59 @@ conn.once('open', () => {
         Promise.all(promises).then(data => {
             res.json(filteredData);
         }).catch(err => res.send(err));
+    });
+
+    router.post('/report', (req, res, next) => {
+        var access = new Access(req.body),
+            users = null,
+            people = null,
+            vehicles = null,
+            visitors = null,
+            apartments = null,
+            promises = [];
+
+        if (access.person) {
+            promises.push($person);
+            var $person = new Promise((resolve, reject) => {
+                daoPerson.getFiltered(access.person.cpf, access.person.name).then(result => {
+                    people = result;
+                    resolve();
+                }).catch(err => reject(err));
+            });
+        } else if (access.vehicle) {
+            promises.push($vehicles);
+            var $vehicles = new Promise((resolve, reject) => {
+                daoVehicle.getFiltered(access.vehicle.plate, access.vehicle.brand).then(result => {
+                    vehicles = result;
+                    resolve();
+                }).catch(err => reject(err));
+            });
+        } else if (access.visitor) {
+            promises.push($visitors);
+            var $visitors = new Promise((resolve, reject) => {
+                daoVisitor.getFiltered(access.visitor.name, access.visitor.document).then(result => {
+                    visitors = result;
+                    resolve();
+                }).catch(err => reject(err));
+            });
+        }
+
+        if (access.user && access.user.username) {
+            promises.push($users);
+            daoUser.getFiltered(access.user.username).then(result => {
+                users = result;
+                resolve();
+            }).catch(err => res.send(err));
+        }
+
+        if (access.apartment && (access.apartment.number || access.apartment.complex || access.apartment.floor)) {
+
+        }
+
+        Promise.all(promises).then(data => {
+            daoAccess.getFiltered(access, ).then(a => res.json(a)).catch(err => res.send(err));
+        }).catch(err => res.send(err));
+
     });
 });
 

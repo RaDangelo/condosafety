@@ -8,11 +8,15 @@ const PersonDao = {
     getByDocument(cpf) {
         return Person.findOne({ 'cpf': cpf }).exec();
     },
-    getFilteredDocument(cpf) {
-        return Person.find({ 'cpf': new RegExp(cpf, "i") }).populate('apartment').exec();
-    },
-    getFilteredName(name) {
-        return Person.find({ 'name': new RegExp(name, "i") }).populate('apartment').exec();
+    getFiltered(cpf, name) {
+        var query = {};
+        if (cpf) {
+            query['cpf'] = new RegExp(cpf, "i");
+        }
+        if (name) {
+            query['name'] = new RegExp(name, "i");
+        }
+        return Person.find(query).populate('apartment').exec();
     },
     getById(id) {
         return Person.findById(id).exec();

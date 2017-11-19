@@ -6,11 +6,18 @@ const mongoose = require('mongoose');
 let conn = mongoose.connection;
 
 var Watch = require('../models/watch-control.vo');
-var daoWatch = require('../daos/watch-control.dao');
+var daoWatch = require('../daos/watch-control.dao'),
+    daoUser = require('../daos/user.dao');
 
 conn.once('open', () => {
     router.post('/', (req, res, next) => {
-        daoWatch.getFiltered(new Watch(req.body)).then(w => res.json(w)).catch(err => res.send(err));
+
+        if (req.body.user && req.body.user.username) {
+            daoUser.getFiltered(req.body.user.username).then((users) => {
+                daoWatch.getFiltered(req.body, users).then(w => res.json(w)).catch(err => res.send(err));
+            }).catch(err => res.send(err));
+        }
+
     });
 });
 
