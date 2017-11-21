@@ -17,7 +17,7 @@ const WatchControlDao = {
             query['action'] = watch.action;
         }
         console.log(query);
-        return Watch.find(query).populate('user').exec();
+        return Watch.find(query).populate('user', 'username').exec();
     },
     saveWatch(watch) {
         return new Promise((resolve, reject) => {

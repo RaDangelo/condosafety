@@ -33,14 +33,16 @@
                     />
                 </mat-input-container>
                 <mat-input-container id="input-complex" class="mat-block" flex-gt-sm>
-                    <input type="text" disabled [value]="selected?.apartment?.complex" matInput placeholder="Bloco" />
+                    <input type="text" [disabled]="!selected || !selected.document" [value]="selected?.apartment?.complex" (change)="selected.apartment.complex=$event.target.value"
+                        matInput placeholder="Bloco" />
                 </mat-input-container>
                 <mat-input-container id="input-cpf" class="mat-block" flex-gt-sm>
                     <input type="text" disabled [value]="selected?.plate || selected?.cpf || selected?.document" matInput [placeholder]="selected && selected.plate ? 'Placa' : 'CPF'"
                     />
                 </mat-input-container>
                 <mat-input-container id="input-apt" class="mat-block" flex-gt-sm>
-                    <input type="text" disabled [value]="selected?.apartment?.number" matInput placeholder="Apto" />
+                    <input type="text" [disabled]="!selected || !selected.document" [value]="selected?.apartment?.number" (change)="selected.apartment.number=$event.target.value"
+                        matInput placeholder="Apto" />
                 </mat-input-container>
             </div>
 

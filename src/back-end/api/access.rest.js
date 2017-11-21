@@ -46,8 +46,6 @@ conn.once('open', () => {
     });
 
     router.post('/', function (req, res, next) {
-        // CHECK: 
-        // enviando apto sem ID e username tmb possivelmente 
         var access = new Access(req.body);
         daoUser.getByUsername(req.body.user.username).then(user => {
             if (!user) {
@@ -57,7 +55,33 @@ conn.once('open', () => {
                 return next(err);
             } else {
                 access.user = user;
-                daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
+                if (access.vehicle) {
+                    daoApartment.getByVehicle(access.vehicle._id).then(apt => {
+                        if (apt) {
+                            access.apartment = apt;
+                            daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
+                        } else {
+                            console.log('Veículo não associado a nenhum apartamento!');
+                            var err = new Error('Veículo não permitido!');
+                            err.status = 500;
+                            return next(err);
+                        }
+                    }).catch(err => res.send(err));
+                } else if (access.visitor) {
+                    daoApartment.getFiltered(access.apartment).then(apt => {
+                        if (apt) {
+                            access.apartment = apt;
+                            daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
+                        } else {
+                            daoApartment.saveApartment(new Apartment(access.apartment)).then(data => {
+                                access.apartment = data;
+                                daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
+                            }).catch(err => res.send(err));
+                        }
+                    })
+                } else {
+                    daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
+                }
             }
         }).catch(err => next(err));
     });
@@ -218,7 +242,7 @@ conn.once('open', () => {
     });
 
     router.post('/report', (req, res, next) => {
-        var access = new Access(req.body),
+        var access = req.body,
             users = null,
             people = null,
             vehicles = null,
@@ -226,46 +250,56 @@ conn.once('open', () => {
             apartments = null,
             promises = [];
 
+        console.log(access);
         if (access.person) {
-            promises.push($person);
             var $person = new Promise((resolve, reject) => {
                 daoPerson.getFiltered(access.person.cpf, access.person.name).then(result => {
                     people = result;
+                    console.log(result);
                     resolve();
                 }).catch(err => reject(err));
             });
+            promises.push($person);
         } else if (access.vehicle) {
-            promises.push($vehicles);
             var $vehicles = new Promise((resolve, reject) => {
                 daoVehicle.getFiltered(access.vehicle.plate, access.vehicle.brand).then(result => {
                     vehicles = result;
+                    console.log(result);
                     resolve();
                 }).catch(err => reject(err));
             });
+            promises.push($vehicles);
         } else if (access.visitor) {
-            promises.push($visitors);
             var $visitors = new Promise((resolve, reject) => {
                 daoVisitor.getFiltered(access.visitor.name, access.visitor.document).then(result => {
                     visitors = result;
+                    console.log(result);
                     resolve();
                 }).catch(err => reject(err));
             });
+            promises.push($visitors);
         }
 
         if (access.user && access.user.username) {
+            var $users = new Promise((resolve, reject) => {
+                daoUser.getFiltered(access.user.username).then(result => {
+                    users = result;
+                    console.log(result);
+                    resolve();
+                }).catch(err => reject(err));
+            });
             promises.push($users);
-            daoUser.getFiltered(access.user.username).then(result => {
-                users = result;
-                resolve();
-            }).catch(err => reject(err));
         }
 
         if (access.apartment && (access.apartment.number || access.apartment.complex || access.apartment.floor)) {
+            var $apartments = new Promise((resolve, reject) => {
+                daoApartment.getFiltered(access.apartment).then(result => {
+                    apartments = result;
+                    console.log(result);
+                    resolve();
+                }).catch(err => reject(err));
+            });
             promises.push($apartments);
-            daoApartment.getFiltered(access.apartment).then(result => {
-                apartments = result;
-                resolve();
-            }).catch(err => reject(err));
         }
 
         Promise.all(promises).then(data => {

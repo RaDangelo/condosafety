@@ -16,7 +16,8 @@ const PersonDao = {
         if (name) {
             query['name'] = new RegExp(name, "i");
         }
-        return Person.find(query).populate('apartment').exec();
+        console.log(query);
+        return Person.find(query).populate('apartment', 'complex number').exec();
     },
     getById(id) {
         return Person.findById(id).exec();

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Rx';
 
 import {
   PersonModel, UserModel, VisitorModel, VehicleModel, MessagesModel, VideoInputModel,
-  AccessModel, AccessType, AccessAction
+  AccessModel, AccessType, AccessAction, ApartmentModel
 } from '../../models';
 import { PersonServiceInterface, AccessServiceInterface } from '../../interfaces';
 import { ElectronService } from 'ngx-electron';
@@ -123,6 +123,9 @@ export class MonitoringComponent implements AfterViewInit {
   // ???????? mexer
   selectedItem(data: any, i: number) {
     this.selected = data;
+    if (!this.selected.apartment) {
+      this.selected.apartment = new ApartmentModel();
+    }
   }
 
   filterData() {
@@ -169,12 +172,14 @@ export class MonitoringComponent implements AfterViewInit {
             const error = new MessagesModel();
             error.severity = MessagesModel.SEVERITIES.ERROR;
             this.dialogBehavior.showErrorMessage(error);
+            this.access = new AccessModel();
           }
         },
         (error: MessagesModel) => {
           console.log('Ocorreu um erro: ' + error.message);
           error.severity = MessagesModel.SEVERITIES.ERROR;
           this.dialogBehavior.showErrorMessage(error);
+          this.access = new AccessModel();
         });
     } else {
       const error = new MessagesModel();
@@ -237,7 +242,7 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   callAccessService() {
-    this.accessService.insertAccess(this.access)
+    this.accessService.insertAccess(this.access).finally(() => this.access = new AccessModel())
       .subscribe((data) => {
         console.log(data);
         this.access.action === AccessAction.ALLOW ? alert('Entrada permitida! ') : alert('Entrada negada! ');
@@ -264,6 +269,10 @@ export class MonitoringComponent implements AfterViewInit {
       this.access.visitor = new VisitorModel(this.selected);
       this.access.visitor.picture = null;
       this.access.type = AccessType.VISITOR;
+    }
+
+    if (this.selected.apartment) {
+      this.access.apartment = this.selected.apartment;
     }
   }
 

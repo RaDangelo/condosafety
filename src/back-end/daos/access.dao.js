@@ -40,8 +40,8 @@ const AccessDao = {
             query['type'] = access.type;
         }
         console.log(query);
-        return Access.find(query).populate('user', vehicles ? 'vehicle' : visitors ? 'visitor' : 'person',
-            'apartment').exec();
+        return Access.find(query).populate('user', 'username').populate('vehicle', 'brand plate').populate('visitor', 'name document').
+            populate('person', 'name cpf').populate('apartment', 'complex number').exec();
     },
 }
 
