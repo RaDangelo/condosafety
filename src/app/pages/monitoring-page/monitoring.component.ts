@@ -80,6 +80,7 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   private getDevices(infos) {
+    console.log(infos);
     for (const i of infos) {
       if (i.kind === 'videoinput') {
         const vid = new VideoInputModel();

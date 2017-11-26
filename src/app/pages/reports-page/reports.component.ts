@@ -83,5 +83,12 @@ export class ReportsComponent {
   clearFilters() {
     this.watchFilter = new WatchControlModel();
     this.accessFilter = new AccessModel();
+    this.username = '';
+    this.date = null;
+  }
+
+  changeOption() {
+    this.clearFilters();
+    this.results = [];
   }
 }

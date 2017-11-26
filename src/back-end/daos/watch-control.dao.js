@@ -7,7 +7,7 @@ const WatchControlDao = {
     },
     getFiltered(watch, users) {
         var query = {};
-        if (users) {
+        if (users && users.length) {
             query['user'] = { $in: users };
         }
         if (watch.date) {

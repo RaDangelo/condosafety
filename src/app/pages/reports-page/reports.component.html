@@ -1,7 +1,7 @@
 <div class="page-template">
 
   <div class="rb-container">
-    <mat-radio-group [(ngModel)]="option">
+    <mat-radio-group [(ngModel)]="option" (change)="changeOption()">
       <mat-radio-button value="0">Acessos ao Sistema</mat-radio-button>
       <mat-radio-button value="1">Acessos ao Condomínio</mat-radio-button>
     </mat-radio-group>
