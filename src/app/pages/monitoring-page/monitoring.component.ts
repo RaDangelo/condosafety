@@ -13,7 +13,7 @@ import { ElectronService } from 'ngx-electron';
 import { ConfigService } from '../../config.service';
 import * as resemble from '../../utils/resemblejs/resemble';
 import { ImageManipulation } from '../../utils/image-manipulation';
-import * as dat from 'dat-gui';
+// import * as dat from 'dat-gui';
 import * as globals from '../../globals';
 
 declare var $: any;
@@ -40,8 +40,14 @@ export class MonitoringComponent implements AfterViewInit {
   frontCamera: any;
   displayFrontCamera = false;
   displayComparison = false;
+  displayForceButton = false;
+  displayMatchPercentage = false;
   pictureTimer = 10;
   picture: any;
+  photob64: string;
+
+  comparisonClass = '';
+  matchPercentage = 0;
 
   @ViewChild('video0') video0: ElementRef;
   @ViewChild('video1') video1: ElementRef;
@@ -106,7 +112,8 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   private getImageFromPicture(context: any) {
-    return ImageManipulation.fromImageToFile(ImageManipulation.fromCanvasToImage(context), 'image-to-compare.png');
+    this.photob64 = ImageManipulation.fromCanvasToImage(context);
+    return ImageManipulation.fromImageToFile(this.photob64, 'image-to-compare.png');
   }
 
   private compareImages(picture: any): Observable<any> {
@@ -198,29 +205,78 @@ export class MonitoringComponent implements AfterViewInit {
     setTimeout(this.callTracker, 1000);
 
     setTimeout(() => {
+      $('.flash').css('z-index', '5');
+      $('.flash').effect('highlight', { color: 'white' }, 'slow');
       this.picture = this.getImageFromPicture(this.takePicture());
-      this.displayFrontCamera = false;
-      // this.beginComparison();
 
-      // show 2 divs side by side on html
-
-      // set 2 divs opacity 
-
-      this.compareImages(this.picture).subscribe((data) => {
-        if (data.misMatchPercentage > 20) {
-          this.denyAccess();
+      this.compareImages(this.picture).finally(() => {
+        $('.flash').css('z-index', '-2');
+        this.displayFrontCamera = false;
+        this.beginComparison();
+      }).subscribe((data) => {
+        this.matchPercentage = 100 - parseInt(data.misMatchPercentage, 10);
+        if (this.matchPercentage < 80) {
+          this.comparisonClass = 'access-denied';
         } else {
+          this.comparisonClass = 'access-allowed';
           this.allowAccess();
         }
       });
-    }, 10000);
+    }, 11000);
   }
 
   private beginComparison() {
+    $('.left-container, .right-container').css('opacity', '0.4');
     this.displayComparison = true;
-    // set side by side
-    $('#imageTwo').css('opacity', '0.5');
+    this.beginAnimation();
+  }
 
+  private beginAnimation() {
+    setTimeout(() => {
+      $('.comparison-container > img').addClass('animate');
+    }, 500);
+    setTimeout(() => {
+      this.mergeImages();
+    }, 2000);
+  }
+
+  private mergeImages() {
+    $('#imageOne').addClass('animate-opacity');
+    setTimeout(() => {
+      this.endAnimation();
+    }, 3000);
+  }
+
+  private endAnimation() {
+    $('.comparison-container > img').addClass(this.comparisonClass);
+    $('.comparison-container > .match-percentage').addClass(this.comparisonClass);
+    this.displayMatchPercentage = true;
+    if (this.matchPercentage < 80) {
+      this.displayForceButton = true;
+    }
+    setTimeout(() => {
+      this.endComparison();
+    }, 10000);
+  }
+
+  private endComparison() {
+    $('.comparison-container > img').removeClass(this.comparisonClass);
+    $('.left-container, .right-container').css('opacity', '1');
+    this.displayForceButton = false;
+    this.displayComparison = false;
+    this.displayMatchPercentage = false;
+  }
+
+  forceAccess(action: number) {
+    if (action === AccessAction.ALLOW) {
+      this.access.observation = 'Permissão de entrada forçada por porteiro ' + this.access.user.username +
+        ' após reconhecimento facial falho!';
+      this.allowAccess();
+    } else {
+      this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida!';
+      this.denyAccess();
+    }
+    this.endComparison();
   }
 
   private allowAccess() {
@@ -235,9 +291,10 @@ export class MonitoringComponent implements AfterViewInit {
 
   private startTimer(timer: number) {
     this.pictureTimer = timer;
+    console.log(this.pictureTimer);
     if (timer > 0) {
       setTimeout(() => {
-        this.startTimer(timer--);
+        this.startTimer(timer - 1);
       }, 1000);
     }
   }

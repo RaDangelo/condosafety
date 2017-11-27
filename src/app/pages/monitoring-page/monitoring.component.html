@@ -4,16 +4,16 @@
             <label class="title">Condosafety</label>
         </div>
         <div class="left-body">
-            <!-- <div [style.display]="displayFrontCamera ? 'inline-block' : 'none'" class="card-timer">{{pictureTimer}}</div> -->
-            <video [style.display]="displayFrontCamera ? 'inline-block' : 'none'" id="frontCamera" width="320" height="240" preload autoplay
-                loop muted class="video"></video>
-            <canvas [style.display]="displayFrontCamera ? '-webkit-box' : 'none'" id="canvas" width="320" height="240"></canvas>
+            <div class="front-camera-container" [style.z-index]="displayFrontCamera ? '3' : '-1'">
+                <video [style.display]="displayFrontCamera ? 'inline-block' : 'none'" id="frontCamera" width="320" height="240" preload autoplay
+                    loop muted class="video"></video>
+                <div [style.display]="displayFrontCamera ? 'block' : 'none'" class="card-timer" [style.z-index]="displayFrontCamera ? '3' : '-1'">{{pictureTimer}}</div>
+                <canvas [style.display]="displayFrontCamera ? '-webkit-box' : 'none'" id="canvas" width="320" height="240"></canvas>
+                <div [style.display]="displayFrontCamera ? 'block' : 'none'" class="flash"></div>
+            </div>
             <div class="person-img">
                 <img *ngIf="selected && selected.picture && !displayFrontCamera" [src]="selected.picture" />
             </div>
-
-            <!-- <img *ngIf="selected && selected.picture && displayComparison" #imageOne width="320" height="240" [src]="selected.picture" />
-            <img *ngIf="picture && displayComparison" #imageTwo width="320" height="240"/> -->
 
             <div class="person-search">
                 <input type="text" [(ngModel)]="filter" (keypress)="onEnterPress($event)" />
@@ -56,8 +56,8 @@
                     <input type="password" matInput placeholder="Senha de liberação" [(ngModel)]="accessPassword" />
                 </mat-input-container>
 
-                <button [disabled]="!accessPassword" class="access-btn" id="allow-access-btn" (click)="setAccess(2)">Permitir acesso</button>
-                <button [disabled]="!accessPassword" class="access-btn" id="deny-access-btn" (click)="setAccess(1)">Impedir acesso</button>
+                <button [disabled]="!accessPassword" class="access-btn allow-access" id="allow-access-btn" (click)="setAccess(2)">Permitir acesso</button>
+                <button [disabled]="!accessPassword" class="access-btn deny-access" id="deny-access-btn" (click)="setAccess(1)">Impedir acesso</button>
             </div>
 
         </div>
@@ -101,6 +101,15 @@
                 </mat-select>
             </mat-form-field>
         </div>
+    </div>
+
+    <div *ngIf="displayComparison" class="comparison-container">
+        <img *ngIf="selected && selected.picture" id="imageOne" width="320" height="240" [src]="selected.picture" />
+        <img *ngIf="photob64" id="imageTwo" width="320" height="240" [src]="photob64" />
+        <div [style.display]="displayMatchPercentage ? 'block' : 'none'" class="match-percentage">{{matchPercentage | number}} %</div>
+        <div [style.display]="displayForceButton ? 'block' : 'none'" class="btn-force-access allow-access" (click)="forceAccess(2)">✓</div>
+        <div [style.display]="displayForceButton ? 'block' : 'none'" class="btn-force-access deny-access" (click)="forceAccess(1)">✗</div>
+
     </div>
 </div>
 

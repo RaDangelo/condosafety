@@ -46,6 +46,7 @@ module.exports = {
     ],
     "scripts": [
       "script-loader!./node_modules\\jquery\\dist\\jquery.js",
+      "script-loader!./node_modules\\jquery-ui-dist\\jquery-ui.min.js",
       "script-loader!./node_modules\\bootstrap\\dist\\js\\bootstrap.min.js",
       "script-loader!./node_modules\\toastr\\build\\toastr.min.js"
     ],
