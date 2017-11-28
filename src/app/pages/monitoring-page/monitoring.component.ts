@@ -1,4 +1,4 @@
-import { MessageDialogBehavior } from '../../behaviors';
+import { MessageDialogBehavior, ImageBehavior } from '../../behaviors';
 import * as path from 'path';
 import { Stream } from 'stream';
 import { Component, ViewChild, ElementRef, ViewChildren, AfterViewInit } from '@angular/core';
@@ -13,12 +13,9 @@ import { ElectronService } from 'ngx-electron';
 import { ConfigService } from '../../config.service';
 import * as resemble from '../../utils/resemblejs/resemble';
 import { ImageManipulation } from '../../utils/image-manipulation';
-// import * as dat from 'dat-gui';
 import * as globals from '../../globals';
 
 declare var $: any;
-declare var document: any;
-declare var tracking: any;
 
 @Component({
   selector: 'monitoring',
@@ -37,14 +34,14 @@ export class MonitoringComponent implements AfterViewInit {
   videos: Array<ElementRef> = new Array<ElementRef>();
   videoInputs: Array<VideoInputModel> = new Array<VideoInputModel>();
   selectedVideos: Array<VideoInputModel> = new Array<VideoInputModel>();
-  frontCamera: any;
-  displayFrontCamera = false;
   displayComparison = false;
   displayForceButton = false;
   displayMatchPercentage = false;
-  pictureTimer = 10;
+  forcedAccess = false;
+
   picture: any;
   photob64: string;
+  photoParams = { autoStart: true, takePicture: false };
 
   comparisonClass = '';
   matchPercentage = 0;
@@ -55,34 +52,27 @@ export class MonitoringComponent implements AfterViewInit {
   @ViewChild('video3') video3: ElementRef;
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior,
-    private electron: ElectronService, private config: ConfigService) {
+    private electron: ElectronService, private config: ConfigService, private imageBehavior: ImageBehavior) {
     if (this.config.isElectron) {
       this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
     }
+    this.imageBehavior.init();
+    this.imageBehavior.visitorImage$.subscribe(this.visitorImage.bind(this));
   }
 
   ngAfterViewInit() {
     this.lookForDevices();
-    this.getFrontCamera();
   }
 
-  private getFrontCamera() {
-    this.frontCamera = document.getElementById('frontCamera');
-    this.setFrontCamera();
-  }
-
-  private setFrontCamera() {
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => {
-        this.frontCamera.src = window.URL.createObjectURL(stream);
-        this.frontCamera.play();
-      });
+  private visitorImage(params: any) {
+    this.photoParams = params;
+    $('#photo-modal').modal('show');
   }
 
   private lookForDevices() {
     this.videos = [this.video0, this.video1, this.video2, this.video3];
     navigator.mediaDevices.enumerateDevices()
-      .then(this.getDevices.bind(this))
+      .then(this.getDevices.bind(this));
   }
 
   private getDevices(infos) {
@@ -105,15 +95,6 @@ export class MonitoringComponent implements AfterViewInit {
         nv.src = window.URL.createObjectURL(stream);
         nv.play();
       });
-  }
-
-  private takePicture() {
-    return ImageManipulation.drawCameraImage(this.frontCamera, true);
-  }
-
-  private getImageFromPicture(context: any) {
-    this.photob64 = ImageManipulation.fromCanvasToImage(context);
-    return ImageManipulation.fromImageToFile(this.photob64, 'image-to-compare.png');
   }
 
   private compareImages(picture: any): Observable<any> {
@@ -197,21 +178,14 @@ export class MonitoringComponent implements AfterViewInit {
     }
   }
 
-  private recognizePerson() {
-    this.displayFrontCamera = true;
-
-    this.startTimer(10);
-
-    setTimeout(this.callTracker, 1000);
-
-    setTimeout(() => {
-      $('.flash').css('z-index', '5');
-      $('.flash').effect('highlight', { color: 'white' }, 'slow');
-      this.picture = this.getImageFromPicture(this.takePicture());
-
+  private afterPhotoTaken(pictures: any) {
+    if (pictures.auto) {
+      this.picture = pictures.picture;
+      this.photob64 = pictures.b64;
+      this.photoParams = { autoStart: true, takePicture: false };
       this.compareImages(this.picture).finally(() => {
         $('.flash').css('z-index', '-2');
-        this.displayFrontCamera = false;
+        $('#photo-modal').modal('hide');
         this.beginComparison();
       }).subscribe((data) => {
         this.matchPercentage = 100 - parseInt(data.misMatchPercentage, 10);
@@ -222,7 +196,16 @@ export class MonitoringComponent implements AfterViewInit {
           this.allowAccess();
         }
       });
-    }, 11000);
+    } else {
+      $('.flash').css('z-index', '-2');
+      $('#photo-modal').modal('hide');
+      this.imageBehavior.visitorImageResult$.emit(pictures);
+    }
+  }
+
+  private recognizePerson() {
+    this.photoParams = { autoStart: true, takePicture: true };
+    $('#photo-modal').modal('show');
   }
 
   private beginComparison() {
@@ -256,10 +239,14 @@ export class MonitoringComponent implements AfterViewInit {
     }
     setTimeout(() => {
       this.endComparison();
+      this.forcedAccess = false;
     }, 10000);
   }
 
   private endComparison() {
+    if (this.matchPercentage < 80 && !this.forcedAccess) {
+      this.denyAccess();
+    }
     $('.comparison-container > img').removeClass(this.comparisonClass);
     $('.left-container, .right-container').css('opacity', '1');
     this.displayForceButton = false;
@@ -268,6 +255,7 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   forceAccess(action: number) {
+    this.forcedAccess = true;
     if (action === AccessAction.ALLOW) {
       this.access.observation = 'Permissão de entrada forçada por porteiro ' + this.access.user.username +
         ' após reconhecimento facial falho!';
@@ -287,16 +275,6 @@ export class MonitoringComponent implements AfterViewInit {
   private denyAccess() {
     this.access.action = AccessAction.DENY;
     this.callAccessService();
-  }
-
-  private startTimer(timer: number) {
-    this.pictureTimer = timer;
-    console.log(this.pictureTimer);
-    if (timer > 0) {
-      setTimeout(() => {
-        this.startTimer(timer - 1);
-      }, 1000);
-    }
   }
 
   callAccessService() {
@@ -343,37 +321,4 @@ export class MonitoringComponent implements AfterViewInit {
       this.filterData();
     }
   }
-
-  private callTracker() {
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-
-    const tracker = new tracking.ObjectTracker('face');
-    tracker.setInitialScale(4);
-    tracker.setStepSize(2);
-    tracker.setEdgesDensity(0.1);
-
-
-    tracking.track('#frontCamera', tracker, { camera: true });
-    tracker.on('track', function (event) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      event.data.forEach(function (rect) {
-        context.strokeStyle = '#a64ceb';
-        context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-        context.font = '11px Helvetica';
-        context.fillStyle = '#fff';
-        context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-        context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-        globals.GlobalVars.imgX = rect.x;
-        globals.GlobalVars.imgY = rect.y;
-        globals.GlobalVars.imgWidth = rect.width;
-        globals.GlobalVars.imgHeight = rect.height;
-
-      });
-    });
-    // const gui = new dat.GUI();
-    // gui.add(tracker, 'edgesDensity', 0.1, 0.5).step(0.01);
-    // gui.add(tracker, 'initialScale', 1.0, 10.0).step(0.1);
-    // gui.add(tracker, 'stepSize', 1, 5).step(0.1);
-  };
 }

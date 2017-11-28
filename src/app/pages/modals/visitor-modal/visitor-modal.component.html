@@ -31,6 +31,7 @@
 
                     <div [style.display]="!disableFields ? 'block' : 'none'" class="upload">
                         <upload [upload]="visitorImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
+                        <div (click)="takePicture()" class="glyphicon glyphicon-camera"> </div>
                     </div>
 
                     <div class="btns-visitor">

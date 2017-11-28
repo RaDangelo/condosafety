@@ -18,7 +18,13 @@ export class UploadComponent implements OnInit {
     uploader: FileUploader;
 
     @Input() set upload(upload: any) {
-        if (upload && upload.execute && this.uploader && this.uploader.queue && this.uploader.queue.length) {
+        if (upload && upload.execute && this.uploader && this.uploader.queue) {
+            if (!this.uploader.queue.length) {
+                if (upload.picture) {
+                    const file = new FileItem(this.uploader, upload.picture, null);
+                    this.uploader.queue.push(file);
+                }
+            }
             this.uploader.queue[0].url = this.restService.getBaseUrl() + '/image/' + upload.id;
             this.uploadFile();
         }

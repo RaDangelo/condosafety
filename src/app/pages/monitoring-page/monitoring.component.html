@@ -4,13 +4,13 @@
             <label class="title">Condosafety</label>
         </div>
         <div class="left-body">
-            <div class="front-camera-container" [style.z-index]="displayFrontCamera ? '3' : '-1'">
+            <!-- <div class="front-camera-container" [style.z-index]="displayFrontCamera ? '3' : '-1'">
                 <video [style.display]="displayFrontCamera ? 'inline-block' : 'none'" id="frontCamera" width="320" height="240" preload autoplay
                     loop muted class="video"></video>
                 <div [style.display]="displayFrontCamera ? 'block' : 'none'" class="card-timer" [style.z-index]="displayFrontCamera ? '3' : '-1'">{{pictureTimer}}</div>
                 <canvas [style.display]="displayFrontCamera ? '-webkit-box' : 'none'" id="canvas" width="320" height="240"></canvas>
                 <div [style.display]="displayFrontCamera ? 'block' : 'none'" class="flash"></div>
-            </div>
+            </div> -->
             <div class="person-img">
                 <img *ngIf="selected && selected.picture && !displayFrontCamera" [src]="selected.picture" />
             </div>
@@ -33,7 +33,7 @@
                     />
                 </mat-input-container>
                 <mat-input-container id="input-complex" class="mat-block" flex-gt-sm>
-                    <input type="text" [disabled]="!selected || !selected.document" [value]="selected?.apartment?.complex" (change)="selected.apartment.complex=$event.target.value"
+                    <input type="text" [disabled]="!selected || !selected.document" [value]="selected?.apartment?.complex || ''" (change)="selected.apartment.complex=$event.target.value"
                         matInput placeholder="Bloco" />
                 </mat-input-container>
                 <mat-input-container id="input-cpf" class="mat-block" flex-gt-sm>
@@ -41,7 +41,7 @@
                     />
                 </mat-input-container>
                 <mat-input-container id="input-apt" class="mat-block" flex-gt-sm>
-                    <input type="text" [disabled]="!selected || !selected.document" [value]="selected?.apartment?.number" (change)="selected.apartment.number=$event.target.value"
+                    <input type="text" [disabled]="!selected || !selected.document" [value]="selected?.apartment?.number || ''" (change)="selected.apartment.number=$event.target.value"
                         matInput placeholder="Apto" />
                 </mat-input-container>
             </div>
@@ -113,4 +113,5 @@
     </div>
 </div>
 
+<photo-modal [params]="photoParams" (imageReady)="afterPhotoTaken($event)"> </photo-modal>
 <visitor-modal> </visitor-modal>

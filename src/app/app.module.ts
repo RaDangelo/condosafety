@@ -32,7 +32,8 @@ import {
 
 import {
   MonitoringComponent, LoginPageComponent, PeopleComponent, ReportGridComponent, AdministrationComponent,
-  ReportsComponent, NavbarComponent, PersonTypeModalComponent, AfkModalComponent, UploadComponent, ImageComponent, VisitorComponent
+  ReportsComponent, NavbarComponent, PersonTypeModalComponent, AfkModalComponent, UploadComponent, ImageComponent,
+  VisitorComponent, PhotoComponent
 } from './pages/';
 import { MessageDialogBehavior, ImageBehavior } from './behaviors';
 
@@ -56,7 +57,8 @@ import { PhonePipe, CpfPipe } from '../app/pipes';
     AfkModalComponent,
     ImageComponent,
     VisitorComponent,
-    ReportGridComponent
+    ReportGridComponent,
+    PhotoComponent
   ],
   imports: [
     BrowserModule,

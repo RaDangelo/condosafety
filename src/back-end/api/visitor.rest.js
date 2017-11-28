@@ -24,7 +24,8 @@ conn.once('open', () => {
                         err.status = 500;
                         return next(err);
                     } else {
-                        daoVisitor.saveVisitor(new Visitor(req.body)).then(res.json({ status: 200 })).catch(err => res.send(err));
+                        let visitor = new Visitor(req.body);
+                        daoVisitor.saveVisitor(visitor).then(res.json(visitor._id)).catch(err => res.send(err));
                     }
                 }).catch(err => next(err));
             } else {
@@ -34,7 +35,7 @@ conn.once('open', () => {
                 v.documentType = req.param('documentType');
                 v.obs = req.param('obs');
 
-                daoVisitor.saveVisitor(v).then(res.json({ status: 200 })).catch(err => res.send(err));
+                daoVisitor.saveVisitor(v).then(res.json(v._id)).catch(err => res.send(err));
             }
         }).catch(err => next(err));
     });

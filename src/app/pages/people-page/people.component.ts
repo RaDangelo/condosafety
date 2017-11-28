@@ -22,6 +22,9 @@ export class PeopleComponent {
   _types: PersonTypeModel[];
   personImageUpload: any;
   comboUtils: ComboUtils = new ComboUtils();
+  photoParams = { autoStart: false, takePicture: false };
+  picture: any;
+
 
   get types() {
     if (this._types) {
@@ -60,6 +63,18 @@ export class PeopleComponent {
     if (this.config.isElectron) {
       this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
     }
+  }
+
+  takePicture() {
+    this.photoParams = { autoStart: false, takePicture: true };
+    $('#photo-modal').modal('show');
+  }
+
+  private afterPhotoTaken(pictures: any) {
+    $('.flash').css('z-index', '-2');
+    $('#photo-modal').modal('hide');
+    this.picture = pictures.picture;
+    this.photoParams = { autoStart: false, takePicture: false };
   }
 
   changePersonStatus() {
@@ -142,7 +157,9 @@ export class PeopleComponent {
     this.person.picture = null;
     this.personService.save(this.person)
       .subscribe((id) => {
-        this.personImageUpload = { execute: true, id: id };
+        this.personImageUpload = {
+          execute: true, id: id, picture: this.picture
+        };
       },
       (error: MessagesModel) => {
         console.log('Ocorreu um erro: ' + error.message);

@@ -67,6 +67,7 @@
 
             <div [style.display]="!disableFields ? 'block' : 'none'" class="upload">
                 <upload [upload]="personImageUpload" (uploadFinished)="uploadFinished($event)"> </upload>
+                <div (click)="takePicture()" class="glyphicon glyphicon-camera"> </div>
             </div>
         </div>
 
@@ -95,3 +96,4 @@
 </div>
 
 <person-type-modal [types]="types" (getTypes)="getTypes($event)"> </person-type-modal>
+<photo-modal [params]="photoParams" (imageReady)="afterPhotoTaken($event)"> </photo-modal>

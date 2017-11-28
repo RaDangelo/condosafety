@@ -1,0 +1,13 @@
+<div id="photo-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+
+        <div class="front-camera-container">
+            <video id="frontCamera" width="320" height="240" preload autoplay loop muted class="video"></video>
+            <div [style.display]="params.autoStart ? 'block' : 'none'" class="card-timer">{{pictureTimer}}</div>
+            <canvas id="canvas" width="320" height="240"></canvas>
+            <div class="flash"></div>
+            <div (click)="takePicture()" [style.display]="!params.autoStart ? 'block' : 'none'" class="glyphicon glyphicon-camera"> </div>
+        </div>
+
+    </div>
+</div>

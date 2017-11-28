@@ -16,6 +16,8 @@ export class VisitorComponent {
     visitor: VisitorModel;
     _visitors: VisitorModel[];
     visitorImageUpload: any;
+    photoParams = { autoStart: false, takePicture: false };
+    picture: any;
 
     get visitors() {
         if (this._visitors) {
@@ -30,6 +32,7 @@ export class VisitorComponent {
         private imageBehavior: ImageBehavior) {
         this.visitor = new VisitorModel();
         // this.getVisitors();
+        this.imageBehavior.visitorImageResult$.subscribe(this.afterPhotoTaken.bind(this));
     }
 
     newVisitor() {
@@ -37,6 +40,17 @@ export class VisitorComponent {
         this.disableFields = false;
     }
 
+    takePicture() {
+        this.photoParams = { autoStart: false, takePicture: true };
+        this.imageBehavior.visitorImage$.emit(this.photoParams);
+        $('#visitor-modal').modal('hide');
+    }
+
+    private afterPhotoTaken(pictures: any) {
+        $('#visitor-modal').modal('show');
+        this.picture = pictures.picture;
+        this.photoParams = { autoStart: false, takePicture: false };
+    }
 
     // private getVisitors() {
     //     this.visitorService.getList()
@@ -63,7 +77,7 @@ export class VisitorComponent {
         this.visitor.picture = null;
         this.visitorService.save(this.visitor)
             .subscribe((id) => {
-                this.visitorImageUpload = { execute: true, id: id };
+                this.visitorImageUpload = { execute: true, id: id, picture: this.picture };
                 console.log('Visitante cadastrado com sucesso! ');
                 alert('Visitante cadastrado com sucesso! ');
             },
@@ -73,11 +87,13 @@ export class VisitorComponent {
                 this.dialogBehavior.showErrorMessage(error);
             },
             () => {
+                this.visitor = new VisitorModel();
+                this.disableFields = true;
             });
     }
 
     uploadFinished() {
-        this.visitorImageUpload = { execute: false, id: '' };
+        this.visitorImageUpload = { execute: false, id: '', picture: null };
         // this.getVisitors();
     }
 
