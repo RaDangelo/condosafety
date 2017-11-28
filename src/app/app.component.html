@@ -1,4 +1,4 @@
-<div [class.fullScreenBg]="!route.isActive('/', true)">
+<div [class.fullScreenBg]="!route.isActive('/', true)" [class.loginScreenBg]="route.isActive('/', true)">
     <div style="width: 100%;" *ngIf="!route.isActive('/', true)">
         <navbar></navbar>
     </div>

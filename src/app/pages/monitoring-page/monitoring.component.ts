@@ -53,10 +53,10 @@ export class MonitoringComponent implements AfterViewInit {
 
   constructor(private accessService: AccessServiceInterface, private dialogBehavior: MessageDialogBehavior,
     private electron: ElectronService, private config: ConfigService, private imageBehavior: ImageBehavior) {
+    $('body').css('background-color', '#c2c2c2');
     if (this.config.isElectron) {
       this.electron.remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
     }
-    this.imageBehavior.init();
     this.imageBehavior.visitorImage$.subscribe(this.visitorImage.bind(this));
   }
 
@@ -193,7 +193,6 @@ export class MonitoringComponent implements AfterViewInit {
           this.comparisonClass = 'access-denied';
         } else {
           this.comparisonClass = 'access-allowed';
-          this.allowAccess();
         }
       });
     } else {
@@ -244,8 +243,16 @@ export class MonitoringComponent implements AfterViewInit {
   }
 
   private endComparison() {
-    if (this.matchPercentage < 80 && !this.forcedAccess) {
-      this.denyAccess();
+    if (!this.forcedAccess) {
+      if (this.matchPercentage < 80) {
+        this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = '
+          + this.matchPercentage + '%';
+        this.denyAccess();
+      } else {
+        this.access.observation = 'Permissão de entrada forçada por porteiro ' + this.access.user.username +
+          ' após reconhecimento facial falho!';
+        this.allowAccess();
+      }
     }
     $('.comparison-container > img').removeClass(this.comparisonClass);
     $('.left-container, .right-container').css('opacity', '1');
@@ -261,7 +268,7 @@ export class MonitoringComponent implements AfterViewInit {
         ' após reconhecimento facial falho!';
       this.allowAccess();
     } else {
-      this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida!';
+      this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = ' + this.matchPercentage + '%';
       this.denyAccess();
     }
     this.endComparison();

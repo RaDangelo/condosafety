@@ -90,8 +90,8 @@ export class PhotoComponent implements AfterViewInit {
 
     private setFrontCamera() {
         this.frontCamera = document.getElementById('frontCamera');
-        console.log(this.videoInputs[1].id);
-        const media: MediaTrackConstraints = { deviceId: this.videoInputs[1].id };
+        console.log(this.videoInputs[0].id);
+        const media: MediaTrackConstraints = { deviceId: this.videoInputs[0].id };
         navigator.mediaDevices.getUserMedia({ video: media })
             .then(stream => {
                 this.frontCamera.src = window.URL.createObjectURL(stream);

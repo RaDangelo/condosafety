@@ -31,6 +31,7 @@ export class AdministrationComponent {
     private vehicleService: VehicleServiceInterface, private afkService: AFKTimeServiceInterface,
     private dialogBehavior: MessageDialogBehavior, private imageBehavior: ImageBehavior, private electron: ElectronService,
     private config: ConfigService) {
+    $('body').css('background-color', '#c2c2c2');
     this.user = new UserModel();
     this.vehicle = new VehicleModel();
     this.apartment = new ApartmentModel();

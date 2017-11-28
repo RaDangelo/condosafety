@@ -56,6 +56,7 @@ export class PeopleComponent {
   constructor(private personService: PersonServiceInterface, private apartmentService: ApartmentServiceInterface,
     private typesService: PersonTypeServiceInterface, private dialogBehavior: MessageDialogBehavior,
     private electron: ElectronService, private imageBehavior: ImageBehavior, private config: ConfigService) {
+    $('body').css('background-color', '#c2c2c2');
     this.person = new PersonModel();
     this.getApartments();
     this.getTypes();

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { WatchControlModel, AccessModel, PersonModel, VehicleModel, VisitorModel } from '../../models';
 import { AccessServiceInterface, WatchControlServiceInterface } from '../../interfaces';
 
+declare var $: any;
+
 @Component({
   selector: 'reports',
   templateUrl: './reports.component.html',
@@ -18,7 +20,9 @@ export class ReportsComponent {
   dataType = null;
   results: any[] = [];
 
-  constructor(private accessService: AccessServiceInterface, private watchService: WatchControlServiceInterface) { }
+  constructor(private accessService: AccessServiceInterface, private watchService: WatchControlServiceInterface) {
+    $('body').css('background-color', '#c2c2c2');
+  }
 
   getReport() {
     if (this.option == 0) {
