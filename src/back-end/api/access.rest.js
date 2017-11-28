@@ -46,7 +46,7 @@ conn.once('open', () => {
     });
 
     router.post('/', function (req, res, next) {
-        var access = new Access(req.body);
+        var access = req.body;
         daoUser.getByUsername(req.body.user.username).then(user => {
             if (!user) {
                 console.log('Usuário ' + req.body.user.username + ' não encontrado!');
@@ -57,7 +57,7 @@ conn.once('open', () => {
                 access.user = user;
                 if (access.vehicle) {
                     daoApartment.getByVehicle(access.vehicle._id).then(apt => {
-                        if (apt) {
+                        if (apt && apt.length) {
                             access.apartment = apt;
                             daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
                         } else {
@@ -69,7 +69,7 @@ conn.once('open', () => {
                     }).catch(err => res.send(err));
                 } else if (access.visitor) {
                     daoApartment.getFiltered(access.apartment).then(apt => {
-                        if (apt) {
+                        if (apt && apt.length) {
                             access.apartment = apt;
                             daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
                         } else {
@@ -139,10 +139,12 @@ conn.once('open', () => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
                                 daoApartment.getByVehicle(item._id).then(apt => {
-                                    if (apt) {
+                                    if (apt && apt.length) {
                                         item.apartment = new Apartment();
                                         item.apartment.complex = apt.complex;
                                         item.apartment.number = apt.number;
+                                        item.apartment._id = apt._id;
+                                        item.apartment.status = true;
                                     }
                                     filteredData.push(item);
                                     itemsProcessed++;
@@ -166,10 +168,12 @@ conn.once('open', () => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
                                 daoApartment.getByVehicle(item._id).then(apt => {
-                                    if (apt) {
+                                    if (apt && apt.length) {
                                         item.apartment = new Apartment();
                                         item.apartment.complex = apt.complex;
                                         item.apartment.number = apt.number;
+                                        item.apartment._id = apt._id;
+                                        item.apartment.status = true;
                                     }
                                     filteredData.push(item);
                                     itemsProcessed++;
