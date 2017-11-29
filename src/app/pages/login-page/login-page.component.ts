@@ -49,6 +49,7 @@ export class LoginPageComponent {
           this.dialogBehavior.showErrorMessage(error);
         },
         () => {
+          $('body').css('width', '100%');
           this.route.navigate(['/monitoring']);
         });
     }

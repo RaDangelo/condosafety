@@ -5,7 +5,7 @@ const UserDao = {
         return User.findOne({ 'username': username }).exec();
     },
     getFiltered(username) {
-        return User.find({ 'username': new RegExp(username, "i") }, '_id');
+        return User.find({ 'username': new RegExp(username, "i") }).exec();
     }
 }
 

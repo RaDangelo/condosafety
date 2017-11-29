@@ -256,32 +256,32 @@ conn.once('open', () => {
             visitors = null,
             apartments = null,
             promises = [];
-
+        console.log(req.body);
         access.type = req.body.type;
         access.action = req.body.action;
         var date = req.body.date;
 
-        if (access.person) {
+        if (req.body.person) {
             var $person = new Promise((resolve, reject) => {
-                daoPerson.getFiltered(access.person.cpf, access.person.name).then(result => {
+                daoPerson.getFiltered(req.body.person.cpf, req.body.person.name).then(result => {
                     people = result;
                     console.log(result);
                     resolve();
                 }).catch(err => reject(err));
             });
             promises.push($person);
-        } else if (access.vehicle) {
+        } else if (req.body.vehicle) {
             var $vehicles = new Promise((resolve, reject) => {
-                daoVehicle.getFiltered(access.vehicle.plate, access.vehicle.brand).then(result => {
+                daoVehicle.getFiltered(req.body.vehicle.plate, req.body.vehicle.brand).then(result => {
                     vehicles = result;
                     console.log(result);
                     resolve();
                 }).catch(err => reject(err));
             });
             promises.push($vehicles);
-        } else if (access.visitor) {
+        } else if (req.body.visitor) {
             var $visitors = new Promise((resolve, reject) => {
-                daoVisitor.getFiltered(access.visitor.name, access.visitor.document).then(result => {
+                daoVisitor.getFiltered(req.body.visitor.name, req.body.visitor.document).then(result => {
                     visitors = result;
                     console.log(result);
                     resolve();
@@ -290,9 +290,9 @@ conn.once('open', () => {
             promises.push($visitors);
         }
 
-        if (access.user && access.user.username) {
+        if (req.body.user && req.body.user.username) {
             var $users = new Promise((resolve, reject) => {
-                daoUser.getFiltered(access.user.username).then(result => {
+                daoUser.getFiltered(req.body.user.username).then(result => {
                     users = result;
                     console.log(result);
                     resolve();
@@ -301,9 +301,9 @@ conn.once('open', () => {
             promises.push($users);
         }
 
-        if (access.apartment && (access.apartment.number || access.apartment.complex || access.apartment.floor)) {
+        if (req.body.apartment && (req.body.apartment.number || req.body.apartment.complex || req.body.apartment.floor)) {
             var $apartments = new Promise((resolve, reject) => {
-                daoApartment.getFiltered(access.apartment).then(result => {
+                daoApartment.getFiltered(req.body.apartment).then(result => {
                     apartments = result;
                     console.log(result);
                     resolve();
@@ -312,13 +312,9 @@ conn.once('open', () => {
             promises.push($apartments);
         }
 
-        if (promises.length) {
-            Promise.all(promises).then(data => {
-                daoAccess.getFiltered(access, users, apartments, vehicles, people, visitors, date).then(a => res.json(a)).catch(err => res.send(err));
-            }).catch(err => res.send(err));
-        } else {
+        Promise.all(promises).then(data => {
             daoAccess.getFiltered(access, users, apartments, vehicles, people, visitors, date).then(a => res.json(a)).catch(err => res.send(err));
-        }
+        }).catch(err => res.send(err));
     });
 });
 
