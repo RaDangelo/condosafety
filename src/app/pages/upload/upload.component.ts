@@ -25,8 +25,10 @@ export class UploadComponent implements OnInit {
                     this.uploader.queue.push(file);
                 }
             }
-            this.uploader.queue[0].url = this.restService.getBaseUrl() + '/image/' + upload.id;
-            this.uploadFile();
+            if (this.uploader.queue.length) {
+                this.uploader.queue[0].url = this.restService.getBaseUrl() + '/image/' + upload.id;
+                this.uploadFile();
+            }
         }
     }
 

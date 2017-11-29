@@ -84,7 +84,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   private manageAfkTimer() {
     const idleDate = new Date(globalVars.GlobalVars.idleTimer).getTime();
     const dtAtual = new Date().getTime();
-    console.log('idleDate', globalVars.GlobalVars.isIdle, idleDate);
     if (globalVars.GlobalVars.isIdle &&
       (dtAtual - idleDate) >= this.afkTimer * 60000) {
       $('#afk-modal').modal('show');

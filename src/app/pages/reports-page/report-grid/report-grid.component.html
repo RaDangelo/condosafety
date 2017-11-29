@@ -26,7 +26,7 @@
                             <td> {{r.user?.username}} </td>
                             <td> {{getAction(r.action)}} </td>
                             <td>
-                                <ng-container *ngIf="r.duration">Tempo de ausência: {{r.duration | date:'HH:mm:ss'}} </ng-container>
+                                <ng-container *ngIf="r.duration">Tempo de ausência: {{r.duration}} minutos </ng-container>
                                 <ng-container *ngIf="r.obs"> - Obs: {{r.obs}} </ng-container>
                             </td>
                         </ng-container>

@@ -42,6 +42,7 @@ export class LoginPageComponent {
         .subscribe((data: UserModel) => {
           console.log('Login executado com sucesso! Usuário logado: ' + data);
           localStorage.setItem('username', this.user.username);
+          localStorage.setItem('accessLevel', data.accessLevel.toString());
         },
         (error: MessagesModel) => {
           console.log('Ocorreu um erro: ' + error.message);

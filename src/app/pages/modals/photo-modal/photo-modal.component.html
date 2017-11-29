@@ -6,7 +6,8 @@
             <div [style.display]="params.autoStart ? 'block' : 'none'" class="card-timer">{{pictureTimer}}</div>
             <canvas id="canvas" width="320" height="240"></canvas>
             <div class="flash"></div>
-            <div (click)="takePicture()" [style.display]="!params.autoStart ? 'block' : 'none'" class="glyphicon glyphicon-camera"> </div>
+            <div (click)="takePicture()" [style.display]="!params.autoStart ? 'block' : 'none'" 
+            [style.z-index]="!params.autoStart ? '20' : '0'"class="glyphicon glyphicon-camera"> </div>
         </div>
 
     </div>

@@ -189,7 +189,7 @@ export class MonitoringComponent implements AfterViewInit {
         this.beginComparison();
       }).subscribe((data) => {
         this.matchPercentage = 100 - parseInt(data.misMatchPercentage, 10);
-        if (this.matchPercentage < 75) {
+        if (this.matchPercentage < 70) {
           this.comparisonClass = 'access-denied';
         } else {
           this.comparisonClass = 'access-allowed';
@@ -233,7 +233,7 @@ export class MonitoringComponent implements AfterViewInit {
     $('.comparison-container > img').addClass(this.comparisonClass);
     $('.comparison-container > .match-percentage').addClass(this.comparisonClass);
     this.displayMatchPercentage = true;
-    if (this.matchPercentage < 75) {
+    if (this.matchPercentage < 70) {
       this.displayForceButton = true;
     }
     setTimeout(() => {
@@ -328,5 +328,12 @@ export class MonitoringComponent implements AfterViewInit {
     if (e.keyCode === 13) {
       this.filterData();
     }
+  }
+
+  isHighLevel() {
+    if (localStorage.getItem('accessLevel') === '0') {
+      return true;
+    }
+    return false;
   }
 }

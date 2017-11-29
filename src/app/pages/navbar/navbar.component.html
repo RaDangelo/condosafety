@@ -8,22 +8,19 @@
         <a [routerLink]=" ['./monitoring']"><label class="label-topo">MONITORAR
           </label></a>
       </li>
-      <!--<li *ngIf="user.accessLvl === 0" [class.active]="router.isActive('/admin')">-->
-      <li [class.active]="isActive('/admin')">
+      <li [style.visibility]="isHighLevel() ? 'visible':'hidden'" [class.active]="isActive('/admin')">
         <a [routerLink]=" ['./admin'] ">
           <label>ADMINISTRAÇÃO
           </label>
         </a>
       </li>
-      <!--<li *ngIf="user.accessLvl === 0" [class.active]="router.isActive('/people')">-->
-      <li [class.active]="isActive('/people')">
+      <li [style.visibility]="isHighLevel() ? 'visible':'hidden'" [class.active]="isActive('/people')">
         <a [routerLink]=" ['./people']">
           <label>CADASTRO PESSOAS
           </label>
         </a>
       </li>
-      <!--<li *ngIf="user.accessLvl === 0" [class.active]="router.isActive('/reports')">-->
-      <li [class.active]="isActive('/reports')">
+      <li [style.visibility]="isHighLevel() ? 'visible':'hidden'" [class.active]="isActive('/reports')">
         <a [routerLink]=" ['./reports'] ">
           <label>RELATÓRIOS
           </label>

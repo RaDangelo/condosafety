@@ -54,7 +54,7 @@ module.exports = function (passport) {
                         if (user.password === password) {
                             user.password = password;
                         } else {
-                            user.password = createHash(password);
+                            user.password = Crypto.createHash(password);
                         }
                         user.accessLevel = req.param('accessLevel');
 
