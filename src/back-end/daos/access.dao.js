@@ -13,13 +13,17 @@ const AccessDao = {
             });
         });
     },
-    getFiltered(access, users, apartments, vehicles, people, visitors) {
+    getFiltered(access, users, apartments, vehicles, people, visitors, date) {
         var query = {};
         if (users && users.length) {
             query['user'] = { $in: users };
         }
-        if (access.date) {
-            query['date'] = access.date;
+        if (date) {
+            var start = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), 00, 00, 00, 00);
+            var end = new Date(date.substring(0, 4), date.substring(5, 7) - 1, date.substring(8, 10), 00, 00, 00, 00);
+            end.setDate(end.getDate() + 1);
+
+            query['date'] = { $gte: start, $lt: end };
         }
         if (apartments && apartments.length) {
             query['apartment'] = { $in: apartments };

@@ -12,11 +12,12 @@ var daoWatch = require('../daos/watch-control.dao'),
 conn.once('open', () => {
     router.post('/', (req, res, next) => {
         var username = null;
+        var date = req.body.date;
         if (req.body.user && req.body.user.username) {
             username = req.body.user.username;
         }
         daoUser.getFiltered(username).then((users) => {
-            daoWatch.getFiltered(req.body, users).then(w => res.json(w)).catch(err => res.send(err));
+            daoWatch.getFiltered(req.body, users, date).then(w => res.json(w)).catch(err => res.send(err));
         }).catch(err => res.send(err));
     });
 });

@@ -3,6 +3,5 @@ export class VideoInputModel {
     name: string;
 
     constructor() {
-
     }
 }

@@ -46,7 +46,7 @@ conn.once('open', () => {
     });
 
     router.post('/', function (req, res, next) {
-        var access = req.body;
+        var access = new Access(req.body);
         daoUser.getByUsername(req.body.user.username).then(user => {
             if (!user) {
                 console.log('Usuário ' + req.body.user.username + ' não encontrado!');
@@ -55,9 +55,12 @@ conn.once('open', () => {
                 return next(err);
             } else {
                 access.user = user;
-                if (access.vehicle) {
-                    daoApartment.getByVehicle(access.vehicle._id).then(apt => {
-                        if (apt && apt.length) {
+                console.log(req.body);
+                if (req.body.vehicle) {
+                    console.log(req.body.vehicle._id);
+                    daoApartment.getByVehicle(req.body.vehicle._id).then(apt => {
+                        console.log(apt);
+                        if (apt) {
                             access.apartment = apt;
                             daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
                         } else {
@@ -67,8 +70,8 @@ conn.once('open', () => {
                             return next(err);
                         }
                     }).catch(err => res.send(err));
-                } else if (access.visitor) {
-                    daoApartment.getFiltered(access.apartment).then(apt => {
+                } else if (req.body.visitor) {
+                    daoApartment.getFiltered(req.body.apartment).then(apt => {
                         if (apt && apt.length) {
                             access.apartment = apt;
                             daoAccess.saveAccess(access).then(data => res.json(true)).catch(err => res.send(err));
@@ -139,7 +142,7 @@ conn.once('open', () => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
                                 daoApartment.getByVehicle(item._id).then(apt => {
-                                    if (apt && apt.length) {
+                                    if (apt) {
                                         item.apartment = new Apartment();
                                         item.apartment.complex = apt.complex;
                                         item.apartment.number = apt.number;
@@ -168,7 +171,7 @@ conn.once('open', () => {
                         if (v.length) {
                             v.forEach((item, index, array) => {
                                 daoApartment.getByVehicle(item._id).then(apt => {
-                                    if (apt && apt.length) {
+                                    if (apt) {
                                         item.apartment = new Apartment();
                                         item.apartment.complex = apt.complex;
                                         item.apartment.number = apt.number;
@@ -246,7 +249,7 @@ conn.once('open', () => {
     });
 
     router.post('/report', (req, res, next) => {
-        var access = req.body,
+        var access = new Access(),
             users = null,
             people = null,
             vehicles = null,
@@ -254,7 +257,10 @@ conn.once('open', () => {
             apartments = null,
             promises = [];
 
-        console.log(access);
+        access.type = req.body.type;
+        access.action = req.body.action;
+        var date = req.body.date;
+
         if (access.person) {
             var $person = new Promise((resolve, reject) => {
                 daoPerson.getFiltered(access.person.cpf, access.person.name).then(result => {
@@ -306,10 +312,13 @@ conn.once('open', () => {
             promises.push($apartments);
         }
 
-        Promise.all(promises).then(data => {
-            daoAccess.getFiltered(access, users, apartments, vehicles, people, visitors).then(a => res.json(a)).catch(err => res.send(err));
-        }).catch(err => res.send(err));
-
+        if (promises.length) {
+            Promise.all(promises).then(data => {
+                daoAccess.getFiltered(access, users, apartments, vehicles, people, visitors, date).then(a => res.json(a)).catch(err => res.send(err));
+            }).catch(err => res.send(err));
+        } else {
+            daoAccess.getFiltered(access, users, apartments, vehicles, people, visitors, date).then(a => res.json(a)).catch(err => res.send(err));
+        }
     });
 });
 

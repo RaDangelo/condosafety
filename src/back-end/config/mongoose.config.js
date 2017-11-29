@@ -13,4 +13,5 @@ module.exports = (config) => {
     }).catch((e) => {
         throw e;
     });
+    mongoose.set('debug', true);
 };

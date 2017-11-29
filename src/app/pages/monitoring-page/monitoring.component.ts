@@ -189,7 +189,7 @@ export class MonitoringComponent implements AfterViewInit {
         this.beginComparison();
       }).subscribe((data) => {
         this.matchPercentage = 100 - parseInt(data.misMatchPercentage, 10);
-        if (this.matchPercentage < 80) {
+        if (this.matchPercentage < 75) {
           this.comparisonClass = 'access-denied';
         } else {
           this.comparisonClass = 'access-allowed';
@@ -233,24 +233,24 @@ export class MonitoringComponent implements AfterViewInit {
     $('.comparison-container > img').addClass(this.comparisonClass);
     $('.comparison-container > .match-percentage').addClass(this.comparisonClass);
     this.displayMatchPercentage = true;
-    if (this.matchPercentage < 80) {
+    if (this.matchPercentage < 75) {
       this.displayForceButton = true;
     }
     setTimeout(() => {
       this.endComparison();
       this.forcedAccess = false;
-    }, 10000);
+    }, 8000);
   }
 
   private endComparison() {
     if (!this.forcedAccess) {
-      if (this.matchPercentage < 80) {
+      if (this.matchPercentage < 75) {
         this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = '
           + this.matchPercentage + '%';
         this.denyAccess();
       } else {
-        this.access.observation = 'Permissão de entrada forçada por porteiro ' + this.access.user.username +
-          ' após reconhecimento facial falho!';
+        this.access.observation = 'Entrada permitida através de reconhecimento facial! Semelhança = '
+          + this.matchPercentage + '%';
         this.allowAccess();
       }
     }
@@ -268,7 +268,8 @@ export class MonitoringComponent implements AfterViewInit {
         ' após reconhecimento facial falho!';
       this.allowAccess();
     } else {
-      this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = ' + this.matchPercentage + '%';
+      this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = '
+        + this.matchPercentage + '%';
       this.denyAccess();
     }
     this.endComparison();
