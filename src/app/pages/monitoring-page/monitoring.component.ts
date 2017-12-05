@@ -244,8 +244,8 @@ export class MonitoringComponent implements AfterViewInit {
 
   private endComparison() {
     if (!this.forcedAccess) {
-      if (this.matchPercentage < 75) {
-        this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = '
+      if (this.matchPercentage < 70) {
+        this.access.observation = 'Bloqueio de entrada automático por reconhecimento inconclusivo! Semelhança = '
           + this.matchPercentage + '%';
         this.denyAccess();
       } else {
@@ -268,7 +268,7 @@ export class MonitoringComponent implements AfterViewInit {
         ' após reconhecimento facial falho!';
       this.allowAccess();
     } else {
-      this.access.observation = 'Bloqueio de entrada automático por motivo de pessoa não conhecida! Semelhança = '
+      this.access.observation = 'Bloqueio de entrada automático por reconhecimento inconclusivo! Semelhança = '
         + this.matchPercentage + '%';
       this.denyAccess();
     }
