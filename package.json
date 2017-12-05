@@ -1,6 +1,6 @@
 {
   "name": "condosafety",
-  "productName": "Condo Management System",
+  "productName": "CondoSafety",
   "version": "0.0.0",
   "license": "MIT",
   "main": "./src/electron/main.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "build-electron": "ng build --base-href . && cp src/electron/* dist",
     "electron": "./node_modules/.bin/electron .",
-    "build-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Condo Management System\"",
+    "build-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"CondoSafety\"",
     "angular": "ng serve",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
