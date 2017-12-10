@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { ConfigService } from '../../config.service';
+import { WatchControlServiceInterface } from '../../interfaces';
+import { WatchControlModel, Action } from '../../models';
 
 @Component({
   selector: 'navbar',
@@ -10,7 +12,8 @@ import { ConfigService } from '../../config.service';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor(private router: Router, private electron: ElectronService, private config: ConfigService) { }
+  constructor(private router: Router, private electron: ElectronService, private config: ConfigService,
+    private watchControlService: WatchControlServiceInterface) { }
 
   ngOnInit() {
   }
@@ -20,11 +23,13 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    // if (this.config.isElectron) {
-      // this.electron.remote.getCurrentWindow().close();
-    // } else {
+    const watch = new WatchControlModel();
+    watch.user.username = localStorage.getItem('username');
+    watch.action = Action.LOGOUT;
+    watch.date = new Date();
+    this.watchControlService.logout(watch).subscribe(() => {
       this.router.navigate(['/']);
-    // }
+    }, err => console.log('Erro ao fazer logout!'));
   }
 
   isHighLevel() {

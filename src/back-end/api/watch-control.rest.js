@@ -20,6 +20,21 @@ conn.once('open', () => {
             daoWatch.getFiltered(req.body, users, date).then(w => res.json(w)).catch(err => res.send(err));
         }).catch(err => res.send(err));
     });
+
+    router.post('/logout', (req, res, next) => {
+        var watch = new Watch(req.body);
+        daoUser.getByUsername(req.body.user.username).then(user => {
+            if (!user) {
+                console.log('Usuário ' + req.body.user.username + ' não encontrado!');
+                var err = new Error('Usuário não existente!');
+                err.status = 500;
+                return next(err);
+            } else {
+                watch.user = user;
+                daoWatch.saveWatch(watch).then(data => res.json(true)).catch(err => next(err));
+            }
+        });
+    });
 });
 
 module.exports = router;

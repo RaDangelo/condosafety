@@ -34,7 +34,7 @@ export class AfkModalComponent {
 
   insertWatchControl() {
     this.watch.date = new Date();
-    this.watch.duration = globalVars.GlobalVars.afkTimer + (this.watch.date.getTime() - this.warningStart.getTime());
+    this.watch.duration = globalVars.GlobalVars.afkTimer + (this.watch.date.getMinutes() - this.warningStart.getMinutes());
     console.log('Alerta de ausência: ' + this.watch.duration);
     this.callService();
   }
@@ -45,6 +45,7 @@ export class AfkModalComponent {
         .subscribe((data) => {
           this.afkService.unfreeze(this.watch).subscribe(() => {
             globalVars.GlobalVars.isWarningTimer = false;
+            this.watch = new WatchControlModel();
             $('#afk-modal').modal('hide');
           },
             (error: MessagesModel) => {
@@ -69,5 +70,9 @@ export class AfkModalComponent {
       return (new Date().getTime() - this.warningStart.getTime()) > 180000;
     }
     return false;
+  }
+
+  getTimer() {
+    return globalVars.GlobalVars.afkTimer;
   }
 }

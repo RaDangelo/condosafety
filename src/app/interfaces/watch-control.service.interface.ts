@@ -7,4 +7,6 @@ export abstract class WatchControlServiceInterface {
 
     abstract getList(filter: WatchControlModel): Observable<WatchControlModel[]>;
 
+    abstract logout(watch: WatchControlModel): Observable<any>;
+
 }

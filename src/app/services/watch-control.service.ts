@@ -21,4 +21,10 @@ export class WatchControlService extends WatchControlServiceInterface {
             .map((res: Response) => <WatchControlModel[]>res.json().map(w => new WatchControlModel(w)))
             .catch(RESTService.handleErrorMessage);
     }
+
+     logout(watch: WatchControlModel): Observable<any> {
+        return this.restService.post(this.url + 'logout/', watch)
+            .map((res: Response) => <any>res.json())
+            .catch(RESTService.handleErrorMessage);
+    }
 }

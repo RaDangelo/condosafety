@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { RESTService } from '../rest.service';
-import { UserModel } from '../models';
+import { UserModel, WatchControlModel } from '../models';
 
 @Injectable()
 export class LoginService extends LoginServiceInterface {
