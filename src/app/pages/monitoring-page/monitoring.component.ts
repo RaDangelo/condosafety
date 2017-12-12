@@ -152,6 +152,7 @@ export class MonitoringComponent implements AfterViewInit {
               } else {
                 console.log('Insira um motivo!');
                 const error = new MessagesModel();
+                error.message = 'Insira um motivo!';
                 error.severity = MessagesModel.SEVERITIES.ERROR;
                 this.dialogBehavior.showErrorMessage(error);
               }
@@ -159,6 +160,7 @@ export class MonitoringComponent implements AfterViewInit {
           } else {
             console.log('Senha incorreta');
             const error = new MessagesModel();
+            error.message = 'Senha incorreta!';
             error.severity = MessagesModel.SEVERITIES.ERROR;
             this.dialogBehavior.showErrorMessage(error);
             this.access = new AccessModel();
@@ -264,7 +266,7 @@ export class MonitoringComponent implements AfterViewInit {
   forceAccess(action: number) {
     this.forcedAccess = true;
     if (action === AccessAction.ALLOW) {
-      this.access.observation = 'Permissão de entrada forçada por porteiro ' + this.access.user.username +
+      this.access.observation = 'Permissão de entrada forçada por ' + this.access.user.username +
         ' após reconhecimento facial falho!';
       this.allowAccess();
     } else {

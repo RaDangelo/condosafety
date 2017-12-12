@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { WatchControlModel, AccessModel, PersonModel, VehicleModel, VisitorModel } from '../../models';
+import { WatchControlModel, AccessModel, PersonModel, VehicleModel, VisitorModel, MessagesModel } from '../../models';
 import { AccessServiceInterface, WatchControlServiceInterface } from '../../interfaces';
+import { MessageDialogBehavior } from '../../behaviors';
 
 declare var $: any;
 
@@ -20,7 +21,8 @@ export class ReportsComponent {
   dataType = null;
   results: any[] = [];
 
-  constructor(private accessService: AccessServiceInterface, private watchService: WatchControlServiceInterface) {
+  constructor(private accessService: AccessServiceInterface, private watchService: WatchControlServiceInterface,
+    private dialogBehavior: MessageDialogBehavior) {
     $('body').css('background-color', '#c2c2c2');
   }
 
@@ -94,5 +96,13 @@ export class ReportsComponent {
   changeOption() {
     this.clearFilters();
     this.results = [];
+  }
+
+  printReport() {
+    console.log('Impressão!');
+    const error = new MessagesModel();
+    error.message = 'Nenhuma impressora encontrada!';
+    error.severity = MessagesModel.SEVERITIES.ERROR;
+    this.dialogBehavior.showErrorMessage(error);
   }
 }

@@ -79,9 +79,10 @@
     </ng-container>
 
     <button id="btn-generate" (click)="getReport()" mat-button>Gerar relatório!</button>
+    <button *ngIf="results && results.length" class="btn-generate" (click)="printReport()" mat-button>Imprimir!</button>
+
   </div>
   <div class="table-container">
     <report-grid [report]="results" [option]="option"> </report-grid>
   </div>
-
 </div>
